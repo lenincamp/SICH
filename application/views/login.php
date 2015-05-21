@@ -1,4 +1,4 @@
-<?php if(@$this->user) redirect ('welcome/menu');?>
+<?php if(@$this->session->userdata('logged_user')) redirect ('main/menu');?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +11,7 @@
 	<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <LINK REL=StyleSheet HREF="<?php echo base_url()?>static/css/style.css" TYPE="text/css">
+<title>sich - login</title>
 </head>
 <body>
 <!--<div class="menu_templ" style="width:100%;max-width:612px;background-color:#d3c2bd;">-->
@@ -42,7 +43,7 @@
 				<h3 style="">Inicio de Sesión</h3>
 			</div>
 			<div class="divMetro contenedorLogin" align="center">
-				<form method='post' action='<?php echo base_url()?>welcome/login/'>
+				<form method='post' action='<?php echo base_url()?>main/login/'>
 				<div class="campoLogin">
 					<img src="<?php echo base_url()?>static/img/perfil.png">
 					<input placeholder="Usuario" type="text" id="username" name="username" value="<?php echo @$this->input->post('username'); ?>">

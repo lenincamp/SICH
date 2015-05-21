@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Welcome extends Private_Controller {
+class Main extends Private_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -48,7 +48,7 @@ class Welcome extends Private_Controller {
 				// Si existe el usuario creamos la sesion y redirigimos al index.
 				if($logged_user) {
 					$this->session->set_userdata('logged_user', $logged_user);
-					redirect('/welcome/menu');
+					redirect('main/menu/');
 				} else {
 					// De lo contrario se activa el error_login.
 					$data['error_login'] = TRUE;
@@ -61,18 +61,19 @@ class Welcome extends Private_Controller {
  
 	public function logout() {
 		$this->session->unset_userdata('logged_user');
-		redirect('/welcome');
+		redirect('main');
 	}
 	
 	public function menu()
 	{
-		if(!@$this->user) redirect ('/welcome');
+		if(!@$this->user) redirect ('main');
 		$data['prueba'] = 'Prueba renderiza variable';
-		$this->load->view('templates/header');
+		$title['title'] = 'home';
+		$this->load->view('templates/header', $title);
 		$this->load->view('user/body', $data);
 		$this->load->view('templates/footer');
 	}
 }
 
-/* End of file welcome.php */
+/* End of file main.php */
 /* Location: ./application/controllers/welcome.php */
