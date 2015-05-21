@@ -1,4 +1,4 @@
-
+<?php if(@$this->user) redirect ('welcome/menu');?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,11 +45,11 @@
 				<form method='post' action='<?php echo base_url()?>welcome/login/'>
 				<div class="campoLogin">
 					<img src="<?php echo base_url()?>static/img/perfil.png">
-					<input placeholder="Usuario" type="text" id="username" name="username" value="<?php echo @$_POST['username']; ?>">
+					<input placeholder="Usuario" type="text" id="username" name="username" value="<?php echo @$this->input->post('username'); ?>">
 				</div>
 				<div class="campoLogin">
 					<img src="<?php echo base_url()?>static/img/pass.png">
-					<input placeholder="Contraseña" type="password" id="password" name="password" value="<?php echo @$_POST['password']; ?>">
+					<input placeholder="Contraseña" type="password" id="password" name="password" value="<?php echo @$this->input->post('password'); ?>">
 				</div>
 				<input class="buttonLogin" type="submit" value="ENTRAR">
 				</form>
