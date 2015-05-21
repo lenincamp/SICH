@@ -27,20 +27,33 @@
 <div class="container-fluid bgLogin" style="padding:0px; margin-left:-5px; ">
   <div class="row-fluid">
     <div  style="/*overflow-x:hidden; overflow-y:scroll; max-height:800px;height:85vh; width:100%;*/">
+		
+		<?php if(@$error_login): ?>
+			Error en el usuario o contrase&ntilde;a.
+			<br />
+		<?php endif; ?>
+ 
+		<?php echo @validation_errors(); ?>
+ 
+		<br />
+		
 		<div class="centrado">
 			<div class=" bgCabeceraLogin" >
 				<h3 style="">Inicio de Sesión</h3>
 			</div>
 			<div class="divMetro contenedorLogin" align="center">
+				<form method='post' action='<?php echo base_url()?>welcome/login/'>
 				<div class="campoLogin">
 					<img src="<?php echo base_url()?>static/img/perfil.png">
-					<input placeholder="Usuario" type="text" id="user" name="user">
+					<input placeholder="Usuario" type="text" id="username" name="username" value="<?php echo @$_POST['username']; ?>">
 				</div>
 				<div class="campoLogin">
 					<img src="<?php echo base_url()?>static/img/pass.png">
-					<input placeholder="Contraseña" type="password" id="clave" name="clave">
+					<input placeholder="Contraseña" type="password" id="password" name="password" value="<?php echo @$_POST['password']; ?>">
 				</div>
 				<input class="buttonLogin" type="submit" value="ENTRAR">
+				</form>
+				
 			</div>
 		</div>
     </div>

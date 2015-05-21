@@ -29,7 +29,7 @@ $config['base_url'] = 'http://localhost/sich/';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -305,7 +305,8 @@ $config['cache_query_string'] = FALSE;
 | http://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = '65er06510t6er15w081t9r81hu0rt95w1g0981t50h95wr1g9reg8109';
+
 
 /*
 |--------------------------------------------------------------------------
