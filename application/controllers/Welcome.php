@@ -22,4 +22,12 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('login');
 	}
+	
+	public function menu()
+	{
+		$data['prueba'] = 'Prueba renderiza variable';
+		$this->load->view('templates/header');
+		$this->load->view('user/body', $data);
+		$this->load->view('templates/footer');
+	}
 }
