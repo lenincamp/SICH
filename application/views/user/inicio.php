@@ -1,0 +1,1 @@
+<img src="<?php echo base_url()?>static/img/logo_grande_chan.png"/>
