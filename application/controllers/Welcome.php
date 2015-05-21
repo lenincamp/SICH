@@ -23,6 +23,14 @@ class Welcome extends CI_Controller {
 		$this->load->view('login');
 	}
 	
+	public function home()
+	{
+		$title['title']  = 'home';
+		$this->load->view('templates/header', $title);
+		$this->load->view('user/inicio');
+		$this->load->view('templates/footer');
+	}
+	
 	public function menu()
 	{
 		$data['prueba'] = 'Prueba renderiza variable';
