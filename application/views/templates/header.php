@@ -10,6 +10,7 @@
 	<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <LINK REL=StyleSheet HREF="<?php echo base_url()?>static/css/style.css" TYPE="text/css">
+<title> sich - <?php echo $title ?></title>
 </head>
 <body>
 <!--<div class="menu_templ" style="width:100%;max-width:612px;background-color:#d3c2bd;">-->

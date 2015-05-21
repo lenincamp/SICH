@@ -26,7 +26,8 @@ class Welcome extends CI_Controller {
 	public function menu()
 	{
 		$data['prueba'] = 'Prueba renderiza variable';
-		$this->load->view('templates/header');
+		$title['title']  = 'home';
+		$this->load->view('templates/header', $title);
 		$this->load->view('user/body', $data);
 		$this->load->view('templates/footer');
 	}
