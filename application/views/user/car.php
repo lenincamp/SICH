@@ -1,5 +1,4 @@
-<!--div class="well panel panel-default" style="margin-top:1%;"-->
-<div class="panel panel-default" style="margin-top:1%;">
+<div class="well panel panel-default" style="margin-top:1%;">
   <div class="panel-body">
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#sectionA">Vehículo</a></li>
@@ -14,8 +13,7 @@
 		<div id="sectionB" class="tab-pane fade">
 			<br>
 			<div class="row">
-				<!--div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;"-->
-				<div class="well col-md-6 col-md-offset-3">	
+				<div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 					<form id="frmMark">
 					  <div class="form-group">
 						<label for="txtName">Nombre:</label>
@@ -30,12 +28,12 @@
 					</form>
 				</div>
 			</div>
-		
 		</div>
 	
 		<div id="sectionC" class="tab-pane fade">
-		<br>
-			<div class="well col-md-6 col-md-offset-3">	
+			<br>
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 				<form id="frmModel">
 				  <div class="form-group">
 					<label for="txtName">Nombre:</label>
@@ -58,6 +56,7 @@
 					  </div>
 				  </div>
 				</form>
+			</div>
 			</div>
 		</div>      
 	</div>
