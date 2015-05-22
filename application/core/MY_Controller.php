@@ -14,7 +14,7 @@ class Private_Controller extends CI_Controller {
 		$this->load->model('users');
 
 		// Se carga el helper url y form.
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		$this->load->helper('form');
 		
 		// Se carga la libreria form_validation.
