@@ -16,11 +16,11 @@ class Main extends Private_Controller {
 	{
 		if(!@$this->user) redirect ('main');
 		$title['title'] = 'home';
+		$data['funcion']="<script type='text/javascript'> seleccionar('mn_home') </script>";
 		$this->load->view('templates/header', $title);
 		$this->load->view('user/inicio');
-		$this->load->view('templates/footer');
+		$this->load->view('templates/footer',$data);
 	}
-	
 	
 	public function login() {
  
