@@ -15,7 +15,7 @@ class Car extends Private_Controller {
 			"src" => base_url()."static/js/bootstrap-select.min.js",
 			//"src" => base_url()."static/js/i18n/defaults-es_CL.min.js"			
 		);
-		$css['css'] = array("href" => base_url()."static/css/bootstrap-select.min.css");
+		$title['css'] = array("href" => base_url()."static/css/bootstrap-select.min.css");
 		$this->load->view('templates/header', $title);
 		$this->load->view('user/car');
 		$this->load->view('templates/footer', $data);
