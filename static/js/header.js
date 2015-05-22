@@ -8,5 +8,5 @@ function seleccionar(opcion){
 	opcion.className = "selected";
 }
 $(function(){
-$("#mn_home").addClass("selected");
+	$("#mn_home").addClass("selected");
 });

@@ -6,5 +6,5 @@ $(window).load(function(){
 		opciones[i].className = "";
 	}
 	$("#mn_car").addClass("selected");
-
+	console.log("como la mamas");
 });
