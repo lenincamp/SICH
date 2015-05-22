@@ -15,13 +15,11 @@
 	{
 		foreach ($js as $key => $value) 
 		{
-			echo "<script $key='$value' type='text/javascript'></script>";
+			echo "<script src='$value' type='text/javascript'></script>";
 		}
 	}
-	if ( ! empty($funcion))
-	{
-		echo $funcion;
-	}
+	
+	echo @$funcion;
 ?>
 </body>
 </html>

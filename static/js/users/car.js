@@ -1,10 +1,16 @@
-$(window).load(function(){
-	var menu=document.getElementById("css3menu1")
-	var opciones = menu.getElementsByTagName("a");
-	var i;
-	for (i = 0; i < opciones.length; i++) {
-		opciones[i].className = "";
-	}
-	$("#mn_car").addClass("selected");
-	console.log("como la mamas");
+$(function(){
+	$("#frmModel").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/save_model/",
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				if(response){
+				}else{
+				}
+			}
+		});
+	});
 });

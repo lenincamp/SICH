@@ -7,6 +7,3 @@ function seleccionar(opcion){
 	}
 	document.getElementById(opcion).className = "selected";
 }
-$(function(){
-//$("#mn_home").addClass("selected");
-});
