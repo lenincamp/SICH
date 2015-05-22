@@ -11,8 +11,8 @@ class Users extends CI_Model {
 	*/
 	function __construct() {
 		parent::__construct();
-		$this->table = 'users';
-		$this->id = 'id';
+		$this->table = 'usuario';
+		$this->id = 'usu_id';
 	}
  
 	/*
@@ -24,8 +24,8 @@ class Users extends CI_Model {
 	function get($username='', $password='') {
 		return $this->db->get_where(
 			$this->table, array(
-				'username' => $username,
-				'password' => $password
+				'per_ced' => $username,
+				'usu_pwd' => $password
 			)
 		)->row();
 	}

@@ -1,4 +1,4 @@
-<?php if(@$this->session->userdata('logged_user')) redirect ('main/menu');?>
+<?php if(@$this->user) redirect ('main/home');?>
 <!DOCTYPE html>
 <html>
 <head>

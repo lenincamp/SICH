@@ -2,21 +2,6 @@
 
 class Main extends Private_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
 	/*function __construct() {
 		parent::__construct();
 		$this->removeCache();
@@ -29,6 +14,7 @@ class Main extends Private_Controller {
 	
 	public function home()
 	{
+		if(!@$this->user) redirect ('main');
 		$title['title'] = 'home';
 		$this->load->view('templates/header', $title);
 		$this->load->view('user/inicio');
@@ -77,16 +63,7 @@ class Main extends Private_Controller {
 		redirect('main');
 	}
 	
-	public function menu()
-	{
-		if(!@$this->user) redirect ('main');
-		$data['prueba'] = 'Prueba renderiza variable';
-		$title['title'] = 'home';
-		$this->load->view('templates/header', $title);
-		$this->load->view('user/body', $data);
-		$this->load->view('templates/footer');
-	}
 }
 
 /* End of file main.php */
-/* Location: ./application/controllers/welcome.php */
+/* Location: ./application/controllers/main.php */
