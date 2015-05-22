@@ -22,6 +22,15 @@ class Main extends Private_Controller {
 		$this->load->view('login');
 	}
 	
+	public function home()
+	{
+		$title['title'] = 'home';
+		$this->load->view('templates/header', $title);
+		$this->load->view('user/inicio');
+		$this->load->view('templates/footer');
+	}
+	
+	
 	public function login() {
  
 		$data = array();
@@ -47,7 +56,7 @@ class Main extends Private_Controller {
 				// Si existe el usuario creamos la sesion y redirigimos al index.
 				if($logged_user) {
 					$this->session->set_userdata('logged_user', $logged_user);
-					redirect('main/menu/');
+					redirect('main/home/');
 				} else {
 					// De lo contrario se activa el error_login.
 					$data['error_login'] = TRUE;
