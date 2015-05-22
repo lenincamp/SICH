@@ -9,5 +9,15 @@
 		</a>
 	</div>
 </div>
+
+<?php  
+	if ( ! empty($js))
+	{
+		foreach ($js as $key => $value) 
+		{
+			echo "<script $key='$value' type='text/javascript'></script>";
+		}
+	}
+?>
 </body>
 </html>

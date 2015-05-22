@@ -1,12 +1,10 @@
-function seleccionar(opcion){
+$(window).load(function(){
 	var menu=document.getElementById("css3menu1")
 	var opciones = menu.getElementsByTagName("a");
 	var i;
 	for (i = 0; i < opciones.length; i++) {
 		opciones[i].className = "";
 	}
-	opcion.className = "selected";
-}
-$(function(){
-	$("#mn_home").addClass("selected");
+	$("#mn_car").addClass("selected");
+	console.log("como la mamas");
 });
