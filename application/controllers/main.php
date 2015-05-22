@@ -17,6 +17,11 @@ class Main extends Private_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+	/*function __construct() {
+		parent::__construct();
+		$this->removeCache();
+	}*/
+	
 	public function index()
 	{
 		$this->load->view('login');
