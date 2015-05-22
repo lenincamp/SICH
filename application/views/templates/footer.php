@@ -18,6 +18,10 @@
 			echo "<script $key='$value' type='text/javascript'></script>";
 		}
 	}
+	if ( ! empty($funcion))
+	{
+		echo $funcion;
+	}
 ?>
 </body>
 </html>
