@@ -22,7 +22,7 @@
 	{
 		foreach ($css as $key => $value) 
 		{
-			echo "<link rel='stylesheet' $key='$value'>";
+			echo "<link rel='stylesheet' href='$value'>";
 		}
 	}
 ?>

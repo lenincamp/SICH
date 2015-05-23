@@ -11,15 +11,23 @@ class Car extends Private_Controller {
 	{
 		if(!@$this->user) redirect ('main');
 		$title['title'] = 'vehiculo';
+
 		$data['js'] = array(
 			base_url()."static/js/users/car.js",
 			base_url()."static/js/bootstrap-select.min.js",
-			base_url()."static/js/i18n/defaults-es_CL.min.js"			
+			base_url()."static/js/i18n/defaults-es_CL.min.js",
+			base_url()."static/js/pnotify.custom.min.js",
+			"https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js",
+			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"
 		);
 		$data['funcion']="<script type='text/javascript'> seleccionar('mn_car') </script>";
-		$title['css'] = array("href" => base_url()."static/css/bootstrap-select.min.css");
+		$title['css'] = array(
+			base_url()."static/css/bootstrap-select.min.css",
+			base_url()."static/css/pnotify.custom.min.css",
+			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css"
+		);
 		
-		$mark['mark'] = $this->mark->get_all();
+		$mark['mark']  = $this->mark->get_all();
 		
 		$this->load->view('templates/header', $title);
 		$this->load->view('user/car', $mark);
@@ -28,6 +36,7 @@ class Car extends Private_Controller {
 	
 	public function save_model()
 	{
+		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
     		$data = array(
@@ -37,6 +46,22 @@ class Car extends Private_Controller {
 
 			$response = $this->model->save($data);
 			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_models_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = $this->model->get_all();
+			echo json_encode(array("data"=>$data));
 		}
 		else
 		{
