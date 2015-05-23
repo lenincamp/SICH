@@ -35,6 +35,40 @@ $(function(){
 	
 	/*
 	 * -------------------------------------------------------------------
+	 *  Edit model submit(Ajax) --- modal form
+	 * -------------------------------------------------------------------
+	 */
+	 $("#frmMdModel").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/edit_model/?trId="+$("#spId").attr('data-toggle'),
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				if(response){
+					new PNotify({
+						title: 'Notificación',
+						text: 'Registro Exitoso',
+						type: 'success'
+					});
+					$("#frmMdModel input[type='text']").val('');
+					$('.cmbMarkMd').selectpicker('refresh');
+					$('#tbModels').DataTable().ajax.reload();
+					$("#mdModel").modal('hide');
+				}else{		
+					new PNotify({
+						title: 'Oh No!',
+						text: 'Error en el registro.',
+						type: 'error'
+					});
+				}
+			}
+		});
+	});
+	 
+	/*
+	 * -------------------------------------------------------------------
 	 *  function editDeleteModel(btn) -> load modal form edit or delete
 	 *	@param : btn => parameter this btn(editModel) onclick
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
@@ -44,6 +78,9 @@ $(function(){
 	 	var trId = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
 	 		$("#mdModel").modal('show');
+	 		$("#spId").attr('data-toggle', trId);
+	 		$("#frmMdModel input[type='text']").val($($("#"+trId).children('td')[0]).html());
+	 		$("#cmbMarkMd").selectpicker('val', $($("#"+trId).children('td')[1]).attr('id'));
 	 	}
 	 	else
 	 	{
@@ -63,7 +100,7 @@ $(function(){
 					history: false
 				}
 			}).get().on('pnotify.confirm', function() {
-				
+							
 				$.ajax({
 					type: "POST",
 					url: "/sich/car/delete_model/",
@@ -156,6 +193,7 @@ $(function(){
 	$.renderizeRow = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
 	   $(nRow).attr('id',aData['mod_id']);
+	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']);
 	}
 						  
 	$.fnTbl('#tbModels',"/sich/car/get_models_all/",[{ "data": "mod_nom"},{"data":"mar_nom"}],$.renderizeRow);
