@@ -6,7 +6,11 @@ class Car extends Private_Controller {
 		parent::__construct();
 		$this->load->model(array('mark','model'));
 	}
-	
+	/*
+	 * -------------------------------------------------------------------
+	 *  MARKS
+	 * -------------------------------------------------------------------
+	 */
 	public function start()
 	{
 		if(!@$this->user) redirect ('main');
@@ -34,6 +38,27 @@ class Car extends Private_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 	
+	/*
+	 * -------------------------------------------------------------------
+	 * MODELS
+	 * -------------------------------------------------------------------
+	 */
+	public function delete_model()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('mod_id' => $this->input->post('id'));
+			$response = $this->model->delete($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
 	public function save_model()
 	{
 		if(!@$this->user) redirect ('main');

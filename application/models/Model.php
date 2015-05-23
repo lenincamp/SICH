@@ -11,7 +11,8 @@ class Model extends CI_Model {
 	}
  
 	
-	public function get_all(){
+	public function get_all()
+	{
 		/*
 			SELECT mod_id, mod_nom, mar_nom
 			FROM modelo, marca
@@ -26,8 +27,14 @@ class Model extends CI_Model {
 		return $response;
 	}
 	
-	public function save($data){
+	public function save($data)
+	{
 		return $this->db->insert('modelo', $data);
+	}
+	
+	public function delete($data)
+	{
+		return $this->db->delete('modelo', $data); 
 	}
  
 }
