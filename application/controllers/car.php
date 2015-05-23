@@ -43,22 +43,7 @@ class Car extends Private_Controller {
 	 * MODELS
 	 * -------------------------------------------------------------------
 	 */
-	public function delete_model()
-	{
-		if(!@$this->user) redirect ('main');
-		if ($this->input->is_ajax_request()) 
-    	{
-    		$data = array('mod_id' => $this->input->post('id'));
-			$response = $this->model->delete($data);
-			echo json_encode($response);
-		}
-		else
-		{
-			exit('No direct script access allowed');
-			show_404();
-		}
-		return FALSE;
-	}
+
 	public function save_model()
 	{
 		if(!@$this->user) redirect ('main');
@@ -87,6 +72,43 @@ class Car extends Private_Controller {
     	{
     		$data = $this->model->get_all();
 			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function edit_model()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'mod_nom'  => $this->input->post('nameMd'),
+				'id_marca' => $this->input->post('id_markMd')
+    		);
+			$response = $this->model->update($this->input->get('trId'), $data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function delete_model()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('mod_id' => $this->input->post('id'));
+			$response = $this->model->delete($data);
+			echo json_encode($response);
 		}
 		else
 		{

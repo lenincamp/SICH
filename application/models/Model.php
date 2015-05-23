@@ -20,7 +20,7 @@ class Model extends CI_Model {
 			GROUP BY mar_nom, mod_id
 			ORDER BY mar_nom, mod_nom
 		*/
-		$response = $this->db->select('mod_id, mod_nom, mar_nom')
+		$response = $this->db->select('mod_id, mod_nom, mar_nom, mar_id')
 						 ->from('modelo')
 						 ->join('marca', 'id_marca = mar_id')
 						 ->get()->result_array();
@@ -35,6 +35,16 @@ class Model extends CI_Model {
 	public function delete($data)
 	{
 		return $this->db->delete('modelo', $data); 
+	}
+	
+	public function update($id, $data)
+	{
+		if($id){
+			return $this->db->update('modelo', $data, array('mod_id' => $id));
+		}
+		else{
+			return FALSE;
+		}
 	}
  
 }

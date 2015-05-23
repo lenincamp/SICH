@@ -157,8 +157,10 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Editar Modelo</h4>
 					</div>
-					<div class="modal-body">		
-						<form role="form" id='frmMdModel'>
+					<form role="form" id='frmMdModel'>
+						<div class="modal-body">		
+						
+							<span id="spId"></span>
 							<div class="form-group">
 								<label for="txtNameMd">Nombre:</label>
 								<input type="text" class="form-control" id="txtNameMd" name="nameMd" placeholder="Ingrese Nombre"/>
@@ -166,7 +168,7 @@
 			  
 						  	<div class="form-group">
 								<label for="txtMark">Marca:</label>
-								<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMarkMd">
+								<select class="selectpicker" data-live-search="true" data-size="5" name="id_markMd" id="cmbMarkMd">
 									<?php
 									if ( ! empty($mark))
 									{
@@ -182,18 +184,17 @@
 									?>
 								</select>
 						  	</div>
-
-						</form>
-						
-					</div>
-					<div class="modal-footer">
-						<div class="row">
-							<div class="col-md-10 col-md-offset-1">
-								<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
-								<button type="button"  class="button button-3d-primary button-rounded">Guardar</button>
+						</div>
+					
+						<div class="modal-footer">
+							<div class="row">
+								<div class="col-md-10 col-md-offset-1">
+									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
+									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
+								</div>
 							</div>
 						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
