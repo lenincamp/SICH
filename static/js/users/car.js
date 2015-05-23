@@ -1,4 +1,5 @@
 $(function(){
+	var create = false;
 	$("#frmModel").on("submit",function(event){
 		event.preventDefault();
 		$.ajax({
@@ -14,6 +15,7 @@ $(function(){
 						type: 'success'
 					});
 					$("#frmModel input[type='text']").val('');
+					create = true;
 				}else{		
 					new PNotify({
 						title: 'Oh No!',
@@ -66,7 +68,10 @@ $(function(){
 	$.fnTbl('#tbModels',"/sich/car/get_models_all/",[{ "data": "mod_nom"},{"data":"mar_nom"}],btnsOpTblModels);					  
 	$("#ltModel").click(function(event){
 		//$("#tbModels").ajax.reload();
-		$('#tbModels').DataTable().ajax.reload();
+		if(create){
+			$('#tbModels').DataTable().ajax.reload();
+			create = false;
+		}
 	});
 	
 	
