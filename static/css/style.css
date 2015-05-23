@@ -304,3 +304,8 @@ border:1px solid black;
 #menu1 li:hover > ul{
 display: block;
 }
+
+.optionBar{
+margin-top:1%;
+padding:1%;
+}
