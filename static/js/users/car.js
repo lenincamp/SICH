@@ -2,6 +2,47 @@ $(function(){
 	
 	/*
 	 * -------------------------------------------------------------------
+	 *  Notification Messages
+	 * -------------------------------------------------------------------
+	 */
+	 $.successMessage = function(){
+	 	new PNotify({
+			title: 'Notificación',
+			text : 'Registro Exitoso',
+			type : 'success'
+		});
+	 }
+	 
+	 $.errorMessage = function(){
+	 	new PNotify({
+			title: 'Oh No!',
+			text: 'Error en el registro.',
+			type: 'error'
+		});
+	 }
+	 
+	 $.confirmMessage = function(fnc){
+	 	new PNotify({
+			title: 'Confirmación Necesaria',
+			text: 'Está Seguro de Eliminar el Registro?',
+			icon: 'glyphicon glyphicon-question-sign',
+			hide: false,
+			confirm: {
+				confirm: true
+			},
+			buttons: {
+				closer: false,
+				sticker: false
+			},
+			history: {
+				history: false
+			}
+		}).get().on('pnotify.confirm', fnc).on('pnotify.cancel', function() {
+			console.log('Oh ok. Chicken, I see.');
+		});
+	 }
+	/*
+	 * -------------------------------------------------------------------
 	 *  Create model submit(Ajax)
 	 * -------------------------------------------------------------------
 	 */
@@ -15,19 +56,11 @@ $(function(){
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					new PNotify({
-						title: 'Notificación',
-						text: 'Registro Exitoso',
-						type: 'success'
-					});
+					$.succesMessage();
 					$("#frmModel input[type='text']").val('');
 					create = true;
 				}else{		
-					new PNotify({
-						title: 'Oh No!',
-						text: 'Error en el registro.',
-						type: 'error'
-					});
+					$.errorMessage();
 				}
 			}
 		});
@@ -47,21 +80,13 @@ $(function(){
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					new PNotify({
-						title: 'Notificación',
-						text: 'Registro Exitoso',
-						type: 'success'
-					});
+					$('#tbModels').DataTable().ajax.reload();
 					$("#frmMdModel input[type='text']").val('');
 					$('.cmbMarkMd').selectpicker('refresh');
-					$('#tbModels').DataTable().ajax.reload();
 					$("#mdModel").modal('hide');
+					$.successMessage();
 				}else{		
-					new PNotify({
-						title: 'Oh No!',
-						text: 'Error en el registro.',
-						type: 'error'
-					});
+					$.errorMessage();
 				}
 			}
 		});
@@ -74,6 +99,23 @@ $(function(){
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
 	 * -------------------------------------------------------------------
 	 */
+	 $.deleteModel = function(){
+	 	$.ajax({
+			type: "POST",
+			url: "/sich/car/delete_model/",
+			dataType: 'json',
+			data: {id:trId},
+			success: function(response) {
+				if(response){
+					$.successMessage();
+					$('#tbModels').DataTable().row( $("#"+trId) ).remove().draw();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	 }
+	 
 	 $.editDeleteModel = function(btn, edt){
 	 	var trId = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
@@ -84,53 +126,7 @@ $(function(){
 	 	}
 	 	else
 	 	{
-	 		new PNotify({
-				title: 'Confirmación Necesaria',
-				text: 'Está Seguro de Eliminar el Modelo?',
-				icon: 'glyphicon glyphicon-question-sign',
-				hide: false,
-				confirm: {
-					confirm: true
-				},
-				buttons: {
-					closer: false,
-					sticker: false
-				},
-				history: {
-					history: false
-				}
-			}).get().on('pnotify.confirm', function() {
-							
-				$.ajax({
-					type: "POST",
-					url: "/sich/car/delete_model/",
-					dataType: 'json',
-					data: {id:trId},
-					success: function(response) {
-						if(response){
-							new PNotify({
-								title: 'Notificación',
-								text: 'El registro se ha eliminado!!',
-								type: 'success'
-							});
-							//$("#"+trId).fadeOut('slow', function(event){$(this).remove();});
-							$('#tbModels').DataTable().row( $("#"+trId) )
-							.remove()
-							.draw();
-						}else{		
-							new PNotify({
-								title: 'Oh No!',
-								text: 'Error en la eliminación del registro.',
-								type: 'error'
-							});
-						}
-					}
-				});
-				
-			}).on('pnotify.cancel', function() {
-				console.log('Oh ok. Chicken, I see.');
-			});
-	 		
+	 		$.confirmMessage($.deleteModel);
 	 	} 	
 	 }
 	 
