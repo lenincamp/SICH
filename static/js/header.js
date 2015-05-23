@@ -5,8 +5,5 @@ function seleccionar(opcion){
 	for (i = 0; i < opciones.length; i++) {
 		opciones[i].className = "";
 	}
-	var menu=document.getElementById(opcion).className = "selected";
+	document.getElementById(opcion).className = "selected";
 }
-$(function(){
-//$("#mn_home").addClass("selected");
-});

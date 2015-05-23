@@ -22,7 +22,7 @@
 	{
 		foreach ($css as $key => $value) 
 		{
-			echo "<link rel='stylesheet' $key='$value'>";
+			echo "<link rel='stylesheet' href='$value'>";
 		}
 	}
 ?>
@@ -62,7 +62,7 @@
     <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="/*overflow-x:hidden; overflow-y:scroll; max-height:800px;*/">
 		<ul id="css3menu1" class="topmenu">
 			<li class="topmenu"><a id="mn_home" href="<?php echo base_url()?>main/home/" ><span><img src="<?php echo base_url()?>static/img/inicio.png" style="height:40px;" alt=""></br>Inicio</span></a></li>
-			<li class="topmenu"><a href="#" ><span><img src="<?php echo base_url()?>static/img/cliente.png" style="height:40px;" alt=""></br>Clientes</span></a></li>
+			<li class="topmenu"><a id="mn_cli" href="<?php echo base_url()?>client/start" ><span><img src="<?php echo base_url()?>static/img/cliente.png" style="height:40px;" alt=""></br>Clientes</span></a></li>
 			<li class="topmenu"><a id="mn_car" href="<?php echo base_url()?>car/start" ><span><img src="<?php echo base_url()?>static/img/vehiculos.png" style="height:35px;" alt=""></br>Vehiculos</span></a></li>
 			<li class="topmenu"><a onclick="seleccionar(this)" href="#"><span><img src="<?php echo base_url()?>static/img/servicios.png" style="height:40px;" alt=""></br>Servicios</span></a></li>
 			<li class="topmenu"><a onclick="seleccionar(this)" href="#"><span><img src="<?php echo base_url()?>static/img/ordenTrabajo.png" style="height:40px;" alt=""></br>Orden de</br>Trabajo</span></a></li>
