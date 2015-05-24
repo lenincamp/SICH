@@ -15,11 +15,6 @@ $(function(){
 				dataType: 'json',
 				data: $(this).serialize(),
 				success: function(response) {
-				new PNotify({
-								title: 'Aviso',
-								text: response,
-								type: 'error'
-							});
 					if(response=="noPass")
 					{
 						new PNotify({
