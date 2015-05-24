@@ -20,18 +20,19 @@
 					<form id="frmChangePass">
 					  <div class="form-group">
 						<label for="txtName">Contraseña actual:</label>
-						<input type="pass" class="form-control" id="txtActualPass" name="name" placeholder="Ingrese Contraseña Actual"/>
+						<input type="password" required="true" class="form-control" id="txtActualPass" name="txtActualPass" placeholder="Ingrese Contraseña Actual"/>
 					  </div>
 					  <div class="form-group">
 						<label for="txtName">Nueva contraseña:</label>
-						<input type="pass" class="form-control" id="txtActualPass" name="name" placeholder="Ingrese Nueva Contraseña"/>
+						<input type="password" required="true" class="form-control" id="txtNewPass" name="txtNewPass" placeholder="Ingrese Nueva Contraseña"/>
 					  </div>
 					  <div class="form-group">
 						<label for="txtName">Nueva contraseña (Confirmar):</label>
-						<input type="pass" class="form-control" id="txtActualPassConfirm" name="name" placeholder="Confirme Nueva Contraseña"/>
+						<input type="password" required="true" class="form-control" id="txtPassConfirm" name="txtPassConfirm" placeholder="Confirme Nueva Contraseña"/>
 					  </div>
-					  <div class="well">
-					  <h5><strong>Aviso: </strong>El cambio de contraseña provocará el cierre de la sesión actual.</h5>
+					  <div class="alert alert-warning alert-dismissable">
+						<button type="button" class="close" data-dismiss="alert">&times;</button>
+						<h5><strong>Aviso: </strong>El cambio de contraseña provocará el cierre de la sesión actual.</h5>
 					  </div>
 					  <div class="row">
 						  <div class="col-xs-offset-4 col-md-offset-5">
