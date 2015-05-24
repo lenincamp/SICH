@@ -29,5 +29,12 @@ class Users extends CI_Model {
 			)
 		)->row();
 	}
+	
+	
+	public function update($data,$id)
+	{
+		$this->db->where($this->id, $id);
+		return $this->db->update($this->table, $data);
+	}
  
 }

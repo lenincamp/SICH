@@ -309,3 +309,17 @@ display: block;
 margin-top:1%;
 padding:1%;
 }
+
+.panel-primary>.panel-heading {
+  color: #fff;
+  background-color: #4D4D4D;
+  border-color: #4D4D4D;
+}
+
+.panel-primary>.panel-heading+.panel-collapse>.panel-body {
+  border-top-color: #4D4D4D;
+}
+
+.panel-primary {
+  border-color: #4D4D4D;
+}

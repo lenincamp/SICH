@@ -12,6 +12,35 @@ class Main extends Private_Controller {
 		$this->load->view('login');
 	}
 	
+	public function updatePass()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data = array(
+    			'usu_pwd'  => $this->input->post('txtPassConfirm')
+    		);
+			$user_data = (array)$this->session->userdata('logged_user');
+			if($user_data["usu_pwd"]==$this->input->post('txtActualPass'))
+			{	
+				$response = $this->users->update($data,$user_data["usu_id"]);
+				echo json_encode($response);
+			}
+			else
+			{
+				$response="noPass";
+				echo json_encode($response);
+			}
+			
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
 	public function home()
 	{
 		if(!@$this->user) redirect ('main');
@@ -19,6 +48,23 @@ class Main extends Private_Controller {
 		$data['funcion']="<script type='text/javascript'> seleccionar('mn_home') </script>";
 		$this->load->view('templates/header', $title);
 		$this->load->view('user/inicio');
+		$this->load->view('templates/footer',$data);
+	}
+	
+	public function conf()
+	{
+		if(!@$this->user) redirect ('main');
+		$data['js'] = array(
+			base_url()."static/js/users/user.js",
+			base_url()."static/js/bootstrap-select.min.js",
+			base_url()."static/js/i18n/defaults-es_CL.min.js",
+			base_url()."static/js/pnotify.custom.min.js"
+			);
+		$title['title'] = 'settings';
+		$title['css'] = array(base_url()."static/css/pnotify.custom.min.css");
+		$data['funcion']="<script type='text/javascript'> seleccionar(null) </script>";
+		$this->load->view('templates/header', $title);
+		$this->load->view('user/setting');
 		$this->load->view('templates/footer',$data);
 	}
 	

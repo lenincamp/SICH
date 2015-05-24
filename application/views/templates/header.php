@@ -2,7 +2,7 @@
 <html>
 <head>
 <link rel="shortcut icon" href="<?php echo base_url()?>static/img/logo.png">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <meta charset="utf-8">
@@ -10,7 +10,7 @@
 <script src="<?php echo base_url()?>static/js/header.js"></script>
 	<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<link rel="stylesheet" href="<?php echo base_url()?>static/css/style.css" type="text/css">
+
 <!--link rel="stylesheet" href="<?php echo base_url()?>static/css/boostrap.css" type="text/css"-->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
@@ -26,7 +26,7 @@
 		}
 	}
 ?>
-
+<link rel="stylesheet" href="<?php echo base_url()?>static/css/style.css" type="text/css">
 <title> sich - <?php echo $title ?></title>
 </head>
 <body>
@@ -41,7 +41,7 @@
 			<ul id="menu1">
 				<li><img src="<?php echo base_url()?>static/img/user.png" style="width:100%;" alt="">
 					<ul>
-						<li><a href="servicio1.html"><img src="<?php echo base_url()?>static/img/conf.png" style="width:15%; margin:5px;" alt="">Configuración</a></li>
+						<li><a href="<?php echo base_url()?>main/conf/"><img src="<?php echo base_url()?>static/img/conf.png" style="width:15%; margin:5px;" alt="">Configuración</a></li>
 						<li><a href="<?php echo base_url()?>main/logout/"><img src="<?php echo base_url()?>static/img/salir.png" style="width:15%; margin:5px;" alt="">Salir</a></li>
 					</ul>
 				</li>
@@ -59,7 +59,7 @@
 <!--end header-->
 <div class="container-fluid" style="padding:0px; margin-left:-5px; ">
   <div class="row-fluid">
-    <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="/*overflow-x:hidden; overflow-y:scroll; max-height:800px;*/">
+    <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" >
 		<ul id="css3menu1" class="topmenu">
 			<li class="topmenu"><a id="mn_home" href="<?php echo base_url()?>main/home/" ><span><img src="<?php echo base_url()?>static/img/inicio.png" style="height:40px;" alt=""></br>Inicio</span></a></li>
 			<li class="topmenu"><a id="mn_cli" href="<?php echo base_url()?>client/start" ><span><img src="<?php echo base_url()?>static/img/cliente.png" style="height:40px;" alt=""></br>Clientes</span></a></li>
@@ -69,5 +69,5 @@
 			<li class="topmenu"><a onclick="seleccionar(this)" href="#"></span><img src="<?php echo base_url()?>static/img/reportes.png" style="height:40px;" alt=""></br>Reportes</span></a></li>
 		</ul>
 	</div>
-    <div class="col-xs-9 col-md-10">
+    <div class="col-xs-9 col-md-10" style="overflow-x:hidden; overflow-y:auto; max-height:85vh;">
     <!--Body content-->
