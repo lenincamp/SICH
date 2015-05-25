@@ -56,7 +56,7 @@ $(function(){
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					$.succesMessage();
+					$.successMessage();
 					$("#frmModel input[type='text']").val('');
 					create = true;
 				}else{		
@@ -116,8 +116,9 @@ $(function(){
 		});
 	 }
 	 
+	 var trId
 	 $.editDeleteModel = function(btn, edt){
-	 	var trId = $($($(btn).parent()).parent()).attr('id');
+	 	trId = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
 	 		$("#mdModel").modal('show');
 	 		$("#spId").attr('data-toggle', trId);
