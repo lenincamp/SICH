@@ -12,6 +12,36 @@ class Main extends Private_Controller {
 		$this->load->view('login');
 	}
 	
+	public function updatePass()
+	{
+		$this->load->helper('security');
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data = array(
+    			'usu_pwd'  => do_hash($this->input->post('txtPassConfirm'), 'md5')
+    		);
+			$user_data = (array)$this->session->userdata('logged_user');
+			if($user_data["usu_pwd"]==do_hash($this->input->post('txtActualPass'), 'md5'))
+			{	
+				$response = $this->users->update($data,$user_data["usu_id"]);
+				echo json_encode($response);
+			}
+			else
+			{
+				$response="noPass";
+				echo json_encode($response);
+			}
+			
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
 	public function home()
 	{
 		if(!@$this->user) redirect ('main');
@@ -22,8 +52,25 @@ class Main extends Private_Controller {
 		$this->load->view('templates/footer',$data);
 	}
 	
+	public function conf()
+	{
+		if(!@$this->user) redirect ('main');
+		$data['js'] = array(
+			base_url()."static/js/users/user.js",
+			base_url()."static/js/bootstrap-select.min.js",
+			base_url()."static/js/i18n/defaults-es_CL.min.js",
+			base_url()."static/js/pnotify.custom.min.js"
+			);
+		$title['title'] = 'settings';
+		$title['css'] = array(base_url()."static/css/pnotify.custom.min.css");
+		$data['funcion']="<script type='text/javascript'> seleccionar(null) </script>";
+		$this->load->view('templates/header', $title);
+		$this->load->view('user/setting');
+		$this->load->view('templates/footer',$data);
+	}
+	
 	public function login() {
- 
+		$this->load->helper('security');
 		$data = array();
  
 		// Añadimos las reglas necesarias.
@@ -34,7 +81,7 @@ class Main extends Private_Controller {
 		$this->form_validation->set_message('required', 'El campo %s es requerido.');
  		
  		$username = $this->input->post('username');
- 		$passwd   = $this->input->post('password'); 
+ 		$passwd   = do_hash($this->input->post('password'), 'md5'); 
  		
 		// Si username y password existen en post
 		if($username && $passwd) {
