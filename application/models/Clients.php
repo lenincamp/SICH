@@ -33,4 +33,13 @@ class Clients extends CI_Model {
 		return $this->db->delete('cliente', $data); 
 	}
  
+	public function update($id, $data)
+	{
+		if($id){
+			return $this->db->update('cliente', $data, array('cli_id' => $id));
+		}
+		else{
+			return FALSE;
+		}
+	}
 }

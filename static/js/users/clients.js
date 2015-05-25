@@ -1,8 +1,48 @@
 $(function(){
-	
 	/*
 	 * -------------------------------------------------------------------
-	 *  Create model submit(Ajax)
+	 *  Notification Messages
+	 * -------------------------------------------------------------------
+	 */
+	 $.successMessage = function(){
+	 	new PNotify({
+			title: 'Notificación',
+			text : 'Registro Exitoso',
+			type : 'success'
+		});
+	 }
+	 
+	 $.errorMessage = function(){
+	 	new PNotify({
+			title: 'Oh No!',
+			text: 'Error en el registro.',
+			type: 'error'
+		});
+	 }
+	 
+	 $.confirmMessage = function(fnc){
+	 	new PNotify({
+			title: 'Confirmación Necesaria',
+			text: 'Está Seguro de Eliminar el Registro?',
+			icon: 'glyphicon glyphicon-question-sign',
+			hide: false,
+			confirm: {
+				confirm: true
+			},
+			buttons: {
+				closer: false,
+				sticker: false
+			},
+			history: {
+				history: false
+			}
+		}).get().on('pnotify.confirm', fnc).on('pnotify.cancel', function() {
+			console.log('Oh ok. Chicken, I see.');
+		});
+	 }
+	/*
+	 * -------------------------------------------------------------------
+	 *  Create client submit(Ajax)
 	 * -------------------------------------------------------------------
 	 */
 	var create = false;
@@ -10,7 +50,7 @@ $(function(){
 		event.preventDefault();
 		$.ajax({
 			type: "POST",
-			url: "/SICH/client/save_client/",
+			url: "/sich/client/save_client/",
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
@@ -36,69 +76,68 @@ $(function(){
 	
 	/*
 	 * -------------------------------------------------------------------
+	 *  Edit client submit(Ajax) --- modal form
+	 * -------------------------------------------------------------------
+	 */
+	 $("#frmMdClient").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/client/edit_client/?trId="+$("#spId").attr('data-toggle'),
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				if(response){
+					$('#tbModels').DataTable().ajax.reload();
+					$("#frmMdClient input[type='text']").val('');
+					$("#frmMdClient input[type='email']").val('');
+					$("#mdClient").modal('hide');
+					$.successMessage();
+					$('#tbClients').DataTable().ajax.reload();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
 	 *  function editDeleteModel(btn) -> load modal form edit or delete
 	 *	@param : btn => parameter this btn(editModel) onclick
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
 	 * -------------------------------------------------------------------
 	 */
+	 $.deleteModel = function(){
+	 	$.ajax({
+			type: "POST",
+			url: "/sich/client/delete_client/",
+			dataType: 'json',
+			data: {id:trId},
+			success: function(response) {
+				if(response){
+					$.successMessage();
+					$('#tbClients').DataTable().row( $("#"+trId) ).remove().draw();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	 }
+	 
+	 var trId
 	 $.editDeleteModel = function(btn, edt){
-	 	var trId = $($($(btn).parent()).parent()).attr('id');
+	 	trId = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
-	 		$("#mdModel").modal('show');
+	 		$("#mdClient").modal('show');
+	 		$("#spId").attr('data-toggle', trId);
+	 		$("#frmMdClient input[type='text']").val($($("#"+trId).children('td')[0]).html());
 	 	}
 	 	else
 	 	{
-	 		new PNotify({
-				title: 'Confirmación Necesaria',
-				text: 'Está Seguro de Eliminar el Modelo?',
-				icon: 'glyphicon glyphicon-question-sign',
-				hide: false,
-				confirm: {
-					confirm: true
-				},
-				buttons: {
-					closer: false,
-					sticker: false
-				},
-				history: {
-					history: false
-				}
-			}).get().on('pnotify.confirm', function() {
-				
-				$.ajax({
-					type: "POST",
-					url: "/sich/car/delete_model/",
-					dataType: 'json',
-					data: {id:trId},
-					success: function(response) {
-						if(response){
-							new PNotify({
-								title: 'Notificación',
-								text: 'El registro se ha eliminado!!',
-								type: 'success'
-							});
-							//$("#"+trId).fadeOut('slow', function(event){$(this).remove();});
-							$('#tbModels').DataTable().row( $("#"+trId) )
-							.remove()
-							.draw();
-						}else{		
-							new PNotify({
-								title: 'Oh No!',
-								text: 'Error en la eliminación del registro.',
-								type: 'error'
-							});
-						}
-					}
-				});
-				
-			}).on('pnotify.cancel', function() {
-				console.log('Oh ok. Chicken, I see.');
-			});
-	 		
+	 		$.confirmMessage($.deleteModel);
 	 	} 	
 	 }
-	 
-	 
 	/*
 	 * -------------------------------------------------------------------
 	 *  Function DataTable(bootrap)  
@@ -156,12 +195,12 @@ $(function(){
 						  
 	$.renderizeRow = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
-	   $(nRow).attr('id',aData['per_ced']);
+	   $(nRow).attr('id',aData['cli_id']);
 	}
 	
-	$.fnTbl('#tbClients',"/SICH/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"cli_tel"}],$.renderizeRow);
+	$.fnTbl('#tbClients',"/sich/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"cli_tel"}],$.renderizeRow);
 	
-	$("#ltModel").click(function(event){
+	$("#ltClient").click(function(event){
 		//$("#tbModels").ajax.reload();
 		if(create){
 			$('#tbClients').DataTable().ajax.reload();
