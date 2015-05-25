@@ -1,4 +1,4 @@
-<div class="well panel panel-default" style="margin-top:1%;">
+<div class="well panel panel-default" style="margin-top:1%;min-height:590px;">
   <div class="panel-body">
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#sectionA">Vehículo</a></li>

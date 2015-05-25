@@ -2,10 +2,13 @@
 
 class Main extends Private_Controller {
 
-	/*function __construct() {
+	function __construct() {
 		parent::__construct();
-		$this->removeCache();
-	}*/
+		//$this->removeCache();
+		
+		// Se carga el modelo de usuarios.
+		$this->load->model('users');
+	}
 	
 	public function index()
 	{
@@ -70,7 +73,17 @@ class Main extends Private_Controller {
 	}
 	
 	public function login() {
+<<<<<<< HEAD
 		$this->load->helper('security');
+=======
+
+		// Se carga el helper form y security.
+		$this->load->helper(array('form', 'security'));
+		
+		// Se carga la libreria form_validation.
+		$this->load->library('form_validation');
+		
+>>>>>>> deploy
 		$data = array();
  
 		// Añadimos las reglas necesarias.
