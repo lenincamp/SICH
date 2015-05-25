@@ -12,6 +12,9 @@ class Main extends Private_Controller {
 	
 	public function index()
 	{
+		// Se carga el helper form.
+		$this->load->helper('form');
+		
 		$this->load->view('login');
 	}
 	
@@ -74,12 +77,17 @@ class Main extends Private_Controller {
 	
 	public function login() {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		$this->load->helper('security');
 =======
 
 		// Se carga el helper form y security.
 		$this->load->helper(array('form', 'security'));
 		
+=======
+	
+		$this->load->helper('security');
+>>>>>>> deploy
 		// Se carga la libreria form_validation.
 		$this->load->library('form_validation');
 		
