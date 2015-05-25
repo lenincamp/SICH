@@ -38,11 +38,7 @@ class Car extends Private_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 	
-	/*
-	 * -------------------------------------------------------------------
-	 * MODELS
-	 * -------------------------------------------------------------------
-	 */
+	/* =========================>>> MODELS <<<========================= */
 
 	public function save_model()
 	{
@@ -108,6 +104,80 @@ class Car extends Private_Controller {
     	{
     		$data = array('mod_id' => $this->input->post('id'));
 			$response = $this->model->delete($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	/* =========================>>> MARKS <<<========================= */
+	
+	public function save_mark()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'mar_nom'  => $this->input->post('nameMark')
+    		);
+
+			$response = $this->mark->save($data);
+			echo $response;
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_marks_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = $this->mark->get_all();
+			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function edit_mark()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'mar_nom'  => $this->input->post('nameMark')
+    		);
+			$response = $this->mark->update($this->input->get('trId'), $data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function delete_mark()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('mar_id' => $this->input->post('id'));
+			$response = $this->mark->delete($data);
 			echo json_encode($response);
 		}
 		else
