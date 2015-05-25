@@ -193,11 +193,14 @@ $(function(){
 	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']);
 	}
 						  
-	$.fnTbl('#tbModels',"/sich/car/get_models_all/",[{ "data": "mod_nom"},{"data":"mar_nom"}],$.renderizeRow);
-	
+	var flag = true;
 	$("#ltModel").click(function(event){
 		//$("#tbModels").ajax.reload();
-		if(create){
+		if (flag){
+			$.fnTbl('#tbModels',"/sich/car/get_models_all/",[{ "data": "mod_nom"},{"data":"mar_nom"}],$.renderizeRow);
+			flag = false;		
+		}
+		else if(create){
 			$('#tbModels').DataTable().ajax.reload();
 			create = false;
 		}
