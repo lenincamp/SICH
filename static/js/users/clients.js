@@ -156,10 +156,10 @@ $(function(){
 						  
 	$.renderizeRow = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
-	   $(nRow).attr('id',aData['mod_id']);
+	   $(nRow).attr('id',aData['per_ced']);
 	}
 	
-	$.fnTbl('#tbClients',"/SICH/client/get_client_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"cli_tel"}],$.renderizeRow);
+	$.fnTbl('#tbClients',"/SICH/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"cli_tel"}],$.renderizeRow);
 	
 	$("#ltModel").click(function(event){
 		//$("#tbModels").ajax.reload();

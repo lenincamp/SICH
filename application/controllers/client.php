@@ -31,9 +31,9 @@ class Client extends Private_Controller {
 			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css"
 		);
 		
-		
+		$clientes['clientes']  = $this->clients->get_all();
 		$this->load->view('templates/header', $title);
-		$this->load->view('user/client');
+		$this->load->view('user/client',$clientes);
 		$this->load->view('templates/footer', $data);
 	}
 	
