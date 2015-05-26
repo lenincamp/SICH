@@ -261,7 +261,7 @@ $(function(){
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					$('#tbarks').DataTable().ajax.reload();
+					$('#tbMarks').DataTable().ajax.reload();
 					$("#frmMdMark input[type='text']").val('');
 					$("#markModal").modal('hide');
 					$.successMessage();
@@ -293,7 +293,6 @@ $(function(){
 						  
 	var flagMk = true;
 	$("#ltMark").click(function(event){
-		//$("#tbModels").ajax.reload();
 		if (flagMk){
 			$.fnTbl('#tbMarks',"/sich/car/get_marks_all/",[{"data":"mar_nom"}],$.renderizeRowTbMarks);
 			flagMk = false;		
