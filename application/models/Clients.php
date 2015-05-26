@@ -36,6 +36,12 @@ class Clients extends CI_Model {
 	{
 		return $this->db->delete('cliente', $data); 
 	}
+	
+	public function selectSQL($sql,$data)
+	{
+		$query = $this->db->query($sql,$data);
+		Return $query->row();
+	}
  
 	public function update($id, $data)
 	{
