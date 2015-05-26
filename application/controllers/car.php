@@ -17,6 +17,7 @@ class Car extends Private_Controller {
 		$title['title'] = 'vehiculo';
 
 		$data['js'] = array(
+			base_url()."static/js/library/alls.js",
 			base_url()."static/js/users/car.js",
 			base_url()."static/js/bootstrap-select.min.js",
 			base_url()."static/js/i18n/defaults-es_CL.min.js",

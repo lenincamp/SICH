@@ -1,45 +1,5 @@
 $(function(){
-	/*
-	 * -------------------------------------------------------------------
-	 *  Notification Messages
-	 * -------------------------------------------------------------------
-	 */
-	 $.successMessage = function(){
-	 	new PNotify({
-			title: 'Notificación',
-			text : 'Registro Exitoso',
-			type : 'success'
-		});
-	 }
-	 
-	 $.errorMessage = function(){
-	 	new PNotify({
-			title: 'Oh No!',
-			text: 'Error en el registro.',
-			type: 'error'
-		});
-	 }
-	 
-	 $.confirmMessage = function(fnc){
-	 	new PNotify({
-			title: 'Confirmación Necesaria',
-			text: 'Está Seguro de Eliminar el Registro?',
-			icon: 'glyphicon glyphicon-question-sign',
-			hide: false,
-			confirm: {
-				confirm: true
-			},
-			buttons: {
-				closer: false,
-				sticker: false
-			},
-			history: {
-				history: false
-			}
-		}).get().on('pnotify.confirm', fnc).on('pnotify.cancel', function() {
-			console.log('Oh ok. Chicken, I see.');
-		});
-	 }
+	
 	/*
 	 * -------------------------------------------------------------------
 	 *  Create client submit(Ajax)
@@ -163,45 +123,6 @@ $(function(){
 	 		$.confirmMessage($.deleteClient);
 	 	} 	
 	 }
-	/*
-	 * -------------------------------------------------------------------
-	 *  Function DataTable(bootrap)  
-	 *  @param : id      => id this element dom
-	 *	@param : url     => uri for ajax method in controller
-	 *	@param : columns => coloumns db for dateTable
-	 *	@param : fnc     => function for rederice tr
-	 * -------------------------------------------------------------------
-	 */
-	 var lngEsp = {
-		"sProcessing":     "Procesando...",
-		"sLengthMenu":     "Mostrar _MENU_ registros",
-		"sZeroRecords":    "No se encontraron resultados",
-		"sEmptyTable":     "Ningún dato disponible en esta tabla",
-		"sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-		"sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
-		"sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
-		"sInfoPostFix":    "",
-		"sSearch":         "Buscar:",
-		"sUrl":            "",
-		"sInfoThousands":  ",",
-		"sLoadingRecords": "Cargando...",
-		"oPaginate": {
-			"sFirst":    "Primero",
-			"sLast":     "Último",
-			"sNext":     "Siguiente",
-			"sPrevious": "Anterior"
-		}
-	};
-	
-	$.fnTbl = function(id, url, columns, fnc){
-		$(id).dataTable( {
-			ordering: true,
-			"ajax": url,
-			"columns": columns,
-			"fnCreatedRow": fnc,
-			"language": lngEsp
-		} );
-	}
 	
 	/*
 	 * -------------------------------------------------------------------

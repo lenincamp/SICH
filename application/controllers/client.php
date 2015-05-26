@@ -17,6 +17,7 @@ class Client extends Private_Controller {
 		$title['title'] = 'clientes';
 
 		$data['js'] = array(
+			base_url()."static/js/library/alls.js",
 			base_url()."static/js/users/clients.js",
 			base_url()."static/js/bootstrap-select.min.js",
 			base_url()."static/js/i18n/defaults-es_CL.min.js",
