@@ -23,6 +23,10 @@ class Clients extends CI_Model {
 		return $response;
 	}
 	
+	public function get($data) {
+		return $this->db->get_where('cliente', $data)->row();
+	}
+	
 	public function save($data)
 	{
 		return $this->db->insert('cliente', $data);

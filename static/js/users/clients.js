@@ -108,7 +108,9 @@ $(function(){
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
 	 * -------------------------------------------------------------------
 	 */
-	 $.deleteModel = function(){
+	 
+	 
+	 $.deleteClient = function(){
 	 	$.ajax({
 			type: "POST",
 			url: "/sich/client/delete_client/",
@@ -126,16 +128,39 @@ $(function(){
 	 }
 	 
 	 var trId
+	 
+	 $.chargeDataModal = function(id){
+		$.ajax({
+			type: "POST",
+			url: "/sich/client/search_client_by_id",
+			dataType: 'json',
+			data: {id:trId},
+			success: function(response) {
+				$("#mdClient").modal('show');
+				if(response!=null){
+					var obj = eval(response);
+					$('#txtNombreMd').val(obj.per_nom);
+					$('#txtApellidoMd').val(obj.per_ape);
+					$('#txtTelefonoMd').val(obj.cli_tel);
+					$('#txtDireccionMd').val(obj.cli_dir);
+					$('#txtEmailMd').val(obj.cli_eml);
+				}else{
+					$.errorMessage();
+				}
+			}
+		});
+	}
+	 
 	 $.editDeleteModel = function(btn, edt){
 	 	trId = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
-	 		$("#mdClient").modal('show');
+	 		
 	 		$("#spId").attr('data-toggle', trId);
-	 		$("#frmMdClient input[type='text']").val($($("#"+trId).children('td')[0]).html());
+	 		$.chargeDataModal(trId);
 	 	}
 	 	else
 	 	{
-	 		$.confirmMessage($.deleteModel);
+	 		$.confirmMessage($.deleteClient);
 	 	} 	
 	 }
 	/*

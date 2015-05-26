@@ -99,6 +99,23 @@ class Client extends Private_Controller {
 		return FALSE;
 	}
 	
+	public function search_client_by_id()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data= array('cli_id' => $this->input->post('id'));
+    		$response = $this->clients->get($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
 	public function edit_client()
 	{
 		if(!@$this->user) redirect ('main');
