@@ -24,13 +24,102 @@
 				<div id="collapseSaveCar" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveCar">
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
+							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 								<form id="frmCar">
-								  <div class="form-group">
-									<label for="txtName">Nombre:</label>
-									<input type="text" class="form-control" id="txtNameMark" name="nameMark" placeholder="Ingrese Nombre">
-								  </div>
-					  
+								  <fieldset class="scheduler-border">
+									<legend class="scheduler-border">Datos Cliente</legend>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">C.I./R.U.C.:</label><a href="#" id="searchClient"><img src="<?php echo base_url()?>static/img/mini_logo.png" style="height:30px;" alt=""> </a>
+										<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">Nombre:</label>
+										<input type="text" required="true" class="form-control" id="txtNombre" name="txtNombre" placeholder="Ingrese Nombre"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">Apellido:</label>
+										<input type="text" required="true" class="form-control" id="txtApellido" name="txtApellido" placeholder="Ingrese Apellido"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">Teléfono:</label>
+										<input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">E-mail:</label>
+										<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">Dirección:</label>
+										<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
+									  </div>
+								  </fieldset>
+								  <fieldset class="scheduler-border">
+									<legend class="scheduler-border">Datos Vehículo</legend>
+									  <div class="form-group col-md-6">
+										<label for="txtMark">Marca:</label>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
+											<?php
+											if ( ! empty($mark))
+											{
+												foreach ($mark as $key => $value) 
+												{
+													echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
+												}
+											}
+											else
+											{
+												echo "<option>Cree una Marca</option>";
+											}
+											?>
+										</select>
+									  </div>
+									  <div class="form-group col-md-6">
+										<label for="txtMark">Modelo:</label>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
+											<?php
+											if ( ! empty($mark))
+											{
+												foreach ($mark as $key => $value) 
+												{
+													echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
+												}
+											}
+											else
+											{
+												echo "<option>Seleccione una Marca</option>";
+											}
+											?>
+										</select>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">Chasis:</label>
+										<input type="text" required="true" class="form-control" id="txtNChasis" name="txtChasis" placeholder="Ingrese Nombre"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtName">Motor:</label>
+										<input type="text" required="true" class="form-control" id="txtMotor" name="txtMotor" placeholder="Ingrese Motor"/>
+									  </div>
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtName">Placa:</label>
+										<input type="text" required="true" class="form-control" id="txtPlaca" name="txtPlaca" placeholder="Ingrese Placa"/>
+									  </div>
+									  
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtName">Año:</label>
+										<input type="email" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
+									  </div>
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtName">Color:</label>
+										<div class="input-group demo2">
+											<input type="text" value="" class="form-control" />
+											<span class="input-group-addon"><i></i></span>
+										</div>
+									  </div>
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtName">Código:</label>
+										<input type="text" required="true" class="form-control" id="txtCodigo" name="txtCodigo" placeholder="Ingrese Código"/>
+									  </div>
+								  </fieldset>
 								  <div class="row">
 									  <div class="col-md-offset-5">
 										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
@@ -50,7 +139,7 @@
 				<div class="panel-heading" role="tab" id="headingListCar">
 				  <h4 class="panel-title">
 					<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
-					  LISTAR VAHICULOS
+					  LISTAR VEHICULOS
 					</a>
 				  </h4>
 				</div>

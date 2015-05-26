@@ -22,13 +22,20 @@ class Car extends Private_Controller {
 			base_url()."static/js/bootstrap-select.min.js",
 			base_url()."static/js/i18n/defaults-es_CL.min.js",
 			base_url()."static/js/pnotify.custom.min.js",
+			base_url()."static/js/bootstrap-colorpicker.min.js",
+			base_url()."static/js/docs.js",
 			"https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js",
 			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"
 		);
-		$data['funcion']="<script type='text/javascript'> seleccionar('mn_car') </script>";
+		$data['funcion']="<script type='text/javascript'> seleccionar('mn_car');</script> <script>
+    $(function(){
+        $('.demo2').colorpicker();
+    });
+</script>";
 		$title['css'] = array(
 			base_url()."static/css/bootstrap-select.min.css",
 			base_url()."static/css/pnotify.custom.min.css",
+			base_url()."static/css/bootstrap-colorpicker.min.css",
 			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css"
 		);
 		
