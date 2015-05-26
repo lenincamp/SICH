@@ -9,8 +9,73 @@
 		
 		<!-- VEHICULO -->
 		<div id="sectionA" class="tab-pane fade in active">
-			<h3>Section A</h3>
-			<p>Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui. Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth.</p>
+			<br>
+			<div class="panel-group" id="accordionCar" role="tablist" aria-multiselectable="true">
+			  
+			  <!-- CREAR VEHICULO -->
+			  <div class="panel panel-primary">
+				<div class="panel-heading" role="tab" id="headingSaveCar">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordionCar" href="#collapseSaveCar" aria-expanded="true" aria-controls="collapseSaveCar">
+					  CREAR VEHICULO
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseSaveCar" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveCar">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
+								<form id="frmCar">
+								  <div class="form-group">
+									<label for="txtName">Nombre:</label>
+									<input type="text" class="form-control" id="txtNameMark" name="nameMark" placeholder="Ingrese Nombre">
+								  </div>
+					  
+								  <div class="row">
+									  <div class="col-md-offset-5">
+										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
+									  </div>
+								  </div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			  </div>
+			  <!-- END CREAR VEHICULO -->
+			  
+			  <!-- LISTAR VEHICULO -->
+			  <div class="panel panel-primary">
+				<div class="panel-heading" role="tab" id="headingListCar">
+				  <h4 class="panel-title">
+					<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
+					  LISTAR VAHICULOS
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseListCar" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListCar">
+				  <div class="panel-body">
+					
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCar">
+								<thead>
+									<tr>
+										<th class="text-center"> Nombre </th>
+										<th class="text-center">Acción</th>
+									</tr>
+								</thead>
+								
+							</table>
+						</div>
+					</div>
+
+				  </div>
+				</div>
+			  </div>
+			  <!-- END LISTAR VEHICULO -->
+			</div>
 		</div>
 		<!-- END VEHICULO -->
 		
