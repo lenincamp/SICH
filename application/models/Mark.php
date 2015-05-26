@@ -38,7 +38,7 @@ class Mark extends CI_Model {
 	public function update($id, $data)
 	{
 		if($id){
-			return $this->db->update('marca', $data, array('mod_id' => $id));
+			return $this->db->update('marca', $data, array('mar_id' => $id));
 		}
 		else{ return FALSE;}
 	}

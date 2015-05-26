@@ -158,7 +158,7 @@ class Car extends Private_Controller {
 		if ($this->input->is_ajax_request()) 
     	{
     		$data = array(
-    			'mar_nom'  => $this->input->post('nameMark')
+    			'mar_nom'  => $this->input->post('nameMarkEdit')
     		);
 			$response = $this->mark->update($this->input->get('trId'), $data);
 			echo json_encode($response);
