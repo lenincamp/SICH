@@ -31,9 +31,9 @@ class Client extends Private_Controller {
 			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css"
 		);
 		
-		
+		$clientes['clientes']  = $this->clients->get_all();
 		$this->load->view('templates/header', $title);
-		$this->load->view('user/client');
+		$this->load->view('user/client',$clientes);
 		$this->load->view('templates/footer', $data);
 	}
 	
@@ -42,13 +42,13 @@ class Client extends Private_Controller {
 	 * MODELS
 	 * -------------------------------------------------------------------
 	 */
-	public function delete_model()
+	public function delete_client()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = array('mod_id' => $this->input->post('id'));
-			$response = $this->model->delete($data);
+    		$data = array('cli_id' => $this->input->post('id'));
+			$response = $this->clients->delete($data);
 			echo json_encode($response);
 		}
 		else
@@ -90,6 +90,46 @@ class Client extends Private_Controller {
     	{
     		$data = $this->clients->get_all();
 			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function search_client_by_id()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data= array('cli_id' => $this->input->post('id'));
+    		$response = $this->clients->get($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function edit_client()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data = array(
+    			'per_nom' => $this->input->post('txtNombreMd'),
+				'per_ape' => $this->input->post('txtApellidoMd'),
+				'cli_dir' => $this->input->post('txtDireccionMd'),
+				'cli_tel' => $this->input->post('txtTelefonoMd'),
+				'cli_eml' => $this->input->post('txtEmailMd')
+    		);
+			$response = $this->clients->update($this->input->get('trId'), $data);
+			echo json_encode($response);
 		}
 		else
 		{

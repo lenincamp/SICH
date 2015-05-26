@@ -23,6 +23,10 @@ class Clients extends CI_Model {
 		return $response;
 	}
 	
+	public function get($data) {
+		return $this->db->get_where('cliente', $data)->row();
+	}
+	
 	public function save($data)
 	{
 		return $this->db->insert('cliente', $data);
@@ -33,4 +37,13 @@ class Clients extends CI_Model {
 		return $this->db->delete('cliente', $data); 
 	}
  
+	public function update($id, $data)
+	{
+		if($id){
+			return $this->db->update('cliente', $data, array('cli_id' => $id));
+		}
+		else{
+			return FALSE;
+		}
+	}
 }
