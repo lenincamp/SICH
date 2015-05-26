@@ -224,8 +224,8 @@ $(function(){
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
 	 * -------------------------------------------------------------------
 	 */
-	 $.deleteMark = function(){
-	 	$.ajax({
+	$.deleteMark = function(){
+		$.ajax({
 			type: "POST",
 			url: "/sich/car/delete_mark/",
 			dataType: 'json',
@@ -239,7 +239,7 @@ $(function(){
 				}
 			}
 		});
-	 }
+	}
 	 
 	 var trIdMk;
 	 $.editDeleteMark = function(btn, edt){
@@ -255,5 +255,10 @@ $(function(){
 	 		$.confirmMessage($.deleteMark, "Si elimina la marca se eliminaran todos sus modelos. <br> ¿Está Seguro De Eliminar La Marca?");
 	 	} 	
 	 }
-    
+	 
+	/* =========================>>> CARS <<<========================= */
+	$.post( "/sich/car/get_marks_all/", function( response ) {
+		console.log(response);
+	});
+	 
 });

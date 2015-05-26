@@ -57,38 +57,12 @@
 									<legend class="scheduler-border">Datos Vehículo</legend>
 									  <div class="form-group col-md-6">
 										<label for="txtMark">Marca:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
-											<?php
-											if ( ! empty($mark))
-											{
-												foreach ($mark as $key => $value) 
-												{
-													echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
-												}
-											}
-											else
-											{
-												echo "<option>Cree una Marca</option>";
-											}
-											?>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdMark" id="cmbMarkAjx">
 										</select>
 									  </div>
 									  <div class="form-group col-md-6">
 										<label for="txtMark">Modelo:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
-											<?php
-											if ( ! empty($mark))
-											{
-												foreach ($mark as $key => $value) 
-												{
-													echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
-												}
-											}
-											else
-											{
-												echo "<option>Seleccione una Marca</option>";
-											}
-											?>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdModel" id="cmbModelAjx">
 										</select>
 									  </div>
 									  <div class="form-group col-xs-12">
