@@ -14,21 +14,34 @@ $(function(){
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
-				if(response){
+			var obj=eval(response)
+			response=obj.insert_client
+				if(response=="2")
+				{
 					new PNotify({
-						title: 'Notificación',
-						text: 'Registro Exitoso',
-						type: 'success'
-					});
-					$("#frmNewClient input[type='text']").val('');
-					$("#frmNewClient input[type='email']").val('');
-					create = true;
-				}else{		
-					new PNotify({
-						title: 'Oh No!',
-						text: 'Error en el registro.',
-						type: 'error'
-					});
+							title: 'Registro existente',
+							text: 'La C.I./R.U.C. ingresado ya se encuentra registrado.',
+							type: 'notice'
+						});
+				}
+				else
+				{
+					if(response=="1"){
+						new PNotify({
+							title: 'Notificación',
+							text: 'Registro Exitoso',
+							type: 'success'
+						});
+						$("#frmNewClient input[type='text']").val('');
+						$("#frmNewClient input[type='email']").val('');
+						create = true;
+					}else{		
+						new PNotify({
+							title: 'Oh No!',
+							text: 'Error en el registro.',
+							type: 'error'
+						});
+					}
 				}
 			}
 		});
