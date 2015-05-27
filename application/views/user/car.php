@@ -29,7 +29,7 @@
 								  <fieldset class="scheduler-border">
 									<legend class="scheduler-border">Datos Cliente</legend>
 									  <div class="form-group col-xs-12">
-										<label for="txtName">C.I./R.U.C.:</label><a href="#" id="searchClient"><img src="<?php echo base_url()?>static/img/mini_logo.png" style="height:30px;" alt=""> </a>
+										<label for="txtName">C.I./R.U.C.:</label><a href="#" id="searchClient"><img src="<?php echo base_url()?>static/img/search.png" style="height:30px; padding:3px;" alt=""> </a>
 										<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
 									  </div>
 									  <div class="form-group col-xs-12">
