@@ -81,7 +81,7 @@
 									  
 									  <div class="form-group col-xs-12 col-md-6">
 										<label for="txtName">Año:</label>
-										<input type="email" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
+										<input type="number" min="1980" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
 									  </div>
 									  <div class="form-group col-xs-12 col-md-6">
 										<label for="txtName">Color:</label>

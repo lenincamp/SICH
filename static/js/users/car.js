@@ -283,7 +283,6 @@ $(function(){
 	}
 	
 	$("#txtCedula").focusout(function(event){
-		
 		var number = $.trim($(this).val()).length;
 		if( number == 10 ){
 			
@@ -291,18 +290,31 @@ $(function(){
 			$.post("/sich/client/search_client_by_id/", data, function(response){
 				if( response !== null ){
 					$("#spClient").attr("data-toggle", response.cli_id);
-					$("#txtNombre").val(response.per_nom);
-					$("#txtApellido").val(response.per_ape);
-					$("#txtTelefono").val(response.cli_tel);
-					$("#txtEmail").val(response.cli_eml);
-					$("#txtDireccion").val(response.cli_dir);
+					$($("#txtNombre").val(response.per_nom)).attr('disabled','true');
+					$($("#txtApellido").val(response.per_ape)).attr('disabled','true');
+					$($("#txtTelefono").val(response.cli_tel)).attr('disabled','true');
+					$($("#txtEmail").val(response.cli_eml)).attr('disabled','true');
+					$($("#txtDireccion").val(response.cli_dir)).attr('disabled','true');
 					
 					/*$('#bodyPage').animate({
 						scrollTop: $("#fstDataCar").offset().top
 					}, 1000);*/
+				}else{
+					$("#spClient").removeAttr("data-toggle");
+					$($($("#txtNombre").val("")).removeAttr('disabled')).focus();
+					$($("#txtApellido").val("")).removeAttr('disabled');
+					$($("#txtTelefono").val("")).removeAttr('disabled');
+					$($("#txtEmail").val("")).removeAttr('disabled');
+					$($("#txtDireccion").val("")).removeAttr('disabled');
 				}
 			}, 'json');
 		}
 
-	});	
+	});
+	
+	$("#frmCar").on('submit', function(event){
+		event.preventDefault();
+		console.log($(this).serialize());
+	});
+
 });
