@@ -19,6 +19,7 @@ $(function(){
 					$.successMessage();
 					$("#frmModel input[type='text']").val('');
 					create = true;
+					$.loadCmbMarks();
 				}else{		
 					$.errorMessage();
 				}
@@ -45,6 +46,7 @@ $(function(){
 					$('.cmbMarkMd').selectpicker('refresh');
 					$("#mdModel").modal('hide');
 					$.successMessage();
+					$.loadCmbMarks();
 				}else{		
 					$.errorMessage();
 				}
@@ -149,6 +151,7 @@ $(function(){
 						$.successMessage();
 						$("#txtNameMark").val('');
 						createMark = true;
+						$.loadCmbMarks();
 						break;
 					case 2:
 						$.errorMessage();
@@ -179,6 +182,7 @@ $(function(){
 					$("#frmMdMark input[type='text']").val('');
 					$("#markModal").modal('hide');
 					$.successMessage();
+					$.loadCmbMarks();
 				}else{		
 					$.errorMessage();
 				}
@@ -234,6 +238,7 @@ $(function(){
 				if(response){
 					$.successMessage();
 					$('#tbMarks').DataTable().row( $("#"+trIdMk) ).remove().draw();
+					$.loadCmbMarks();
 				}else{		
 					$.errorMessage();
 				}
@@ -257,15 +262,19 @@ $(function(){
 	 }
 	 
 	/* =========================>>> CARS <<<========================= */
-	$.post( "/sich/car/get_marks_all/", function(response) {
-		var option = "";
-		$.each(response.data, function(index, val){
-			option += "<option value='"+val.mar_id+"'>"+val.mar_nom+"</option>";
-		});
-		$("#cmbMarkAjx").html(option);
-		$.loadCmbModels(response.data[0].mar_id);
-		$("#cmbMarkAjx").selectpicker('refresh');
-	}, 'json');
+	$.loadCmbMarks = function(){
+		$.post( "/sich/car/get_marks_all/", function(response) {
+			var option = "";
+			$.each(response.data, function(index, val){
+				option += "<option value='"+val.mar_id+"'>"+val.mar_nom+"</option>";
+			});
+			$("#cmbMarkAjx").html(option);
+			$.loadCmbModels(response.data[0].mar_id);
+			$("#cmbMarkAjx").selectpicker('refresh');
+		}, 'json');
+	}
+	
+	$.loadCmbMarks();
 	
 	$("#cmbMarkAjx").change(function(){
 		$.loadCmbModels( $(this).val() );
@@ -282,7 +291,8 @@ $(function(){
 		}, 'json');
 	}
 	
-	$.disEnaInputCli = function(disEn){
+	$.disEnaInputCli = function(disEn, response){
+		response = typeof response !== 'undefined' ? response : null;
 		if(disEn){
 			$("#spClient").attr("data-toggle", response.cli_id);
 			$($("#txtNombre").val(response.per_nom)).attr('disabled','true');
@@ -310,7 +320,7 @@ $(function(){
 			var data = {"ci":$.trim($(this).val())};
 			$.post("/sich/client/search_client_by_id/", data, function(response){
 				if( response !== null ){
-					$.disEnaInputCli(true);
+					$.disEnaInputCli(true, response);
 				}else{
 					$.disEnaInputCli(false);
 				}
@@ -325,7 +335,7 @@ $(function(){
 			var data = {"ci":$.trim($("#txtCedula").val())};
 			$.post("/sich/client/search_client_by_id/", data, function(response){
 				if( response !== null ){
-					$.disEnaInputCli(true);
+					$.disEnaInputCli(true, response);
 				}else{
 					$.disEnaInputCli(false);
 					$.errorMessage("Cliente No Existe!");
