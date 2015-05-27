@@ -69,5 +69,5 @@
 			<li class="topmenu"><a onclick="seleccionar(this)" href="#"></span><img src="<?php echo base_url()?>static/img/reportes.png" style="height:40px;" alt=""></br>Reportes</span></a></li>
 		</ul>
 	</div>
-    <div class="col-xs-9 col-md-10" style="overflow-x:hidden; overflow-y:auto; max-height:85vh;">
+    <div class="col-xs-9 col-md-10" style="overflow-x:hidden; overflow-y:auto; max-height:85vh;" id="bodyPage">
     <!--Body content-->

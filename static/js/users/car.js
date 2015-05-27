@@ -257,8 +257,52 @@ $(function(){
 	 }
 	 
 	/* =========================>>> CARS <<<========================= */
-	$.post( "/sich/car/get_marks_all/", function( response ) {
-		console.log(response);
+	$.post( "/sich/car/get_marks_all/", function(response) {
+		var option = "";
+		$.each(response.data, function(index, val){
+			option += "<option value='"+val.mar_id+"'>"+val.mar_nom+"</option>";
+		});
+		$("#cmbMarkAjx").html(option);
+		$.loadCmbModels(response.data[0].mar_id);
+		$("#cmbMarkAjx").selectpicker('refresh');
+	}, 'json');
+	
+	$("#cmbMarkAjx").change(function(){
+		$.loadCmbModels( $(this).val() );
 	});
-	 
+	
+	$.loadCmbModels = function( id ){
+		$.post( "/sich/car/get_models_for_mark/", {"id":id} ,function(response) {	
+			var option = "";
+			$.each(response.data, function(index, val){
+				option += "<option value='"+val.mod_id+"'>"+val.mod_nom+"</option>";
+			});
+			$("#cmbModelAjx").html(option);
+			$("#cmbModelAjx").selectpicker('refresh');
+		}, 'json');
+	}
+	
+	$("#txtCedula").focusout(function(event){
+		
+		var number = $.trim($(this).val()).length;
+		if( number == 10 ){
+			
+			var data = {"ci":$.trim($(this).val())};
+			$.post("/sich/client/search_client_by_id/", data, function(response){
+				if( response !== null ){
+					$("#spClient").attr("data-toggle", response.cli_id);
+					$("#txtNombre").val(response.per_nom);
+					$("#txtApellido").val(response.per_ape);
+					$("#txtTelefono").val(response.cli_tel);
+					$("#txtEmail").val(response.cli_eml);
+					$("#txtDireccion").val(response.cli_dir);
+					
+					/*$('#bodyPage').animate({
+						scrollTop: $("#fstDataCar").offset().top
+					}, 1000);*/
+				}
+			}, 'json');
+		}
+
+	});	
 });

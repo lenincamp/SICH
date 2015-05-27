@@ -12,8 +12,7 @@ class Mark extends CI_Model {
 	
 	
 	public function get_all(){
-		//return $this->db->order_by('mar_nom asc')->get('marca')->result_array();
-		return $this->db->get('marca')->result_array();
+		return $this->db->order_by('mar_nom asc')->get('marca')->result_array();
 	}
 	
 	/*

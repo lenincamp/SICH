@@ -6,11 +6,8 @@ class Car extends Private_Controller {
 		parent::__construct();
 		$this->load->model(array('mark','model'));
 	}
-	/*
-	 * -------------------------------------------------------------------
-	 *  MARKS
-	 * -------------------------------------------------------------------
-	 */
+
+
 	public function start()
 	{
 		if(!@$this->user) redirect ('main');
@@ -64,7 +61,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -80,7 +77,24 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_models_for_mark(){
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'id_marca' => $this->input->post('id')
+    		);
+    		$response = $this->model->get_for_mark($data);
+			echo json_encode(array("data"=>$response));
+		}
+		else
+		{
+			exit('No direct script access allowed');
 		}
 		return FALSE;
 	}
@@ -100,7 +114,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -117,7 +131,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -139,7 +153,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -155,7 +169,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -174,7 +188,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -191,10 +205,13 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
+	
+	/* =========================>>> CARS <<<========================= */
+	
 }
 /* End of file main.php */
 /* Location: ./application/controllers/car.php */

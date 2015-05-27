@@ -26,6 +26,7 @@
 						<div class="row">
 							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 								<form id="frmCar">
+								  <span id="spClient"></span>
 								  <fieldset class="scheduler-border">
 									<legend class="scheduler-border">Datos Cliente</legend>
 									  <div class="form-group col-xs-12">
@@ -53,15 +54,15 @@
 										<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
 									  </div>
 								  </fieldset>
-								  <fieldset class="scheduler-border">
+								  <fieldset class="scheduler-border" id="fstDataCar">
 									<legend class="scheduler-border">Datos Vehículo</legend>
 									  <div class="form-group col-md-6">
-										<label for="txtMark">Marca:</label>
+										<label for="cmbMarkAjx">Marca:</label>
 										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdMark" id="cmbMarkAjx">
 										</select>
 									  </div>
 									  <div class="form-group col-md-6">
-										<label for="txtMark">Modelo:</label>
+										<label for="cmbModelAjx">Modelo:</label>
 										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdModel" id="cmbModelAjx">
 										</select>
 									  </div>
