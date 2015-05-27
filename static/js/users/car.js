@@ -282,34 +282,56 @@ $(function(){
 		}, 'json');
 	}
 	
+	$.disEnaInputCli = function(disEn){
+		if(disEn){
+			$("#spClient").attr("data-toggle", response.cli_id);
+			$($("#txtNombre").val(response.per_nom)).attr('disabled','true');
+			$($("#txtApellido").val(response.per_ape)).attr('disabled','true');
+			$($("#txtTelefono").val(response.cli_tel)).attr('disabled','true');
+			$($("#txtEmail").val(response.cli_eml)).attr('disabled','true');
+			$($("#txtDireccion").val(response.cli_dir)).attr('disabled','true');
+			
+			/*$('#bodyPage').animate({
+				scrollTop: $("#fstDataCar").offset().top
+			}, 1000);*/
+		}else{
+			$("#spClient").removeAttr("data-toggle");
+			$($($("#txtNombre").val("")).removeAttr('disabled')).focus();
+			$($("#txtApellido").val("")).removeAttr('disabled');
+			$($("#txtTelefono").val("")).removeAttr('disabled');
+			$($("#txtEmail").val("")).removeAttr('disabled');
+			$($("#txtDireccion").val("")).removeAttr('disabled');
+		}
+	}
+	
 	$("#txtCedula").focusout(function(event){
 		var number = $.trim($(this).val()).length;
 		if( number == 10 ){
-			
 			var data = {"ci":$.trim($(this).val())};
 			$.post("/sich/client/search_client_by_id/", data, function(response){
 				if( response !== null ){
-					$("#spClient").attr("data-toggle", response.cli_id);
-					$($("#txtNombre").val(response.per_nom)).attr('disabled','true');
-					$($("#txtApellido").val(response.per_ape)).attr('disabled','true');
-					$($("#txtTelefono").val(response.cli_tel)).attr('disabled','true');
-					$($("#txtEmail").val(response.cli_eml)).attr('disabled','true');
-					$($("#txtDireccion").val(response.cli_dir)).attr('disabled','true');
-					
-					/*$('#bodyPage').animate({
-						scrollTop: $("#fstDataCar").offset().top
-					}, 1000);*/
+					$.disEnaInputCli(true);
 				}else{
-					$("#spClient").removeAttr("data-toggle");
-					$($($("#txtNombre").val("")).removeAttr('disabled')).focus();
-					$($("#txtApellido").val("")).removeAttr('disabled');
-					$($("#txtTelefono").val("")).removeAttr('disabled');
-					$($("#txtEmail").val("")).removeAttr('disabled');
-					$($("#txtDireccion").val("")).removeAttr('disabled');
+					$.disEnaInputCli(false);
 				}
 			}, 'json');
 		}
 
+	});
+	
+	$("#searchClient").click(function(){
+		var number = $.trim($("#txtCedula").val()).length;
+		if( number == 10 ){
+			var data = {"ci":$.trim($("#txtCedula").val())};
+			$.post("/sich/client/search_client_by_id/", data, function(response){
+				if( response !== null ){
+					$.disEnaInputCli(true);
+				}else{
+					$.disEnaInputCli(false);
+					$.errorMessage("Cliente No Existe!");
+				}
+			}, 'json');
+		}
 	});
 	
 	$("#frmCar").on('submit', function(event){
