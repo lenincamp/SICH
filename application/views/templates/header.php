@@ -9,10 +9,10 @@
 <script src="<?php echo base_url()?>static/js/jquery-1.11.3.min.js"></script>
 <script src="<?php echo base_url()?>static/js/header.js"></script>
 	<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="<?= base_url() ?>static/css/bootstrap.min.css">
 
 <!--link rel="stylesheet" href="<?php echo base_url()?>static/css/boostrap.css" type="text/css"-->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="<?= base_url() ?>static/js/bootstrap.min.js"></script>
 
 <link rel="stylesheet" href="<?= base_url() ?>static/css/buttons.css">
 <script type="text/javascript" src="<?= base_url() ?>static/js/buttons.js"></script>

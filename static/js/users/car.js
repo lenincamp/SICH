@@ -70,7 +70,7 @@ $(function(){
 			success: function(response) {
 				if(response){
 					$.successMessage();
-					$('#tbModels').DataTable().row( $("#"+trId) ).remove().draw();
+					$('#tbModels').DataTable().row( $("#"+trIdMd) ).remove().draw();
 				}else{		
 					$.errorMessage();
 				}
@@ -237,6 +237,7 @@ $(function(){
 					$.successMessage();
 					$('#tbMarks').DataTable().row( $("#"+trIdMk) ).remove().draw();
 					$.loadCmbMarks();
+					$('#tbModels').DataTable().ajax.reload();
 				}else{		
 					$.errorMessage();
 				}
@@ -267,8 +268,11 @@ $(function(){
 				option += "<option value='"+val.mar_id+"'>"+val.mar_nom+"</option>";
 			});
 			$("#cmbMarkAjx").html(option);
+			$("#cmbMark").html(option);
+			$("#cmbMark").selectpicker('refresh');
 			$.loadCmbModels(response.data[0].mar_id);
 			$("#cmbMarkAjx").selectpicker('refresh');
+			
 		}, 'json');
 	}
 	

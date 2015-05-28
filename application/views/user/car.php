@@ -277,8 +277,8 @@
 							  </div>
 				  
 							  <div class="form-group">
-								<label for="txtMark">Marca:</label>
-								<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
+								<label for="cmbMark">Marca:</label>
+								<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="cmbMark">
 									<?php
 									if ( ! empty($mark))
 									{
