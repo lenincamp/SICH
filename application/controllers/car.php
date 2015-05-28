@@ -4,13 +4,10 @@ class Car extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('mark','model'));
+		$this->load->model(array('cars','mark','model'));
 	}
-	/*
-	 * -------------------------------------------------------------------
-	 *  MARKS
-	 * -------------------------------------------------------------------
-	 */
+
+
 	public function start()
 	{
 		if(!@$this->user) redirect ('main');
@@ -27,11 +24,11 @@ class Car extends Private_Controller {
 			"https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js",
 			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"
 		);
-		$data['funcion']="<script type='text/javascript'> seleccionar('mn_car');</script> <script>
-    $(function(){
-        $('.demo2').colorpicker();
-    });
-</script>";
+		$data['funcion'] = "<script type='text/javascript'> seleccionar('mn_car');</script> <script>
+								$(function(){
+									$('.demo2').colorpicker();
+								});
+							</script>";
 		$title['css'] = array(
 			base_url()."static/css/bootstrap-select.min.css",
 			base_url()."static/css/pnotify.custom.min.css",
@@ -64,7 +61,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -80,7 +77,24 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_models_for_mark(){
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'id_marca' => $this->input->post('id')
+    		);
+    		$response = $this->model->get_for_mark($data);
+			echo json_encode(array("data"=>$response));
+		}
+		else
+		{
+			exit('No direct script access allowed');
 		}
 		return FALSE;
 	}
@@ -100,7 +114,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -117,7 +131,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -139,7 +153,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -155,7 +169,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -174,7 +188,7 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
 		}
 		return FALSE;
 	}
@@ -191,7 +205,41 @@ class Car extends Private_Controller {
 		else
 		{
 			exit('No direct script access allowed');
-			show_404();
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	/* =========================>>> CARS <<<========================= */
+	public function save_car()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			$this->input->post('txtCedula'),
+				$this->input->post('txtNombre'),
+				$this->input->post('txtApellido'),
+				$this->input->post('txtDireccion'),
+				$this->input->post('txtTelefono'),
+				$this->input->post('txtEmail'),
+				$this->input->post('txtChasis'),
+				$this->input->post('txtPlaca'),
+				$this->input->post('txtAnio'),
+				$this->input->post('txtMotor'),
+				$this->input->post('txtCodigo'),
+				$this->input->get('id'),
+				$this->input->post('cmbIdModel')
+    		);
+
+			$response = $this->cars->save("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			//exit(print_r($response));
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
 		}
 		return FALSE;
 	}

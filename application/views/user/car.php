@@ -26,10 +26,11 @@
 						<div class="row">
 							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 								<form id="frmCar">
+								  <span id="spClient"></span>
 								  <fieldset class="scheduler-border">
 									<legend class="scheduler-border">Datos Cliente</legend>
 									  <div class="form-group col-xs-12">
-										<label for="txtName">C.I./R.U.C.:</label><a href="#" id="searchClient"><img src="<?php echo base_url()?>static/img/search.png" style="height:30px; padding:3px;" alt=""> </a>
+										<label for="txtName">C.I./R.U.C.:</label><a id="searchClient"><img src="<?php echo base_url()?>static/img/search.png" style="height:30px;cursor:pointer;" alt=""> </a>
 										<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
 									  </div>
 									  <div class="form-group col-xs-12">
@@ -53,42 +54,16 @@
 										<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
 									  </div>
 								  </fieldset>
-								  <fieldset class="scheduler-border">
+								  <fieldset class="scheduler-border" id="fstDataCar">
 									<legend class="scheduler-border">Datos Vehículo</legend>
 									  <div class="form-group col-md-6">
-										<label for="txtMark">Marca:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
-											<?php
-											if ( ! empty($mark))
-											{
-												foreach ($mark as $key => $value) 
-												{
-													echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
-												}
-											}
-											else
-											{
-												echo "<option>Cree una Marca</option>";
-											}
-											?>
+										<label for="cmbMarkAjx">Marca:</label>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdMark" id="cmbMarkAjx">
 										</select>
 									  </div>
 									  <div class="form-group col-md-6">
-										<label for="txtMark">Modelo:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="txtMark">
-											<?php
-											if ( ! empty($mark))
-											{
-												foreach ($mark as $key => $value) 
-												{
-													echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
-												}
-											}
-											else
-											{
-												echo "<option>Seleccione una Marca</option>";
-											}
-											?>
+										<label for="cmbModelAjx">Modelo:</label>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdModel" id="cmbModelAjx">
 										</select>
 									  </div>
 									  <div class="form-group col-xs-12">
@@ -106,7 +81,7 @@
 									  
 									  <div class="form-group col-xs-12 col-md-6">
 										<label for="txtName">Año:</label>
-										<input type="email" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
+										<input type="number" min="1980" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
 									  </div>
 									  <div class="form-group col-xs-12 col-md-6">
 										<label for="txtName">Color:</label>

@@ -115,7 +115,14 @@ class Client extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-			$data= array('cli_id' => $this->input->post('id'));
+    		if($this->input->post('id'))
+    		{
+    			$data= array('cli_id' => $this->input->post('id'));
+    		}
+			elseif($this->input->post('ci')){
+				$data= array('per_ced' => $this->input->post('ci'));
+			}
+			
     		$response = $this->clients->get($data);
 			echo json_encode($response);
 		}

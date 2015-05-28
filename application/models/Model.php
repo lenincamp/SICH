@@ -27,6 +27,14 @@ class Model extends CI_Model {
 		return $response;
 	}
 	
+	public function get_for_mark($data)
+	{
+		$response = $this->db->order_by('mod_nom asc')
+						 ->get_where('modelo', $data)
+						 ->result_array();
+		return $response;
+	}
+	
 	public function save($data)
 	{
 		return $this->db->insert('modelo', $data);
