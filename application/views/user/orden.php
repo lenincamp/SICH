@@ -106,7 +106,7 @@
 									foreach ($detallesTrabajo as $key => $value) 
 									{
 										$color=$contador%3==0?"transparent":"silver";
-										echo "<div class='form-group col-md-4' style='border-right: 1px solid ".$color.";'>
+										echo "<div class='form-group col-md-4' style='border-right: 1px solid ".$color."; height:40px;'>
 										<label for='chk".$value['art_id']."' style='width:90%;'>".$value['art_nom']."</label>
 										<input type='checkbox' class='form-control' id='chk".$value['art_id']."' name='chk".$value['art_id']."' value='".$value['art_id']."' style='display:table-cell; height:auto; width:auto;'>
 										</div>";
