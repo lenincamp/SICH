@@ -63,9 +63,9 @@
 		<ul id="css3menu1" class="topmenu">
 			<li class="topmenu"><a id="mn_home" href="<?php echo base_url()?>main/home/" ><span><img src="<?php echo base_url()?>static/img/inicio.png" style="height:40px;" alt=""></br>Inicio</span></a></li>
 			<li class="topmenu"><a id="mn_cli" href="<?php echo base_url()?>client/start" ><span><img src="<?php echo base_url()?>static/img/cliente.png" style="height:40px;" alt=""></br>Clientes</span></a></li>
-			<li class="topmenu"><a id="mn_car" href="<?php echo base_url()?>car/start" ><span><img src="<?php echo base_url()?>static/img/vehiculos.png" style="height:35px;" alt=""></br>Vehiculos</span></a></li>
-			<li class="topmenu"><a onclick="seleccionar(this)" href="#"><span><img src="<?php echo base_url()?>static/img/servicios.png" style="height:40px;" alt=""></br>Servicios</span></a></li>
-			<li class="topmenu"><a onclick="seleccionar(this)" href="#"><span><img src="<?php echo base_url()?>static/img/ordenTrabajo.png" style="height:40px;" alt=""></br>Orden de</br>Trabajo</span></a></li>
+			<li class="topmenu"><a id="mn_car" href="<?php echo base_url()?>car/start" ><span><img src="<?php echo base_url()?>static/img/vehiculos.png" style="height:35px;" alt=""></br>Vehículos</span></a></li>
+			<li class="topmenu"><a id="mn_srv" href="<?php echo base_url()?>service/start"><span><img src="<?php echo base_url()?>static/img/servicios.png" style="height:40px;" alt=""></br>Servicios</span></a></li>
+			<li class="topmenu"><a id="mn_ord" href="<?php echo base_url()?>orden/start" onclick="seleccionar(this)" href="#"><span><img src="<?php echo base_url()?>static/img/ordenTrabajo.png" style="height:40px;" alt=""></br>Orden de</br>Trabajo</span></a></li>
 			<li class="topmenu"><a onclick="seleccionar(this)" href="#"></span><img src="<?php echo base_url()?>static/img/reportes.png" style="height:40px;" alt=""></br>Reportes</span></a></li>
 		</ul>
 	</div>
