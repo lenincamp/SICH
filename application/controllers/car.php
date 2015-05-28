@@ -4,7 +4,7 @@ class Car extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('mark','model'));
+		$this->load->model(array('cars','mark','model'));
 	}
 
 
@@ -211,7 +211,38 @@ class Car extends Private_Controller {
 	}
 	
 	/* =========================>>> CARS <<<========================= */
-	
+	public function save_car()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			$this->input->post('txtCedula'),
+				$this->input->post('txtNombre'),
+				$this->input->post('txtApellido'),
+				$this->input->post('txtDireccion'),
+				$this->input->post('txtTelefono'),
+				$this->input->post('txtEmail'),
+				$this->input->post('txtChasis'),
+				$this->input->post('txtPlaca'),
+				$this->input->post('txtAnio'),
+				$this->input->post('txtMotor'),
+				$this->input->post('txtCodigo'),
+				$this->input->get('id'),
+				$this->input->post('cmbIdModel')
+    		);
+
+			$response = $this->cars->save("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			//exit(print_r($response));
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
 }
 /* End of file main.php */
 /* Location: ./application/controllers/car.php */

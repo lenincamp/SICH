@@ -155,9 +155,7 @@ $(function(){
 						break;
 					case 2:
 						$.errorMessage();
-					default:
-						console.log(response);
-						console.log(typeof response);
+						break;
 				}
 			}
 		});
@@ -346,7 +344,25 @@ $(function(){
 	
 	$("#frmCar").on('submit', function(event){
 		event.preventDefault();
-		console.log($(this).serialize());
+		var url = "";
+		if(typeof $("#spClient").attr("data-toggle") !== 'undefined'){
+			url = "/sich/car/save_car/?id="+$("#spClient").attr("data-toggle");
+		}else{
+			url = "/sich/car/save_car/?id="+0;
+		}
+		$.post(url,$(this).serialize(), function(response){	
+			switch(response.insert_car) {
+				case '0':
+					$.errorMessage();
+					break;
+				case '1':
+					$.successMessage();
+					break;
+				case '2':
+					$.errorMessage("El Vehiculo Ya Existe!");
+					break;
+			}	
+		}, 'json');
 	});
 
 });
