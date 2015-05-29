@@ -3,6 +3,7 @@
 	<ul class="nav nav-tabs">
 		<li class="active"><a data-toggle="tab" href="#sectionA">Vehículo</a></li>
 		<li><a data-toggle="tab" href="#sectionB">Marca</a></li>
+		<li><a data-toggle="tab" href="#sectionD">Categoría</a></li>
 		<li><a data-toggle="tab" href="#sectionC">Modelo</a></li>   
 	</ul>
 	<div class="tab-content">
@@ -251,9 +252,116 @@
 			</div>
 		</div>
 		<!-- End Modal HTML -->
-		
-		
 		<!-- END MARCA -->
+		
+		<!-- CATEGORIA -->
+		<div id="sectionD" class="tab-pane fade">
+			<br>
+			<div class="panel-group" id="accordionCateg" role="tablist" aria-multiselectable="true">
+			  
+			  <!-- CREAR CATEGORIA -->
+			  <div class="panel panel-primary">
+				<div class="panel-heading" role="tab" id="headingSaveMark">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordionCateg" href="#collapseSaveCateg" aria-expanded="true" aria-controls="collapseSaveCateg">
+					  CREAR CATEGORIA
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseSaveCateg" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveMark">
+					<div class="panel-body">
+						<div class="row">
+							<div id="divFrmCateg" class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
+								<form id="frmCateg">
+								  <div class="form-group">
+									<label for="txtName">Nombre:</label>
+									<input type="text" class="form-control" id="txtNameCateg" name="txtNameCateg" placeholder="Ingrese Nombre">
+								  </div>
+					  
+								  <div class="row">
+									  <div class="col-md-offset-5">
+										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
+									  </div>
+								  </div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			  </div>
+			  <!-- END CREAR CATEGORIA -->
+			  
+			  <!-- LISTAR CATEGORIA -->
+			  <div class="panel panel-primary">
+				<div class="panel-heading" role="tab" id="headingListCateg">
+				  <h4 class="panel-title">
+					<a class="collapsed" id="ltCateg" data-toggle="collapse" data-parent="#accordionCateg" href="#collapseListCateg" aria-expanded="false" aria-controls="collapseListCateg">
+					  LISTAR CATEGORIAS
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseListCateg" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListCateg">
+				  <div class="panel-body">
+					
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCateg">
+								<thead>
+									<tr>
+										<th class="text-center">Nombre</th>
+										<th class="text-center">Acción</th>
+									</tr>
+								</thead>
+								
+							</table>
+						</div>
+					</div>
+
+				  </div>
+				</div>
+			  </div>
+			  <!-- END LISTAR CATEGORIA -->
+			</div>
+				
+		</div>
+		
+		<!-- Modal CATEGORIA HTML -->
+		<div id="categModal" class="modal fade">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title">Editar Modelo</h4>
+					</div>
+					<form role="form" id='frmMdCateg'>
+						<div class="modal-body">		
+							<span id="spIdCateg"></span>
+							<div class="form-group">
+								<label for="txtName">Nombre:</label>
+								<input type="text" class="form-control" id="txtNameCategEdit" name="txtNameCategEdit" placeholder="Ingrese Nombre">
+							</div>
+			  
+						</div>
+					
+						<div class="modal-footer">
+							<div class="row">
+								<div align="center">
+									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
+									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- End Modal HTML -->
+		
+		
+		<!-- END CATEGORIA -->
+		
+		
 		
 		<!-- MODELO -->
 		<div id="sectionC" class="tab-pane fade">
