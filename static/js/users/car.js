@@ -260,6 +260,138 @@ $(function(){
 	 	} 	
 	 }
 	 
+	 
+	/* =========================>>> CATEGORIES <<<========================= */
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Create CATEGORY submit(Ajax)
+	 * -------------------------------------------------------------------
+	 */
+	var createCategory = false;
+	$("#frmCateg").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/save_category/",
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				switch(response) {
+					case 0:
+						$.errorMessage("La Categoría Ya Está Creada");
+						break;
+					case 1:
+						$.successMessage();
+						$("#txtNameCateg").val('');
+						createCategory = true;
+						break;
+					case 2:
+						$.errorMessage();
+						break;
+				}
+			}
+		});
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Edit mark submit(Ajax) --- modal form
+	 * -------------------------------------------------------------------
+	 */
+	 
+	 $("#frmMdCateg").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/edit_category?trId="+$("#spIdCateg").attr('data-toggle'),
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				if(response){
+					$('#tbCateg').DataTable().ajax.reload();
+					$("#frmMdCateg input[type='text']").val('');
+					$("#categModal").modal('hide');
+					$.successMessage();
+					$.loadCmbMarks();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Generate Table marks list
+	 *	function renderizeRow renderize tr, td for table
+	 *	@param : btnsOpTblMarks => variable(string): buttons for dateTable
+	 * -------------------------------------------------------------------
+	 */
+	var btnsOpTblCateg = "<button style='border: 0; background: transparent' onclick='$.editDeleteCateg(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteCateg(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+						  
+	$.renderizeRowTbCateg = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'>"+btnsOpTblCateg+"</td>");
+	   $(nRow).attr('id',aData['cat_id']);
+	}
+						  
+	var flagCateg = true;
+	$("#ltCateg").click(function(event){
+		if (flagCateg){
+			$.fnTbl('#tbCateg',"/sich/car/get_categories_all/",[{"data":"cat_nom"}],$.renderizeRowTbCateg);
+			flagCateg = false;		
+		}
+		else if(createCategory){
+			$('#tbCateg').DataTable().ajax.reload();
+			createCategory = false;
+		}
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  function editDeleteCateg(btn) -> load modal form edit or delete
+	 *	@param : btn => parameter this btn(editMark) onclick
+	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
+	 * -------------------------------------------------------------------
+	 */
+	$.deleteCateg = function(){
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/delete_category/",
+			dataType: 'json',
+			data: {id:trIdCateg},
+			success: function(response) {
+				if(response){
+					$.successMessage();
+					$('#tbCateg').DataTable().row( $("#"+trIdCateg) ).remove().draw();
+					$.loadCmbMarks();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	}
+	 
+	 var trIdCateg;
+	 $.editDeleteCateg = function(btn, edt){
+	 	trIdCateg = $($($(btn).parent()).parent()).attr('id');
+	 	if(edt){
+	 		$("#txtNameCategEdit").val($($("#"+trIdCateg).children('td')[0]).html());
+	 		$("#categModal").modal('show');
+	 		$("#spIdCateg").attr('data-toggle', trIdCateg);
+	 		
+	 	}
+	 	else
+	 	{
+	 		$.confirmMessage($.deleteCateg, "Está Seguro De Eliminar La Categoría?");
+	 	} 	
+	 }
+	 
 	/* =========================>>> CARS <<<========================= */
 	$.loadCmbMarks = function(){
 		$.post( "/sich/car/get_marks_all/", function(response) {
