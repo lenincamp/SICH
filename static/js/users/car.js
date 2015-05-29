@@ -127,6 +127,18 @@ $(function(){
 		}
 	});
 	
+	$.loadCmbCategory = function(){
+		$.post("/sich/car/get_categories_all/",function(response){
+			var option = "";
+			$.each(response.data, function(index, val){
+				option += "<option value='"+val.cat_id+"'>"+val.cat_nom+"</option>";
+			});
+			$("#cmbCat").html(option);
+			$("#cmbCat").selectpicker('refresh');
+		},"json");
+	};
+	$.loadCmbCategory();
+	
 	/* =========================>>> MARKS <<<========================= */
 	
 	/*
@@ -285,6 +297,7 @@ $(function(){
 						$.successMessage();
 						$("#txtNameCateg").val('');
 						createCategory = true;
+						$.loadCmbCategory();
 						break;
 					case 2:
 						$.errorMessage();
@@ -313,7 +326,7 @@ $(function(){
 					$("#frmMdCateg input[type='text']").val('');
 					$("#categModal").modal('hide');
 					$.successMessage();
-					$.loadCmbMarks();
+					$.loadCmbCategory();
 				}else{		
 					$.errorMessage();
 				}
@@ -369,7 +382,7 @@ $(function(){
 				if(response){
 					$.successMessage();
 					$('#tbCateg').DataTable().row( $("#"+trIdCateg) ).remove().draw();
-					$.loadCmbMarks();
+					$.loadCmbCategory();
 				}else{		
 					$.errorMessage();
 				}
@@ -480,6 +493,7 @@ $(function(){
 		}
 	});
 	
+	var createCar = false;
 	$("#frmCar").on('submit', function(event){
 		event.preventDefault();
 		var url = "";
@@ -495,6 +509,7 @@ $(function(){
 					break;
 				case '1':
 					$.successMessage();
+					createCar = true;
 					break;
 				case '2':
 					$.errorMessage("El Vehiculo Ya Existe!");
@@ -502,5 +517,71 @@ $(function(){
 			}	
 		}, 'json');
 	});
-
+	
+	$.deleteCar = function(){
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/delete_category/",
+			dataType: 'json',
+			data: {id:trIdCar},
+			success: function(response) {
+				if(response){
+					$.successMessage();
+					$('#tbCateg').DataTable().row( $("#"+trIdCateg) ).remove().draw();
+					$.loadCmbCategory();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	}
+	 
+	 var trIdCar;
+	 $.editDeleteCar = function(btn, edt){
+	 	trIdCateg = $($($(btn).parent()).parent()).attr('id');
+	 	if(edt){
+	 		$("#txtNameCategEdit").val($($("#"+trIdCateg).children('td')[0]).html());
+	 		$("#categModal").modal('show');
+	 		$("#spIdCateg").attr('data-toggle', trIdCateg);
+	 		
+	 	}
+	 	else
+	 	{
+	 		$.confirmMessage($.deleteCateg, "Está Seguro De Eliminar La Categoría?");
+	 	} 	
+	 }
+	
+	var btnsOpTblCars = "<button style='border: 0; background: transparent' onclick='$.editDeleteCar(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteCar(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+	
+	$.renderizeRowTbCars = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'>"+btnsOpTblCars+"</td>");
+	   $(nRow).attr('id',aData['veh_id']+"Car");
+	}
+	
+	var flagCar = true;
+	$("#ltCar").click(function(event){
+		if (flagCar){
+		//'cli_id, per_ced, per_nom, per_ape, marca.*, modelo.*, veh_pla, veh_col, veh_id'
+			var data = [
+				{"data":"per_ced"},
+				{"data":"nombres"},
+				{"data":"mar_nom"},
+				{"data":"mod_nom"},
+				{"data":"veh_pla"},
+				{"data":"veh_col"}
+			];
+			$.fnTbl('#tbCars',"/sich/car/get_cars_all/",data,$.renderizeRowTbCars);
+			flagCar = false;		
+		}
+		else if(createCar){
+			$('#tbCars').DataTable().ajax.reload();
+			createCar = false;
+		}
+	});
+	
 });
