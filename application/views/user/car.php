@@ -1,153 +1,12 @@
 <div class="well panel panel-default" style="margin-top:1%;min-height:590px;">
   <div class="panel-body">
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#sectionA">Vehículo</a></li>
 		<li><a data-toggle="tab" href="#sectionB">Marca</a></li>
 		<li><a data-toggle="tab" href="#sectionD">Categoría</a></li>
-		<li><a data-toggle="tab" href="#sectionC">Modelo</a></li>   
+		<li><a data-toggle="tab" href="#sectionC">Modelo</a></li>
+		<li class="active"><a data-toggle="tab" href="#sectionA">Vehículo</a></li>
 	</ul>
 	<div class="tab-content">
-		
-		<!-- VEHICULO -->
-		<div id="sectionA" class="tab-pane fade in active">
-			<br>
-			<div class="panel-group" id="accordionCar" role="tablist" aria-multiselectable="true">
-			  
-			  <!-- CREAR VEHICULO -->
-			  <div class="panel panel-primary">
-				<div class="panel-heading" role="tab" id="headingSaveCar">
-				  <h4 class="panel-title">
-					<a data-toggle="collapse" data-parent="#accordionCar" href="#collapseSaveCar" aria-expanded="true" aria-controls="collapseSaveCar">
-					  CREAR VEHICULO
-					</a>
-				  </h4>
-				</div>
-				<div id="collapseSaveCar" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveCar">
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
-								<form id="frmCar">
-								  <span id="spClient"></span>
-								  <fieldset class="scheduler-border">
-									<legend class="scheduler-border">Datos Cliente</legend>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">C.I./R.U.C.:</label><a id="searchClient"><img src="<?php echo base_url()?>static/img/search.png" style="height:30px;cursor:pointer;" alt=""> </a>
-										<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">Nombre:</label>
-										<input type="text" required="true" class="form-control" id="txtNombre" name="txtNombre" placeholder="Ingrese Nombre"/>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">Apellido:</label>
-										<input type="text" required="true" class="form-control" id="txtApellido" name="txtApellido" placeholder="Ingrese Apellido"/>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">Teléfono:</label>
-										<input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">E-mail:</label>
-										<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">Dirección:</label>
-										<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
-									  </div>
-								  </fieldset>
-								  <fieldset class="scheduler-border" id="fstDataCar">
-									<legend class="scheduler-border">Datos Vehículo</legend>
-									  <div class="form-group col-md-6">
-										<label for="cmbMarkAjx">Marca:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdMark" id="cmbMarkAjx">
-										</select>
-									  </div>
-									  <div class="form-group col-md-6">
-										<label for="cmbModelAjx">Modelo:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdModel" id="cmbModelAjx">
-										</select>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">Chasis:</label>
-										<input type="text" required="true" class="form-control" id="txtNChasis" name="txtChasis" placeholder="Ingrese Nombre"/>
-									  </div>
-									  <div class="form-group col-xs-12">
-										<label for="txtName">Motor:</label>
-										<input type="text" required="true" class="form-control" id="txtMotor" name="txtMotor" placeholder="Ingrese Motor"/>
-									  </div>
-									  <div class="form-group col-xs-12 col-md-6">
-										<label for="txtName">Placa:</label>
-										<input type="text" required="true" class="form-control" id="txtPlaca" name="txtPlaca" placeholder="Ingrese Placa"/>
-									  </div>
-									  
-									  <div class="form-group col-xs-12 col-md-6">
-										<label for="txtName">Año:</label>
-										<input type="number" min="1980" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
-									  </div>
-									  <div class="form-group col-xs-12 col-md-6">
-										<label for="txtName">Color:</label>
-										<div class="input-group demo2">
-											<input type="text" value="" class="form-control" />
-											<span class="input-group-addon"><i></i></span>
-										</div>
-									  </div>
-									  <div class="form-group col-xs-12 col-md-6">
-										<label for="txtName">Código:</label>
-										<input type="text" required="true" class="form-control" id="txtCodigo" name="txtCodigo" placeholder="Ingrese Código"/>
-									  </div>
-								  </fieldset>
-								  <div class="row">
-									  <div class="col-md-offset-5">
-										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
-									  </div>
-								  </div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-				
-			  </div>
-			  <!-- END CREAR VEHICULO -->
-			  
-			  <!-- LISTAR VEHICULO -->
-			  <div class="panel panel-primary">
-				<div class="panel-heading" role="tab" id="headingListCar">
-				  <h4 class="panel-title">
-					<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
-					  LISTAR VEHICULOS
-					</a>
-				  </h4>
-				</div>
-				<div id="collapseListCar" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListCar">
-				  <div class="panel-body">
-					
-					<div class="row">
-						<div class="col-md-8 col-md-offset-2">
-							<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCar">
-								<thead>
-									<tr>
-										<th class="text-center">Cédula</th>
-										<th class="text-center">Nombre</th>
-										<th class="text-center">Marca</th>
-										<th class="text-center">Modelo</th>
-										<th class="text-center">Placa</th>
-										<th class="text-center">Color</th>
-										<th class="text-center">Acción</th>
-									</tr>
-								</thead>
-								
-							</table>
-						</div>
-					</div>
-
-				  </div>
-				</div>
-			  </div>
-			  <!-- END LISTAR VEHICULO -->
-			</div>
-		</div>
-		<!-- END VEHICULO -->
 		
 		<!-- MARCA -->
 		<div id="sectionB" class="tab-pane fade">
@@ -357,8 +216,6 @@
 			</div>
 		</div>
 		<!-- End Modal HTML -->
-		
-		
 		<!-- END CATEGORIA -->
 		
 		
@@ -388,12 +245,22 @@
 								<label for="txtName">Nombre:</label>
 								<input type="text" class="form-control" id="txtName" name="name" placeholder="Ingrese Nombre"/>
 							  </div>
-				  
-							  <div class="form-group">
-								<label for="cmbMark">Marca:</label>
-								<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="cmbMark">
-								</select>
-							  </div>
+				  			  <div class="row">
+				  			  	<div class="col-xs-6">
+								  <div class="form-group">
+									<label for="cmbMark">Marca:</label>
+									<select class="selectpicker form-control" data-live-search="true" data-size="5" name="id_mark" id="cmbMark">
+									</select>
+								  </div>
+								</div>
+								<div class="col-xs-6">
+								  <div class="form-group">
+									<label for="cmbCat">Categoria:</label>
+									<select class="selectpicker form-control" data-live-search="true" data-size="5" name="id_cat" id="cmbCat">
+									</select>
+								  </div>
+								</div>
+							 </div>
 				  
 							  <div class="row">
 								  <div class="col-md-offset-5">
@@ -500,9 +367,149 @@
 			</div>
 		</div>
 		<!-- End Modal HTML -->
-		
-		
 		<!-- END MODELO -->
+		
+		<!-- VEHICULO -->
+		<div id="sectionA" class="tab-pane fade in active">
+			<br>
+			<div class="panel-group" id="accordionCar" role="tablist" aria-multiselectable="true">
+			  
+			  <!-- CREAR VEHICULO -->
+			  <div class="panel panel-primary">
+				<div class="panel-heading" role="tab" id="headingSaveCar">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" data-parent="#accordionCar" href="#collapseSaveCar" aria-expanded="true" aria-controls="collapseSaveCar">
+					  CREAR VEHICULO
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseSaveCar" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveCar">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
+								<form id="frmCar">
+								  <span id="spClient"></span>
+								  <fieldset class="scheduler-border">
+									<legend class="scheduler-border">Datos Cliente</legend>
+									  <div class="form-group col-xs-12">
+										<label for="txtCedula">C.I./R.U.C.:</label><a id="searchClient"><img src="<?php echo base_url()?>static/img/search.png" style="height:30px;cursor:pointer;" alt=""> </a>
+										<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtNombre">Nombre:</label>
+										<input type="text" required="true" class="form-control" id="txtNombre" name="txtNombre" placeholder="Ingrese Nombre"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtApellido">Apellido:</label>
+										<input type="text" required="true" class="form-control" id="txtApellido" name="txtApellido" placeholder="Ingrese Apellido"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtTelefono">Teléfono:</label>
+										<input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtEmail">E-mail:</label>
+										<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtDireccion">Dirección:</label>
+										<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
+									  </div>
+								  </fieldset>
+								  <fieldset class="scheduler-border" id="fstDataCar">
+									<legend class="scheduler-border">Datos Vehículo</legend>
+									  <div class="form-group col-md-6">
+										<label for="cmbMarkAjx">Marca:</label>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdMark" id="cmbMarkAjx">
+										</select>
+									  </div>
+									  <div class="form-group col-md-6">
+										<label for="cmbModelAjx">Modelo:</label>
+										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdModel" id="cmbModelAjx">
+										</select>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtNChasis">Chasis:</label>
+										<input type="text" required="true" class="form-control" id="txtNChasis" name="txtChasis" placeholder="Ingrese Nombre"/>
+									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="txtMotor">Motor:</label>
+										<input type="text" required="true" class="form-control" id="txtMotor" name="txtMotor" placeholder="Ingrese Motor"/>
+									  </div>
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtPlaca">Placa:</label>
+										<input type="text" required="true" class="form-control" id="txtPlaca" name="txtPlaca" placeholder="Ingrese Placa"/>
+									  </div>
+									  
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtAnio">Año:</label>
+										<input type="number" min="1980" required="true" class="form-control" id="txtAnio" name="txtAnio" placeholder="Ingrese Año"/>
+									  </div>
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtColor">Color:</label>
+										<div class="input-group demo2">
+											<input type="text" value="" class="form-control" id="txtColor" name="txtColor"/>
+											<span class="input-group-addon"><i></i></span>
+										</div>
+									  </div>
+									  <div class="form-group col-xs-12 col-md-6">
+										<label for="txtName">Código:</label>
+										<input type="text" required="true" class="form-control" id="txtCodigo" name="txtCodigo" placeholder="Ingrese Código"/>
+									  </div>
+								  </fieldset>
+								  <div class="row">
+									  <div class="col-md-offset-5">
+										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
+									  </div>
+								  </div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			  </div>
+			  <!-- END CREAR VEHICULO -->
+			  
+			  <!-- LISTAR VEHICULO -->
+			  <div class="panel panel-primary">
+				<div class="panel-heading" role="tab" id="headingListCar">
+				  <h4 class="panel-title">
+					<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
+					  LISTAR VEHICULOS
+					</a>
+				  </h4>
+				</div>
+				<div id="collapseListCar" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListCar">
+				  <div class="panel-body">
+					
+					<div class="row">
+						<div class="col-md-12">
+							<table class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCars">
+								<thead>
+									<tr>
+										<th class="text-center">Cédula</th>
+										<th class="text-center">Nombre</th>
+										<th class="text-center">Marca</th>
+										<th class="text-center">Modelo</th>
+										<th class="text-center">Placa</th>
+										<th class="text-center">Color</th>
+										<th class="text-center">Acción</th>
+									</tr>
+								</thead>
+								
+							</table>
+						</div>
+					</div>
+
+				  </div>
+				</div>
+			  </div>
+			  <!-- END LISTAR VEHICULO -->
+			</div>
+		</div>
+		<!-- END VEHICULO -->
+		
 	</div>
   </div>
 </div>

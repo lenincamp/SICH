@@ -305,13 +305,30 @@ class Car extends Private_Controller {
 				$this->input->post('txtAnio'),
 				$this->input->post('txtMotor'),
 				$this->input->post('txtCodigo'),
+				$this->input->post('txtColor'),
 				$this->input->get('id'),
 				$this->input->post('cmbIdModel')
     		);
 
-			$response = $this->cars->save("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			$response = $this->cars->save("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			//exit(print_r($response));
 			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_cars_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = $this->cars->get_all();
+			echo json_encode(array("data"=>$data));
 		}
 		else
 		{
