@@ -40,11 +40,9 @@ class Car extends Private_Controller {
 			base_url()."static/css/bootstrap-colorpicker.min.css",
 			base_url()."static/css/dataTables.bootstrap.css"
 		);
-		
-		$mark['mark']  = $this->mark->get_all();
-		
+
 		$this->load->view('templates/header', $title);
-		$this->load->view('user/car', $mark);
+		$this->load->view('user/car');
 		$this->load->view('templates/footer', $data);
 	}
 	
