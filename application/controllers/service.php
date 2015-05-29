@@ -14,7 +14,7 @@ class Service extends Private_Controller {
 	public function start()
 	{
 		if(!@$this->user) redirect ('main');
-		$title['title'] = 'vehiculo';
+		$title['title'] = 'servicios';
 
 		$data['js'] = array(
 			base_url()."static/js/library/alls.js",

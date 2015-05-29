@@ -4,14 +4,14 @@ class Car extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('cars','mark','model'));
+		$this->load->model(array('cars','mark','model','category'));
 	}
 
 
 	public function start()
 	{
 		if(!@$this->user) redirect ('main');
-		$title['title'] = 'vehiculo';
+		$title['title'] = 'vehículo';
 
 		$data['js'] = array(
 			base_url()."static/js/library/alls.js",
@@ -200,6 +200,80 @@ class Car extends Private_Controller {
     	{
     		$data = array('mar_id' => $this->input->post('id'));
 			$response = $this->mark->delete($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	/* =========================>>> CATEGORIES <<<========================= */
+	
+	public function save_category()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'cat_nom'  => strtoupper(trim($this->input->post('txtNameCateg')))
+    		);
+
+			$response = $this->category->save($data);
+			echo $response;
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_categories_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = $this->category->get_all();
+			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function edit_category()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'cat_nom'  => $this->input->post('txtNameCategEdit')
+    		);
+			$response = $this->category->update($this->input->get('trId'), $data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function delete_category()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('cat_id' => $this->input->post('id'));
+			$response = $this->category->delete($data);
 			echo json_encode($response);
 		}
 		else
