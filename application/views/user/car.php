@@ -127,7 +127,12 @@
 							<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCar">
 								<thead>
 									<tr>
-										<th class="text-center"> Nombre </th>
+										<th class="text-center">Cédula</th>
+										<th class="text-center">Nombre</th>
+										<th class="text-center">Marca</th>
+										<th class="text-center">Modelo</th>
+										<th class="text-center">Placa</th>
+										<th class="text-center">Color</th>
 										<th class="text-center">Acción</th>
 									</tr>
 								</thead>
@@ -387,19 +392,6 @@
 							  <div class="form-group">
 								<label for="cmbMark">Marca:</label>
 								<select class="selectpicker" data-live-search="true" data-size="5" name="id_mark" id="cmbMark">
-									<?php
-									if ( ! empty($mark))
-									{
-										foreach ($mark as $key => $value) 
-										{
-											echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
-										}
-									}
-									else
-									{
-										echo "<option>Cree una Marca</option>";
-									}
-									?>
 								</select>
 							  </div>
 				  
@@ -491,19 +483,6 @@
 						  	<div class="form-group">
 								<label for="txtMark">Marca:</label>
 								<select class="selectpicker" data-live-search="true" data-size="5" name="id_markMd" id="cmbMarkMd">
-									<?php
-									if ( ! empty($mark))
-									{
-										foreach ($mark as $key => $value) 
-										{
-											echo "<option value='".$value['mar_id']."'>".$value['mar_nom']."</option>";
-										}
-									}
-									else
-									{
-										echo "<option>Cree una Marca</option>";
-									}
-									?>
 								</select>
 						  	</div>
 						</div>

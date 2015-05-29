@@ -66,7 +66,7 @@ $(function(){
 			type: "POST",
 			url: "/sich/car/delete_model/",
 			dataType: 'json',
-			data: {id:trIdMd},
+			data: {id:trIdMd.replace("Model", "")},
 			success: function(response) {
 				if(response){
 					$.successMessage();
@@ -83,9 +83,9 @@ $(function(){
 	 	trIdMd = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
 	 		$("#mdModel").modal('show');
-	 		$("#spId").attr('data-toggle', trIdMd);
+	 		$("#spId").attr('data-toggle', trIdMd.replace("Model", ""));
 	 		$("#frmMdModel input[type='text']").val($($("#"+trIdMd).children('td')[0]).html());
-	 		$("#cmbMarkMd").selectpicker('val', $($("#"+trIdMd).children('td')[1]).attr('id'));
+	 		$("#cmbMarkMd").selectpicker('val', ($($("#"+trIdMd).children('td')[1]).attr('id')).replace("Model", ""));
 	 	}
 	 	else
 	 	{
@@ -111,7 +111,7 @@ $(function(){
 	$.renderizeRowTbModels = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
 	   $(nRow).attr('id',aData['mod_id']);
-	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']);
+	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']+"Model");
 	}
 						  
 	var flagMd = true;
@@ -204,7 +204,7 @@ $(function(){
 						  
 	$.renderizeRowTbMarks = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblMark+"</td>");
-	   $(nRow).attr('id',aData['mar_id']);
+	   $(nRow).attr('id',aData['mar_id']+"Mark");
 	}
 						  
 	var flagMk = true;
@@ -231,10 +231,10 @@ $(function(){
 			type: "POST",
 			url: "/sich/car/delete_mark/",
 			dataType: 'json',
-			data: {id:trIdMk},
+			data: {id:trIdMk.replace("Mark", "")},
 			success: function(response) {
 				if(response){
-					$.successMessage();
+					$.successMessage("Se ha Eliminado el Registro");
 					$('#tbMarks').DataTable().row( $("#"+trIdMk) ).remove().draw();
 					$.loadCmbMarks();
 					$('#tbModels').DataTable().ajax.reload();
@@ -251,7 +251,7 @@ $(function(){
 	 	if(edt){
 	 		$("#txtNameMarkEdit").val($($("#"+trIdMk).children('td')[0]).html());
 	 		$("#markModal").modal('show');
-	 		$("#spIdMk").attr('data-toggle', trIdMk);
+	 		$("#spIdMk").attr('data-toggle', trIdMk.replace("Mark", ""));
 	 		
 	 	}
 	 	else
@@ -402,6 +402,8 @@ $(function(){
 			$("#cmbMarkAjx").html(option);
 			$("#cmbMark").html(option);
 			$("#cmbMark").selectpicker('refresh');
+			$("#cmbMarkMd").html(option);
+			$("#cmbMarkMd").selectpicker('refresh');
 			$.loadCmbModels(response.data[0].mar_id);
 			$("#cmbMarkAjx").selectpicker('refresh');
 			
