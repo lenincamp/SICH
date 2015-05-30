@@ -11,7 +11,7 @@
 			<br>
 			<div class="panel-group" id="accordionCar" role="tablist" aria-multiselectable="true">
 			  
-			  <!-- CREAR VEHICULO -->
+			  <!-- CREAR SERVICIO -->
 			  <div class="panel panel-primary">
 				<div class="panel-heading" role="tab" id="headingSaveCar">
 				  <h4 class="panel-title">
@@ -22,10 +22,23 @@
 				</div>
 				<div id="collapseSaveCar" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveCar">
 					<div class="panel-body">
+						<span id="ctg"></span>
+						<span id="ars"></span>
 						<div class="row">
 							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
-								<form id="frmCar">
-								  <h3>EN CONSTRUCCIÓN</h3>
+								<form id="frmServices">
+									<div class="form-group">
+										<label for="txtNameService">Nombre:</label>
+										<input type="text" required="true" class="form-control" id="txtNameService" name="txtNameService" placeholder="Ingrese Nombre">
+									</div>
+									<div id="contenedor_servicios" name="cotenedor_servicios">
+									<!--carga dinamica por ajax-->
+									</div>
+									 <div class="row">
+										  <div class="col-xs-offset-4 col-md-offset-5">
+											<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
+										  </div>
+									</div>
 								</form>
 							</div>
 						</div>
@@ -33,14 +46,14 @@
 				</div>
 				
 			  </div>
-			  <!-- END CREAR VEHICULO -->
+			  <!-- END CREAR SERVICIO -->
 			  
 			  <!-- LISTAR VEHICULO -->
 			  <div class="panel panel-primary">
 				<div class="panel-heading" role="tab" id="headingListCar">
 				  <h4 class="panel-title">
 					<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
-					  LISTAR VEHICULOS
+					  LISTAR SERVICIOS
 					</a>
 				  </h4>
 				</div>
