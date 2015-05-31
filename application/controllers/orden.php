@@ -19,17 +19,14 @@ class Orden extends Private_Controller {
 		$data['js'] = array(
 			base_url()."static/js/library/alls.js",
 			base_url()."static/js/users/clients.js",
-			base_url()."static/js/bootstrap-select.min.js",
-			base_url()."static/js/i18n/defaults-es_CL.min.js",
 			base_url()."static/js/pnotify.custom.min.js",
-			"https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js",
-			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js"
+			base_url()."static/js/jquery.dataTables.min.js",
+			base_url()."static/js/dataTables.bootstrap.js"
 		);
 		$data['funcion']="<script type='text/javascript'> seleccionar('mn_ord') </script>";
 		$title['css'] = array(
-			base_url()."static/css/bootstrap-select.min.css",
 			base_url()."static/css/pnotify.custom.min.css",
-			"https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css"
+			base_url()."static/css/dataTables.bootstrap.css"
 		);
 		$contenido['detallesTrabajo']  = $this->areas->selectSQLAll("select * from get_all_areas() where art_est=true",null);
 		$this->load->view('templates/header', $title);

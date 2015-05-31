@@ -249,14 +249,14 @@
 				  			  	<div class="col-xs-6">
 								  <div class="form-group">
 									<label for="cmbMark">Marca:</label>
-									<select class="selectpicker form-control" data-live-search="true" data-size="5" name="id_mark" id="cmbMark">
+									<select class="form-control" name="id_mark" id="cmbMark">
 									</select>
 								  </div>
 								</div>
 								<div class="col-xs-6">
 								  <div class="form-group">
 									<label for="cmbCat">Categoria:</label>
-									<select class="selectpicker form-control" data-live-search="true" data-size="5" name="id_cat" id="cmbCat">
+									<select class="form-control" name="id_cat" id="cmbCat">
 									</select>
 								  </div>
 								</div>
@@ -349,7 +349,7 @@
 			  
 						  	<div class="form-group">
 								<label for="txtMark">Marca:</label>
-								<select class="selectpicker" data-live-search="true" data-size="5" name="id_markMd" id="cmbMarkMd">
+								<select class="form-control" name="id_markMd" id="cmbMarkMd">
 								</select>
 						  	</div>
 						</div>
@@ -386,10 +386,10 @@
 				<div id="collapseSaveCar" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingSaveCar">
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
+							<div id="divFrmCar" class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 								<form id="frmCar">
 								  <span id="spClient"></span>
-								  <fieldset class="scheduler-border">
+								  <fieldset class="scheduler-border" id="fstDataCli">
 									<legend class="scheduler-border">Datos Cliente</legend>
 									  <div class="form-group col-xs-12">
 										<label for="txtCedula">C.I./R.U.C.:</label><a id="searchClient"><img src="<?php echo base_url()?>static/img/search.png" style="height:30px;cursor:pointer;" alt=""> </a>
@@ -418,19 +418,21 @@
 								  </fieldset>
 								  <fieldset class="scheduler-border" id="fstDataCar">
 									<legend class="scheduler-border">Datos Vehículo</legend>
-									  <div class="form-group col-md-6">
+									  <div class="form-group col-md-6" id="divCmbMarkAjx">
 										<label for="cmbMarkAjx">Marca:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdMark" id="cmbMarkAjx">
+										<select class="form-control" name="cmbIdMark" id="cmbMarkAjx">
 										</select>
+										
 									  </div>
-									  <div class="form-group col-md-6">
+									  <div class="form-group col-md-6" id="divCmbMarkAjx">
 										<label for="cmbModelAjx">Modelo:</label>
-										<select class="selectpicker" data-live-search="true" data-size="5" name="cmbIdModel" id="cmbModelAjx">
+ 										<select class="form-control" name="cmbIdModel" id="cmbModelAjx">
 										</select>
+ 										
 									  </div>
 									  <div class="form-group col-xs-12">
 										<label for="txtNChasis">Chasis:</label>
-										<input type="text" required="true" class="form-control" id="txtNChasis" name="txtChasis" placeholder="Ingrese Nombre"/>
+										<input type="text" class="form-control" id="txtNChasis" name="txtChasis" placeholder="Ingrese Nombre"/>
 									  </div>
 									  <div class="form-group col-xs-12">
 										<label for="txtMotor">Motor:</label>
@@ -508,6 +510,22 @@
 			  <!-- END LISTAR VEHICULO -->
 			</div>
 		</div>
+		
+		<!-- Modal HTML -->
+		<div id="mdCar" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title">Editar Vehículo</h4>
+					</div>
+					<div class="modal-body" id="mdBdCar">		
+					</div>
+				</div>	
+			</div>
+		</div>
+		<!-- End Modal HTML -->
+		
 		<!-- END VEHICULO -->
 		
 	</div>
