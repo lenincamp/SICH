@@ -10,7 +10,7 @@ $(function(){
 	 });
 	 
 	 $.successMessage = function(text){
-	 	text = typeof text !== 'undefined' ? text : 'Registro Exitoso.';
+	 	text = typeof text !== 'undefined' ? text : 'Proceso Exitoso.';
 	 	new PNotify({
 			title: 'Notificación',
 			text : text,
@@ -19,7 +19,7 @@ $(function(){
 	 }
 	 
 	 $.errorMessage = function(text){
-	 	text = typeof text !== 'undefined' ? text : 'Error en el registro.';
+	 	text = typeof text !== 'undefined' ? text : 'Error en el proceso.';
 	 	new PNotify({
 			title: 'Oh No!',
 			text: text,

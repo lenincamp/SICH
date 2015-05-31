@@ -17,24 +17,29 @@ class Services extends CI_Model {
 			SELECT per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_tel, cli_eml
 			FROM cliente
 		*/
-		$response = $this->db->select('per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_tel, cli_eml')
-						 ->from('cliente')
+		$response = $this->db->select('srv_id, srv_nom')
+						 ->from('servicio')
 						 ->get()->result_array();
 		return $response;
 	}
 	
 	public function get($data) {
-		return $this->db->get_where('cliente', $data)->row();
+		return $this->db->get_where('servicio', $data)->row();
+	}
+	
+	public function selectSQLMultiple($sql,$data) {
+		$query = $this->db->query($sql,$data);
+		Return $query->result_array();
 	}
 	
 	public function save($data)
 	{
-		return $this->db->insert('cliente', $data);
+		return $this->db->insert('servicio', $data);
 	}
 	
 	public function delete($data)
 	{
-		return $this->db->delete('cliente', $data); 
+		return $this->db->delete('servicio', $data); 
 	}
 	
 	public function selectSQL($sql,$data)
@@ -46,7 +51,7 @@ class Services extends CI_Model {
 	public function update($id, $data)
 	{
 		if($id){
-			return $this->db->update('cliente', $data, array('cli_id' => $id));
+			return $this->db->update('servicio', $data, array('srv_id' => $id));
 		}
 		else{
 			return FALSE;

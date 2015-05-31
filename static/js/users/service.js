@@ -8,6 +8,7 @@ $(function(){
 	 */
 	var create = false;
 	$("#frmServices").on("submit",function(event){
+		$("#buttonsAction").html('<h4 class="text-primary">Guardando...</h4>');
 		event.preventDefault();
 		$.ajax({
 			type: "POST",
@@ -26,7 +27,9 @@ $(function(){
 						case "1":
 							$.successMessage();
 							$("#frmServices input[type='number']").val('0.00');
+							$("#frmServices input[type='text']").val('');
 							create = true;
+							$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 							break;
 						case "0":
 							$.errorMessage();
@@ -37,7 +40,11 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
-			}
+			},
+			error: function(){
+				$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+				$.errorMessage();
+			},
 		});
 	});
 	
@@ -46,24 +53,29 @@ $(function(){
 	 *  Edit service submit(Ajax) --- modal form
 	 * -------------------------------------------------------------------
 	 */
-	 $("#frmMdModel").on("submit",function(event){
+	 $("#frmMdServicio").on("submit",function(event){
 		event.preventDefault();
+		$("#buttonsActionEdit").html('<h4 class="text-primary">Guardando...</h4>');
 		$.ajax({
 			type: "POST",
-			url: "/sich/car/edit_model/?trId="+$("#spId").attr('data-toggle'),
+			url: "/sich/service/edit_service/?trId="+$("#spIdServicio").attr('data-toggle')+"&ctgId="+$("#ctg").attr('data-toggle')+"&arsId="+$("#ars").attr('data-toggle'),
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					$('#tbModels').DataTable().ajax.reload();
-					$("#frmMdModel input[type='text']").val('');
-					$('.cmbMarkMd').selectpicker('refresh');
-					$("#mdModel").modal('hide');
+					$('#tbService').DataTable().ajax.reload();
+					$("#frmMdServicio input[type='text']").val('');
+					$("#servicioModal").modal('hide');
+					$("#buttonsActionEdit").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 					$.successMessage();
 				}else{		
 					$.errorMessage();
 				}
-			}
+			},
+			error: function(){
+				$("#buttonsActionEdit").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+				$.errorMessage();
+			},
 		});
 	});
 	 
@@ -74,16 +86,36 @@ $(function(){
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
 	 * -------------------------------------------------------------------
 	 */
-	 $.deleteModel = function(){
+	 $.deleteService = function(){
 	 	$.ajax({
 			type: "POST",
-			url: "/sich/car/delete_model/",
+			url: "/sich/service/delete_service/",
 			dataType: 'json',
 			data: {id:trIdMd},
 			success: function(response) {
 				if(response){
 					$.successMessage();
-					$('#tbModels').DataTable().row( $("#"+trId) ).remove().draw();
+					$('#tbService').DataTable().row( $("#"+trIdMd) ).remove().draw();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	 }
+	 
+	 $.chargeModalService = function(){
+	 	$.ajax({
+			type: "POST",
+			url: "/sich/service/search_service_by_id/",
+			dataType: 'json',
+			data: {id:trIdMd},
+			success: function(response) {
+				if(response){
+					//$('#tbService').DataTable().row( $("#"+trId) ).remove().draw();
+					var precios=eval(response);
+					for (var i = 0; i < precios.length; i++) {
+						$("#edittxtPrc"+precios[i].cat_id+"_"+precios[i].art_id).val(precios[i].sca_prc)
+					}
 				}else{		
 					$.errorMessage();
 				}
@@ -95,14 +127,14 @@ $(function(){
 	 $.editDeleteModel = function(btn, edt){
 	 	trIdMd = $($($(btn).parent()).parent()).attr('id');
 	 	if(edt){
-	 		$("#mdModel").modal('show');
-	 		$("#spId").attr('data-toggle', trIdMd);
-	 		$("#frmMdModel input[type='text']").val($($("#"+trIdMd).children('td')[0]).html());
-	 		$("#cmbMarkMd").selectpicker('val', $($("#"+trIdMd).children('td')[1]).attr('id'));
+			$("#servicioModal").modal('show');
+	 		$("#spIdServicio").attr('data-toggle', trIdMd);
+	 		$("#frmMdServicio input[type='text']").val($($("#"+trIdMd).children('td')[0]).html());
+	 		$.renderizeDivContentServices('edit_contenedor_servicios','edit');
 	 	}
 	 	else
 	 	{
-	 		$.confirmMessage($.deleteModel);
+	 		$.confirmMessage($.deleteService);
 	 	} 	
 	 }
 	
@@ -110,32 +142,32 @@ $(function(){
 	 * -------------------------------------------------------------------
 	 *  Generate Table models list
 	 *	function renderizeRow renderize tr, td for table
-	 *	@param : btnsOpTblModels => variable(string): buttons for dateTable
+	 *	@param : btnsOpTblServices => variable(string): buttons for dateTable
 	 * -------------------------------------------------------------------
 	 */
 	
-	var btnsOpTblModels = "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, true);'>"+
+	var btnsOpTblServices = "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, true);'>"+
 							"<img src='/sich/static/img/edit.png' title='Editar'>"+
 						  "</button>"+
 						  "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
 							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
 						  "</button>";
 						  
-	$.renderizeRowTbModels = function( nRow, aData, iDataIndex ) {
-	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
-	   $(nRow).attr('id',aData['mod_id']);
-	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']);
+	$.renderizeRowTbServices = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'>"+btnsOpTblServices+"</td>");
+	   $(nRow).attr('id',aData['srv_id']);
+	   $($(nRow).children('td')[1]).attr('id',aData['srv_id']);
 	}
 						  
 	var flagMd = true;
-	$("#ltModel").click(function(event){
-		//$("#tbModels").ajax.reload();
+	$("#ltService").click(function(event){
+		//$("#tbService").ajax.reload();
 		if (flagMd){
-			$.fnTbl('#tbModels',"/sich/car/get_models_all/",[{ "data": "mod_nom"},{"data":"mar_nom"}],$.renderizeRowTbModels);
+			$.fnTbl('#tbService',"/sich/service/get_service_all/",[{ "data": "srv_nom"}],$.renderizeRowTbServices);
 			flagMd = false;		
 		}
 		else if(create){
-			$('#tbModels').DataTable().ajax.reload();
+			$('#tbService').DataTable().ajax.reload();
 			create = false;
 		}
 	});
@@ -144,17 +176,18 @@ $(function(){
 	 *  Charge contenido_servicios(Ajax) --- modal form
 	 * -------------------------------------------------------------------
 	 */
-	 $.renderizeDivContentServices = function() {
+	 $.renderizeDivContentServices = function(idCotenedor, prefijo) {
 		var contenido="";
 		var objAreas;
 		var areas;
 		var ctgid="";
 		var arsid="";
 		var pasoArsid=true;
-		$('#contenedor_servicios').html('<h4 class="text-info">Cargando formulario, por favor espere...</h4>');
+		$('#'+idCotenedor).html('<h4 class="text-info">Cargando formulario, por favor espere...</h4>');
 		
 		$.ajax({
 			type: "POST",
+			async:true,
 			url: "/sich/car/get_categories_all/",
 			dataType: 'json',
 			success: function(response) {
@@ -166,7 +199,7 @@ $(function(){
 						categorias.forEach(function(entry) {
 							ctgid+=","+entry.cat_id
 							//contenido+="<fieldset class='scheduler-border'><legend class='scheduler-border'>"+capitalizeFirstLetter(entry.cat_nom)+"</legend>";
-							contenido+="<fieldset class='scheduler-border' id='fs"+entry.cat_id+"'><legend class='scheduler-border'><ul id='menu1'><li>"+capitalizeFirstLetter(entry.cat_nom)+"<ul><li><a href='#' onclick=\"copiarInputs('fs"+entry.cat_id+"')\"><img src='/sich/static/img/copiar.png' style='width:15%; margin:5px;'>Copiar</a></li><li><a href='#' onclick=\"pegarInputs('fs"+entry.cat_id+"')\"><img src='/sich/static/img/pegar.png' style='width:15%; margin:5px;'>Pegar</a></li></ul></li></ul></legend>";
+							contenido+="<fieldset class='scheduler-border' id='"+prefijo+"fs"+entry.cat_id+"'><legend class='scheduler-border'><ul id='menu1'><li>"+capitalizeFirstLetter(entry.cat_nom)+"<ul><li><a href='#' onclick=\"copiarInputs('"+prefijo+"fs"+entry.cat_id+"')\"><img src='/sich/static/img/copiar.png' style='width:15%; margin:5px;'>Copiar</a></li><li><a href='#' onclick=\"pegarInputs('"+prefijo+"fs"+entry.cat_id+"')\"><img src='/sich/static/img/pegar.png' style='width:15%; margin:5px;'>Pegar</a></li></ul></li></ul></legend>";
 							$.ajax({
 								type: "POST",
 								async:false,  
@@ -183,7 +216,7 @@ $(function(){
 												{
 													arsid+=","+entryArea.art_id;
 												}
-												contenido+="<div class='form-group col-md-6'><label for='txtPrc"+entry.cat_id+"_"+entryArea.art_id+"'>"+capitalizeFirstLetter(entryArea.art_nom)+"</label> <input type='number' step='0.01' class='form-control' id='txtPrc"+entry.cat_id+"_"+entryArea.art_id+"' name='txtPrc"+entry.cat_id+"_"+entryArea.art_id+"' value='0.00'> </div>";
+												contenido+="<div class='form-group col-md-6'><label for='"+prefijo+"txtPrc"+entry.cat_id+"_"+entryArea.art_id+"'>"+capitalizeFirstLetter(entryArea.art_nom)+"</label> <input type='number' step='0.01' class='form-control' id='"+prefijo+"txtPrc"+entry.cat_id+"_"+entryArea.art_id+"' name='"+prefijo+"txtPrc"+entry.cat_id+"_"+entryArea.art_id+"' value='0.00'> </div>";
 											});
 											pasoArsid=false;
 										}
@@ -191,8 +224,6 @@ $(function(){
 										{
 											contenido+="<a class='btn btn-info' role='button' onClick=\"switchTab(\'sectionB\')\" href='#'>No cuentas con ningun área de trabajo  disponible. ¡Crealas!</a>";
 										}
-									//$('#contenedor_servicios').html(contenido);
-										//for recorriendo areas de trabajo
 									}else{		
 										$.errorMessage();
 									}
@@ -207,7 +238,11 @@ $(function(){
 					}
 				$("#ctg").attr('data-toggle', ctgid.substring(1));
 				$("#ars").attr('data-toggle', arsid.substring(1));
-				$('#contenedor_servicios').html(contenido);
+				$('#'+idCotenedor).html(contenido);
+				if(prefijo=="edit")
+				{
+					$.chargeModalService();
+				}
 				}else{		
 					$.errorMessage();
 				}
@@ -272,7 +307,8 @@ $(function(){
 					$("#frmMdArea input[type='checkbox']").prop('checked', false);
 					$("#areaModal").modal('hide');
 					$.successMessage();
-					$.renderizeDivContentServices();
+					$.renderizeDivContentServices('contenedor_servicios','');
+					//$.renderizeDivContentServices('edit_contenedor_servicios','edit');
 				}else{		
 					$.errorMessage();
 				}
@@ -307,7 +343,8 @@ $(function(){
 		}
 		else if(createArea){
 			$('#tbAreaTrab').DataTable().ajax.reload();
-			$.renderizeDivContentServices();
+			$.renderizeDivContentServices('contenedor_servicios','');
+			//$.renderizeDivContentServices('edit_contenedor_servicios','edit');
 			createArea = false;
 		}
 	});
