@@ -43,7 +43,6 @@ $(function(){
 				if(response){
 					$('#tbModels').DataTable().ajax.reload();
 					$("#frmMdModel input[type='text']").val('');
-					$('.cmbMarkMd').selectpicker('refresh');
 					$("#mdModel").modal('hide');
 					$.successMessage();
 					$.loadCmbMarks();
@@ -85,7 +84,7 @@ $(function(){
 	 		$("#mdModel").modal('show');
 	 		$("#spId").attr('data-toggle', trIdMd.replace("Model", ""));
 	 		$("#frmMdModel input[type='text']").val($($("#"+trIdMd).children('td')[0]).html());
-	 		$("#cmbMarkMd").selectpicker('val', ($($("#"+trIdMd).children('td')[1]).attr('id')).replace("Model", ""));
+	 		$("#cmbMarkMd").val(($($("#"+trIdMd).children('td')[1]).attr('id')).replace("Model", ""));
 	 	}
 	 	else
 	 	{
@@ -134,7 +133,6 @@ $(function(){
 				option += "<option value='"+val.cat_id+"'>"+val.cat_nom+"</option>";
 			});
 			$("#cmbCat").html(option);
-			$("#cmbCat").selectpicker('refresh');
 		},"json");
 	};
 	$.loadCmbCategory();
@@ -414,12 +412,8 @@ $(function(){
 			});
 			$("#cmbMarkAjx").html(option);
 			$("#cmbMark").html(option);
-			$("#cmbMark").selectpicker('refresh');
 			$("#cmbMarkMd").html(option);
-			$("#cmbMarkMd").selectpicker('refresh');
 			$.loadCmbModels(response.data[0].mar_id);
-			$("#cmbMarkAjx").selectpicker('refresh');
-			
 		}, 'json');
 	}
 	
@@ -429,14 +423,18 @@ $(function(){
 		$.loadCmbModels( $(this).val() );
 	});
 	
-	$.loadCmbModels = function( id ){
+	$.loadCmbModels = function( id, idCmb ){
+		idCmb = typeof idCmb !== 'undefined' ? idCmb : "#cmbModelAjx";
 		$.post( "/sich/car/get_models_for_mark/", {"id":id} ,function(response) {	
 			var option = "";
 			$.each(response.data, function(index, val){
 				option += "<option value='"+val.mod_id+"'>"+val.mod_nom+"</option>";
 			});
-			$("#cmbModelAjx").html(option);
-			$("#cmbModelAjx").selectpicker('refresh');
+			$(idCmb).html(option);
+			if(idCmb !== "#cmbModelAjx"){
+				$(idCmb).val($.trim($($("#"+trIdCar).children('td')[3]).attr("id")));
+			}
+			
 		}, 'json');
 	}
 	
@@ -463,34 +461,59 @@ $(function(){
 		}
 	}
 	
-	$("#txtCedula").focusout(function(event){
-		var number = $.trim($(this).val()).length;
+	$.inputsMdCli = function(response){
+		$("#mdBdCar #frmCar input").removeAttr('disabled');
+		$("#mdBdCar #frmCar #spClient").attr("data-toggle", response.cli_id);
+		$($("#mdBdCar #frmCar #txtCedula").val(response.per_ced)).attr('disabled','true');
+		$("#mdBdCar #frmCar #txtNombre").val(response.per_nom);
+		$("#mdBdCar #frmCar #txtApellido").val(response.per_ape);
+		$("#mdBdCar #frmCar #txtTelefono").val(response.cli_tel);
+		$("#mdBdCar #frmCar #txtEmail").val(response.cli_eml);
+		$("#mdBdCar #frmCar #txtDireccion").val(response.cli_dir);
+		$("#mdBdCar #frmCar #cmbMarkAjx").change(function(){
+			$.loadCmbModels( $(this).val(), "#mdBdCar #frmCar #cmbModelAjx" );
+		});
+		$("#mdBdCar #frmCar #cmbMarkAjx").val($.trim($($("#"+trIdCar).children('td')[2]).attr("id")));
+		$("#mdBdCar #frmCar #cmbMarkAjx").change();
+		
+		
+	}
+	
+	$.clearImputCar = function(){
+		$("#fstDataCar input").val("");
+	}
+	
+	$.searchClientByCi = function(ci, msg, mdl){
+		msg = typeof msg !== 'undefined' ? msg : false;
+		mdl = typeof mdl !== 'undefined' ? mdl : false;
+		var number = ci.length;
 		if( number == 10 ){
-			var data = {"ci":$.trim($(this).val())};
+			var data = {"ci":ci};
 			$.post("/sich/client/search_client_by_id/", data, function(response){
-				if( response !== null ){
-					$.disEnaInputCli(true, response);
+				if( response !== null ){	
+					if(mdl){
+						$.inputsMdCli(response);
+					}else{
+						$.disEnaInputCli(true, response);
+					}
 				}else{
-					$.disEnaInputCli(false);
+					if(!mdl){
+						$.disEnaInputCli(false);
+					}
+					if(msg){
+						$.errorMessage("Cliente No Existe!");
+					}
 				}
 			}, 'json');
 		}
-
+	}
+	
+	$("#txtCedula").focusout(function(event){
+		$.searchClientByCi($.trim($(this).val()));
 	});
 	
 	$("#searchClient").click(function(){
-		var number = $.trim($("#txtCedula").val()).length;
-		if( number == 10 ){
-			var data = {"ci":$.trim($("#txtCedula").val())};
-			$.post("/sich/client/search_client_by_id/", data, function(response){
-				if( response !== null ){
-					$.disEnaInputCli(true, response);
-				}else{
-					$.disEnaInputCli(false);
-					$.errorMessage("Cliente No Existe!");
-				}
-			}, 'json');
-		}
+		$.searchClientByCi($.trim($("#txtCedula").val()), true);
 	});
 	
 	var createCar = false;
@@ -509,6 +532,8 @@ $(function(){
 					break;
 				case '1':
 					$.successMessage();
+					$.disEnaInputCli(false);
+					$.clearImputCar();
 					createCar = true;
 					break;
 				case '2':
@@ -521,14 +546,13 @@ $(function(){
 	$.deleteCar = function(){
 		$.ajax({
 			type: "POST",
-			url: "/sich/car/delete_category/",
+			url: "/sich/car/delete_car/",
 			dataType: 'json',
-			data: {id:trIdCar},
+			data: {id:trIdCar.replace("Car","")},
 			success: function(response) {
 				if(response){
 					$.successMessage();
-					$('#tbCateg').DataTable().row( $("#"+trIdCateg) ).remove().draw();
-					$.loadCmbCategory();
+					$('#tbCars').DataTable().row( $("#"+trIdCar) ).remove().draw();
 				}else{		
 					$.errorMessage();
 				}
@@ -536,18 +560,49 @@ $(function(){
 		});
 	}
 	 
-	 var trIdCar;
-	 $.editDeleteCar = function(btn, edt){
-	 	trIdCateg = $($($(btn).parent()).parent()).attr('id');
-	 	if(edt){
-	 		$("#txtNameCategEdit").val($($("#"+trIdCateg).children('td')[0]).html());
-	 		$("#categModal").modal('show');
-	 		$("#spIdCateg").attr('data-toggle', trIdCateg);
+	$('#mdCar').on('shown.bs.modal', function () {
+		$("#mdBdCar #frmCar #txtNombre").focus();
+	});
+	
+	var trIdCar;
+	$.editDeleteCar = function(btn, edt){
+		trIdCar = $.trim($($($(btn).parent()).parent()).attr('id'));
+		if(edt){
+	 		$("#mdBdCar").html("<span id='spIdCarMd' data-toggle='"+$.trim($($('#'+trIdCar).children('td')[0]).attr('id'))+"'></span>"+$("#divFrmCar").html());
+	 		$("#mdBdCar #searchClient").hide();
+	 		$.searchClientByCi($.trim($($("#"+trIdCar).children('td')[0]).html()), false, true);
+	
+	 		$.post("/sich/car/get_car_by_id/", {id:trIdCar.replace("Car","")}, function(response){
+	 			$("#mdBdCar #frmCar #txtNChasis").val(response.veh_cha);
+	 			$("#mdBdCar #frmCar #txtMotor").val(response.veh_mot);
+	 			$("#mdBdCar #frmCar #txtPlaca").val(response.veh_pla);
+	 			$("#mdBdCar #frmCar #txtAnio").val(response.veh_yar);
+	 			$("#mdBdCar #frmCar #txtColor").val(response.veh_col);
+	 			$("#mdBdCar #frmCar #txtCodigo").val(response.veh_cla);
+	 			$('.demo2').colorpicker();
+	 			console.log(response);
+	 		},'json');
 	 		
+	 		$("#mdCar").modal("show");
+	 		
+	 		$("#mdBdCar #frmCar").on('submit', function(event){
+				event.preventDefault();
+				var url = "/sich/car/update_car/?id="+trIdCar.replace("Car","")+"&idCl="+$("#spIdCarMd").attr('data-toggle');
+				$.post( url, $(this).serialize(), function(response){
+	 			if(response.update_car == '1'){
+	 				$('#tbCars').DataTable().ajax.reload();
+	 				$("#mdCar").modal("hide");
+	 				$.successMessage();
+	 			}else{
+	 				$.errorMessage();
+	 			}
+	 			
+	 		},'json');
+			});
 	 	}
 	 	else
 	 	{
-	 		$.confirmMessage($.deleteCateg, "Está Seguro De Eliminar La Categoría?");
+	 		$.confirmMessage($.deleteCar, "Está Seguro De Eliminar El Vehículo?");
 	 	} 	
 	 }
 	
@@ -559,8 +614,11 @@ $(function(){
 						  "</button>";
 	
 	$.renderizeRowTbCars = function( nRow, aData, iDataIndex ) {
-	   $(nRow).append("<td class='text-center'>"+btnsOpTblCars+"</td>");
-	   $(nRow).attr('id',aData['veh_id']+"Car");
+		$(nRow).append("<td id='"+aData['veh_col']+"'><div style='border:1px solid #ccc;margin:auto;width:24px;height:24px;background-color:"+aData['veh_col']+";'></div></td><td class='text-center'>"+btnsOpTblCars+"</td>");
+		$(nRow).attr('id',aData['veh_id']+"Car");
+		$($(nRow).children('td')[0]).attr("id",aData['cli_id']);
+		$($(nRow).children('td')[2]).attr("id",aData['mar_id']);
+		$($(nRow).children('td')[3]).attr("id",aData['mod_id']);
 	}
 	
 	var flagCar = true;
@@ -572,8 +630,8 @@ $(function(){
 				{"data":"nombres"},
 				{"data":"mar_nom"},
 				{"data":"mod_nom"},
-				{"data":"veh_pla"},
-				{"data":"veh_col"}
+				{"data":"veh_pla"}
+				//{"data":"veh_col"}
 			];
 			$.fnTbl('#tbCars',"/sich/car/get_cars_all/",data,$.renderizeRowTbCars);
 			flagCar = false;		

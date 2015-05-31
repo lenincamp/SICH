@@ -16,8 +16,6 @@ class Car extends Private_Controller {
 		$data['js'] = array(
 			base_url()."static/js/library/alls.js",
 			base_url()."static/js/users/car.js",
-			base_url()."static/js/bootstrap-select.min.js",
-			base_url()."static/js/i18n/defaults-es_CL.min.js",
 			base_url()."static/js/pnotify.custom.min.js",
 			base_url()."static/js/bootstrap-colorpicker.min.js",
 			base_url()."static/js/docs.js",
@@ -35,7 +33,6 @@ class Car extends Private_Controller {
 							</script>";
 							
 		$title['css'] = array(
-			base_url()."static/css/bootstrap-select.min.css",
 			base_url()."static/css/pnotify.custom.min.css",
 			base_url()."static/css/bootstrap-colorpicker.min.css",
 			base_url()."static/css/dataTables.bootstrap.css"
@@ -310,8 +307,42 @@ class Car extends Private_Controller {
 				$this->input->post('cmbIdModel')
     		);
 
-			$response = $this->cars->save("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			$response = $this->cars->querySQL("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			//exit(print_r($response));
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function update_car()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			$this->input->post('txtCedula'),
+				$this->input->post('txtNombre'),
+				$this->input->post('txtApellido'),
+				$this->input->post('txtDireccion'),
+				$this->input->post('txtTelefono'),
+				$this->input->post('txtEmail'),
+				$this->input->post('txtChasis'),
+				$this->input->post('txtPlaca'),
+				$this->input->post('txtAnio'),
+				$this->input->post('txtMotor'),
+				$this->input->post('txtCodigo'),
+				$this->input->post('txtColor'),
+				$this->input->post('cmbIdModel'),
+				$this->input->get('id'),
+				$this->input->get('idCl')
+    		);
+
+			$response = $this->cars->querySQL("SELECT update_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
@@ -337,6 +368,40 @@ class Car extends Private_Controller {
 		}
 		return FALSE;
 	}
+	
+	public function get_car_by_id()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('veh_id' => $this->input->post('id'));
+    		$response = $this->cars->get_for_id($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+		}
+		return FALSE;
+	}
+	
+	public function delete_car()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('veh_id' => $this->input->post('id'));
+			$response = $this->cars->delete($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
 }
 /* End of file main.php */
 /* Location: ./application/controllers/car.php */
