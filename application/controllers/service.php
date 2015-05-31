@@ -4,11 +4,11 @@ class Service extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('services','areas'));
+		$this->load->model(array('services','areas','category'));
 	}
 	/*
 	 * -------------------------------------------------------------------
-	 *  MARKS
+	 *  MAIN SERVICES
 	 * -------------------------------------------------------------------
 	 */
 	public function start()
@@ -23,7 +23,10 @@ class Service extends Private_Controller {
 			base_url()."static/js/jquery.dataTables.min.js",
 			base_url()."static/js/dataTables.bootstrap.js"
 		);
-		$data['funcion']="<script type='text/javascript'> seleccionar('mn_srv');</script>";
+		$data['funcion']="<script type='text/javascript'> seleccionar('mn_srv'); 
+		$(function(){
+			$.renderizeDivContentServices();
+		});</script>";
 		$title['css'] = array(
 			base_url()."static/css/pnotify.custom.min.css",
 			base_url()."static/css/bootstrap-colorpicker.min.css",
@@ -92,13 +95,13 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function delete_model()
+	public function delete_area()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = array('mod_id' => $this->input->post('id'));
-			$response = $this->model->delete($data);
+    		$data = array('art_id' => $this->input->post('id'));
+			$response = $this->areas->delete($data);
 			echo json_encode($response);
 		}
 		else
@@ -109,19 +112,33 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
-	/* =========================>>> MARKS <<<========================= */
+	/* =========================>>> SERVICE <<<========================= */
 	
-	public function save_mark()
+	public function save_service()
 	{
+		$response=array();
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = array(
-    			'mar_nom'  => $this->input->post('nameMark')
-    		);
+			
 
-			$response = $this->mark->save($data);
-			echo $response;
+			$categorias=explode(",",$this->input->get('ctgId'));
+			$areas=explode(",",$this->input->get('arsId'));
+			foreach ($categorias as $keyC => $valueC) 
+			{
+				foreach ($areas as $keyA => $valueA) 
+				{
+					array_push($response,$this->input->post('txtPrc'.$valueC."_".$valueA));
+				}
+			}
+			$data = array(
+				$this->input->post('txtNameService'),
+    			"{".$this->input->get('ctgId')."}",
+				"{".$this->input->get('arsId')."}",
+				"{".implode(",",$response)."}"
+    		);
+			$response = $this->services->selectSQL("SELECT insert_service(?,?,?,?)",$data);
+			echo json_encode($response);
 		}
 		else
 		{
