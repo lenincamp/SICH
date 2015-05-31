@@ -532,6 +532,7 @@ $(function(){
 					break;
 				case '1':
 					$.successMessage();
+					$("#txtCedula").val("");
 					$.disEnaInputCli(false);
 					$.clearImputCar();
 					createCar = true;
