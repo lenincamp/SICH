@@ -2,7 +2,7 @@ $(function(){
 	
 	/*
 	 * -------------------------------------------------------------------
-	 *  Create model submit(Ajax)
+	 *  Update pass submit(Ajax)
 	 * -------------------------------------------------------------------
 	 */
 	$("#frmChangePass").on("submit",function(event){
@@ -11,7 +11,7 @@ $(function(){
 		{
 			$.ajax({
 				type: "POST",
-				url: "/SICH/main/updatePass/",
+				url: "/sich/main/updatePass/",
 				dataType: 'json',
 				data: $(this).serialize(),
 				success: function(response) {

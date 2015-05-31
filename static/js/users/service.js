@@ -3,7 +3,7 @@ $(function(){
 	/* =========================>>> SERVICES <<<========================= */
 	/*
 	 * -------------------------------------------------------------------
-	 *  Create model submit(Ajax)
+	 *  Create service submit(Ajax)
 	 * -------------------------------------------------------------------
 	 */
 	var create = false;
@@ -11,14 +11,29 @@ $(function(){
 		event.preventDefault();
 		$.ajax({
 			type: "POST",
-			url: "/sich/service/save_service/",
+			url: "/sich/service/save_service/?ctgId="+$("#ctg").attr('data-toggle')+"&arsId="+$("#ars").attr('data-toggle'),
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					$.successMessage();
-					$("#frmServices input[type='text']").val('');
-					create = true;
+					console.log(response);
+					var obj=eval(response);
+					response=response.insert_service;
+					switch(response) {
+						case "2":
+							$.errorMessage("El Servicio ya ha sido creado con anterioridad.");
+							break;
+						case "1":
+							$.successMessage();
+							$("#frmServices input[type='number']").val('0.00');
+							create = true;
+							break;
+						case "0":
+							$.errorMessage();
+						default:
+							console.log(response);
+							console.log(typeof response);
+					}
 				}else{		
 					$.errorMessage();
 				}
@@ -28,7 +43,7 @@ $(function(){
 	
 	/*
 	 * -------------------------------------------------------------------
-	 *  Edit model submit(Ajax) --- modal form
+	 *  Edit service submit(Ajax) --- modal form
 	 * -------------------------------------------------------------------
 	 */
 	 $("#frmMdModel").on("submit",function(event){
@@ -54,7 +69,7 @@ $(function(){
 	 
 	/*
 	 * -------------------------------------------------------------------
-	 *  function editDeleteModel(btn) -> load modal form edit or delete
+	 *  function editDeleteService(btn) -> load modal form edit or delete
 	 *	@param : btn => parameter this btn(editModel) onclick
 	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
 	 * -------------------------------------------------------------------
@@ -124,7 +139,81 @@ $(function(){
 			create = false;
 		}
 	});
-	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Charge contenido_servicios(Ajax) --- modal form
+	 * -------------------------------------------------------------------
+	 */
+	 $.renderizeDivContentServices = function() {
+		var contenido="";
+		var objAreas;
+		var areas;
+		var ctgid="";
+		var arsid="";
+		var pasoArsid=true;
+		$('#contenedor_servicios').html('<h4 class="text-info">Cargando formulario, por favor espere...</h4>');
+		
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/get_categories_all/",
+			dataType: 'json',
+			success: function(response) {
+				if(response){
+				var obj=eval(response)
+				var categorias=obj.data;
+					if(categorias.length>0)
+					{
+						categorias.forEach(function(entry) {
+							ctgid+=","+entry.cat_id
+							//contenido+="<fieldset class='scheduler-border'><legend class='scheduler-border'>"+capitalizeFirstLetter(entry.cat_nom)+"</legend>";
+							contenido+="<fieldset class='scheduler-border' id='fs"+entry.cat_id+"'><legend class='scheduler-border'><ul id='menu1'><li>"+capitalizeFirstLetter(entry.cat_nom)+"<ul><li><a href='#' onclick=\"copiarInputs('fs"+entry.cat_id+"')\"><img src='/sich/static/img/copiar.png' style='width:15%; margin:5px;'>Copiar</a></li><li><a href='#' onclick=\"pegarInputs('fs"+entry.cat_id+"')\"><img src='/sich/static/img/pegar.png' style='width:15%; margin:5px;'>Pegar</a></li></ul></li></ul></legend>";
+							$.ajax({
+								type: "POST",
+								async:false,  
+								url: "/sich/service/get_areas_all/",
+								dataType: 'json',
+								success: function(responseArea) {
+									if(responseArea){
+									var objAreas=eval(responseArea)
+									var areas=objAreas.data;
+										if(areas.length>0)
+										{
+											areas.forEach(function(entryArea) {
+												if(pasoArsid)
+												{
+													arsid+=","+entryArea.art_id;
+												}
+												contenido+="<div class='form-group col-md-6'><label for='txtPrc"+entry.cat_id+"_"+entryArea.art_id+"'>"+capitalizeFirstLetter(entryArea.art_nom)+"</label> <input type='number' step='0.01' class='form-control' id='txtPrc"+entry.cat_id+"_"+entryArea.art_id+"' name='txtPrc"+entry.cat_id+"_"+entryArea.art_id+"' value='0.00'> </div>";
+											});
+											pasoArsid=false;
+										}
+										else
+										{
+											contenido+="<a class='btn btn-info' role='button' onClick=\"switchTab(\'sectionB\')\" href='#'>No cuentas con ningun área de trabajo  disponible. ¡Crealas!</a>";
+										}
+									//$('#contenedor_servicios').html(contenido);
+										//for recorriendo areas de trabajo
+									}else{		
+										$.errorMessage();
+									}
+								}
+							});
+							contenido+="</fieldset>"
+						});
+					}
+					else
+					{
+						contenido="<a class='btn btn-info' role='button' href='/sich/car/start'>No cuentas con ninguna categoría disponible. ¡Crealas!</a>";
+					}
+				$("#ctg").attr('data-toggle', ctgid.substring(1));
+				$("#ars").attr('data-toggle', arsid.substring(1));
+				$('#contenedor_servicios').html(contenido);
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	 }
 	/* =========================>>> AREAS DE TRABAJO <<<========================= */
 	
 	/*
@@ -183,6 +272,7 @@ $(function(){
 					$("#frmMdArea input[type='checkbox']").prop('checked', false);
 					$("#areaModal").modal('hide');
 					$.successMessage();
+					$.renderizeDivContentServices();
 				}else{		
 					$.errorMessage();
 				}
@@ -217,6 +307,7 @@ $(function(){
 		}
 		else if(createArea){
 			$('#tbAreaTrab').DataTable().ajax.reload();
+			$.renderizeDivContentServices();
 			createArea = false;
 		}
 	});
@@ -253,7 +344,6 @@ $(function(){
 			$("#chkEstEdit").prop('checked', ($($("#"+trIdArea).children('td')[1]).html()=="SI"));
 			$("#areaModal").modal('show');
 	 		$("#spIdArea").attr('data-toggle', trIdArea);
-	 		
 	 	}
 	 	else
 	 	{
