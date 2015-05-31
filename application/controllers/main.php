@@ -76,30 +76,25 @@ class Main extends Private_Controller {
 	}
 	
 	public function login() {
-/*<<<<<<< HEAD
-<<<<<<< HEAD
-		$this->load->helper('security');
-=======*/
+
 
 		// Se carga el helper form y security.
 		$this->load->helper(array('form', 'security'));
-		
-/*=======
-	
-		$this->load->helper('security');
->>>>>>> deploy*/
+
 		// Se carga la libreria form_validation.
 		$this->load->library('form_validation');
 		
-//>>>>>>> deploy
 		$data = array();
  
 		// Añadimos las reglas necesarias.
-		$this->form_validation->set_rules('username', 'Username', 'required');
-		$this->form_validation->set_rules('password', 'Password', 'required');
- 
-		// Generamos el mensaje de error personalizado para la accion 'required'
-		$this->form_validation->set_message('required', 'El campo %s es requerido.');
+		$this->form_validation->set_rules('username', 'Usuario', 'required|trim|min_length[10]|max_length[10]|xss_clean');
+		$this->form_validation->set_rules('password', 'Contraseña', 'required|trim|md5|min_length[5]|max_length[32]|xss_clean');
+ 		
+        
+		// Generamos el mensaje de error personalizado para la accion 'required', 'min_lenght', 'max_lenght'
+		$this->form_validation->set_message('required', ' * El campo %s es requerido.');
+		$this->form_validation->set_message('min_length', ' * El %s debe tener al menos %s carácteres');
+        $this->form_validation->set_message('max_length', ' * El %s debe tener al menos %s carácteres');
  		
  		$username = $this->input->post('username');
  		$passwd   = do_hash($this->input->post('password'), 'md5'); 
@@ -128,6 +123,7 @@ class Main extends Private_Controller {
  
 	public function logout() {
 		$this->session->unset_userdata('logged_user');
+		$this->session->sess_destroy();
 		redirect('main');
 	}
 	
