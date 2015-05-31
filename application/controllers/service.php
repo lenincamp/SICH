@@ -27,7 +27,8 @@ class Service extends Private_Controller {
 		);
 		$data['funcion']="<script type='text/javascript'> seleccionar('mn_srv'); 
 		$(function(){
-			$.renderizeDivContentServices();
+			$.renderizeDivContentServices('contenedor_servicios','');
+			
 		});</script>";
 		$title['css'] = array(
 			base_url()."static/css/bootstrap-select.min.css",
@@ -131,7 +132,10 @@ class Service extends Private_Controller {
 			{
 				foreach ($areas as $keyA => $valueA) 
 				{
-					array_push($response,$this->input->post('txtPrc'.$valueC."_".$valueA));
+					if($this->input->post('txtPrc'.$valueC."_".$valueA))
+					{
+						array_push($response,$this->input->post('txtPrc'.$valueC."_".$valueA));
+					}
 				}
 			}
 			$data = array(
@@ -151,12 +155,12 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function get_marks_all()
+	public function get_service_all()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = $this->mark->get_all();
+    		$data = $this->services->get_all();
 			echo json_encode(array("data"=>$data));
 		}
 		else
@@ -167,15 +171,58 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function edit_mark()
+	public function search_service_by_id()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = array(
-    			'mar_nom'  => $this->input->post('nameMarkEdit')
-    		);
-			$response = $this->mark->update($this->input->get('trId'), $data);
+			if($this->input->post('id'))
+    		{
+    			$data= array($this->input->post('id'));
+				$response = $this->services->selectSQLMultiple("SELECT * from detalle_servicio_categoria_area where srv_id=?",$data);
+				echo json_encode($response);
+			}
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function edit_service()
+	{
+		$response=array();
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			
+
+			$categorias=explode(",",$this->input->get('ctgId'));
+			$areas=explode(",",$this->input->get('arsId'));
+			foreach ($categorias as $keyC => $valueC) 
+			{
+				foreach ($areas as $keyA => $valueA) 
+				{
+					if($this->input->post('edittxtPrc'.$valueC."_".$valueA))
+					{
+						array_push($response,$this->input->post('edittxtPrc'.$valueC."_".$valueA));
+					}
+					else
+					{
+						array_push($response,'0.00');
+					}
+				}
+			}
+			$data = array(
+				$this->input->post('txtNameServicioEdit'),
+    			"{".$this->input->get('ctgId')."}",
+				"{".$this->input->get('arsId')."}",
+				"{".implode(",",$response)."}",
+				$this->input->get('trId')
+			);
+			$response = $this->services->selectSQL("SELECT update_service(?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
@@ -186,13 +233,13 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function delete_mark()
+	public function delete_service()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = array('mar_id' => $this->input->post('id'));
-			$response = $this->mark->delete($data);
+    		$data = array('srv_id' => $this->input->post('id'));
+			$response = $this->services->delete($data);
 			echo json_encode($response);
 		}
 		else

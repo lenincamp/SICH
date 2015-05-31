@@ -32,12 +32,12 @@
 										<input type="text" required="true" class="form-control" id="txtNameService" name="txtNameService" placeholder="Ingrese Nombre">
 									</div>
 									<div id="contenedor_servicios" name="cotenedor_servicios">
-									<!--carga dinamica por ajax-->
+									<!--carga dinamica por ajax--><h4 class="text-info">Cargando formulario, por favor espere...</h4>
 									</div>
-									 <div class="row">
-										  <div class="col-xs-offset-4 col-md-offset-5">
-											<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
-										  </div>
+									<div class="row">
+									  <div class="col-xs-offset-4 col-md-offset-5" id="buttonsAction">
+										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
+									  </div>
 									</div>
 								</form>
 							</div>
@@ -48,21 +48,21 @@
 			  </div>
 			  <!-- END CREAR SERVICIO -->
 			  
-			  <!-- LISTAR VEHICULO -->
+			  <!-- LISTAR SERVICIO -->
 			  <div class="panel panel-primary">
 				<div class="panel-heading" role="tab" id="headingListCar">
 				  <h4 class="panel-title">
-					<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
+					<a class="collapsed" id="ltService" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListService" aria-expanded="false" aria-controls="collapseListService">
 					  LISTAR SERVICIOS
 					</a>
 				  </h4>
 				</div>
-				<div id="collapseListCar" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListCar">
+				<div id="collapseListService" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingListCar">
 				  <div class="panel-body">
 					
 					<div class="row">
 						<div class="col-md-8 col-md-offset-2">
-							<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCar">
+							<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbService">
 								<thead>
 									<tr>
 										<th class="text-center"> Nombre </th>
@@ -77,9 +77,42 @@
 				  </div>
 				</div>
 			  </div>
-			  <!-- END LISTAR VEHICULO -->
+			  <!-- END LISTAR SERVICIO -->
 			</div>
 		</div>
+		<!-- Modal SERVICIO HTML -->
+		<div id="servicioModal" class="modal fade">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+						<h4 class="modal-title">Editar Servicio</h4>
+					</div>
+					<form role="form" id='frmMdServicio'>
+						<div class="modal-body">		
+							<span id="spIdServicio"></span>
+							<div class="form-group">
+								<label for="txtNameServicioEdit">Nombre:</label>
+								<input type="text" class="form-control" id="txtNameServicioEdit" name="txtNameServicioEdit" placeholder="Ingrese Nombre">
+							</div>
+							<div id="edit_contenedor_servicios" name="edit_cotenedor_servicios">
+								<!--carga dinamica por ajax-->
+							</div>
+							</div>
+					
+						<div class="modal-footer">
+							<div class="row">
+								<div align="center" id="buttonsActionEdit">
+									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
+									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- End Modal HTML -->
 		<!-- END SERVICIOS -->
 		
 		<!-- AREAS DE TRABAJO -->
