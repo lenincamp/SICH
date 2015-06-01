@@ -28,7 +28,7 @@ class Main extends Private_Controller {
     			'usu_pwd'  => do_hash($this->input->post('txtPassConfirm'), 'md5')
     		);
 			$user_data = (array)$this->session->userdata('logged_user');
-			if($user_data["usu_pwd"]==do_hash($this->input->post('txtActualPass'), 'md5'))
+			if($user_data["usu_pwd"] === do_hash($this->input->post('txtActualPass'), 'md5'))
 			{	
 				$response = $this->users->update($data,$user_data["usu_id"]);
 				echo json_encode($response);
@@ -87,7 +87,7 @@ class Main extends Private_Controller {
 		$data = array();
  
 		// Añadimos las reglas necesarias.
-		$this->form_validation->set_rules('username', 'Usuario', 'required|trim|min_length[10]|max_length[10]|xss_clean');
+		$this->form_validation->set_rules('username', 'Usuario', 'required|trim|min_length[10]|max_length[10]|xss_clean|callback_validar_ci');
 		$this->form_validation->set_rules('password', 'Contraseña', 'required|trim|md5|min_length[5]|max_length[32]|xss_clean');
  		
         
@@ -95,6 +95,7 @@ class Main extends Private_Controller {
 		$this->form_validation->set_message('required', ' * El campo %s es requerido.');
 		$this->form_validation->set_message('min_length', ' * El %s debe tener al menos %s carácteres');
         $this->form_validation->set_message('max_length', ' * El %s debe tener al menos %s carácteres');
+        $this->form_validation->set_message('validar_ci', ' * La Cédula es Incorrecta..!');
  		
  		$username = $this->input->post('username');
  		$passwd   = do_hash($this->input->post('password'), 'md5'); 
