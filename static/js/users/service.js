@@ -28,6 +28,7 @@ $(function(){
 							$.successMessage();
 							$("#frmServices input[type='number']").val('0.00');
 							$("#frmServices input[type='text']").val('');
+							$("#frmMdArea input[type='checkbox']").prop('checked', false);
 							create = true;
 							$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 							break;
@@ -104,23 +105,50 @@ $(function(){
 	 }
 	 
 	 $.chargeModalService = function(){
-	 	$.ajax({
+	 $("#buttonsActionEdit").html('<h4 class="text-danger">Cargando información...</h4>');
+	 var area=0, precio=0
+		$.ajax({
 			type: "POST",
-			url: "/sich/service/search_service_by_id/",
+			url: "/sich/service/search_area_service_by_id/",
 			dataType: 'json',
 			data: {id:trIdMd},
 			success: function(response) {
 				if(response){
-					//$('#tbService').DataTable().row( $("#"+trId) ).remove().draw();
-					var precios=eval(response);
-					for (var i = 0; i < precios.length; i++) {
-						$("#edittxtPrc"+precios[i].cat_id+"_"+precios[i].art_id).val(precios[i].sca_prc)
+					var areas=eval(response);
+					for (var i = 0; i < areas.length; i++) {
+						$("#editcat"+areas[i].art_id).prop('checked', true);
 					}
+					$.ajax({
+						type: "POST",
+						url: "/sich/service/search_price_service_by_id/",
+						dataType: 'json',
+						data: {id:trIdMd},
+						success: function(responseP) {
+							if(responseP){
+								var precios=eval(responseP);
+								for (var i = 0; i < precios.length; i++) {
+									$("#editprc"+precios[i].cat_id).val(precios[i].dcs_prc)
+								}
+								$("#buttonsActionEdit").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+							}else{		
+								$.errorMessage();
+							}
+						},
+						error: function(){
+							$("#servicioModal").modal('hide');
+							$.errorMessage();
+						}
+					});
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$("#servicioModal").modal('show');
+				$.errorMessage();
 			}
 		});
+	 	
 	 }
 	 
 	 var trIdMd;
@@ -130,7 +158,7 @@ $(function(){
 			$("#servicioModal").modal('show');
 	 		$("#spIdServicio").attr('data-toggle', trIdMd);
 	 		$("#frmMdServicio input[type='text']").val($($("#"+trIdMd).children('td')[0]).html());
-	 		$.renderizeDivContentServices('edit_contenedor_servicios','edit');
+	 		$.renderizeDivDetailsService('edit_contenedor_servicios','edit');
 	 	}
 	 	else
 	 	{
@@ -171,6 +199,55 @@ $(function(){
 			create = false;
 		}
 	});
+	/*
+	 * -------------------------------------------------------------------
+	 *  Charge detalles de trabajo en servicio(Ajax) --- modal form
+	 * -------------------------------------------------------------------
+	 */
+	 $.renderizeDivDetailsService = function(idCotenedor, prefijo) {
+		var contenido="";
+		var objAreas;
+		var areas;
+		var ctgid="";
+		var arsid="";
+		var pasoArsid=true;
+		$('#'+idCotenedor).html('<h4 class="text-info">Cargando formulario, por favor espere...</h4>');
+		
+		$.ajax({
+			type: "POST",
+			async:true,
+			url: "/sich/service/get_areas_all/",
+			dataType: 'json',
+			success: function(response) {
+				if(response){
+				var obj=eval(response)
+				var areas=obj.data;
+				var contador=1;
+					if(areas.length>0)
+					{
+						areas.forEach(function(entryArea) {
+							var clase = contador%2==0?"":"borderRight"; 
+							arsid+=","+entryArea.art_id
+							contenido+="<div class='form-group col-md-6 "+clase+"'><label for='"+prefijo+"cat"+entryArea.art_id+"' style='width:90%;'>"+capitalizeFirstLetter(entryArea.art_nom)+"</label> <input type='checkbox' class='form-control' id='"+prefijo+"cat"+entryArea.art_id+"' name='"+prefijo+"cat"+entryArea.art_id+"' value='"+entryArea.art_id+"'  style='display:table-cell; height:auto; width:auto;'> </div>";
+							contador++;
+						});
+					}
+					else
+					{
+						contenido="<a class='btn btn-info' role='button' href='/sich/car/start'>No cuentas con ninguna categoría disponible. ¡Crealas!</a>";
+					}
+				$("#ars").attr('data-toggle', arsid.substring(1));
+				$('#'+idCotenedor).html(contenido);
+				if(prefijo=="edit")
+				{
+					$.chargeModalService();
+				}
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	 }
 	/*
 	 * -------------------------------------------------------------------
 	 *  Charge contenido_servicios(Ajax) --- modal form
@@ -307,7 +384,7 @@ $(function(){
 					$("#frmMdArea input[type='checkbox']").prop('checked', false);
 					$("#areaModal").modal('hide');
 					$.successMessage();
-					$.renderizeDivContentServices('contenedor_servicios','');
+					//$.renderizeDivContentServices('contenedor_servicios','');
 					//$.renderizeDivContentServices('edit_contenedor_servicios','edit');
 				}else{		
 					$.errorMessage();
@@ -343,7 +420,7 @@ $(function(){
 		}
 		else if(createArea){
 			$('#tbAreaTrab').DataTable().ajax.reload();
-			$.renderizeDivContentServices('contenedor_servicios','');
+			//$.renderizeDivContentServices('contenedor_servicios','');
 			//$.renderizeDivContentServices('edit_contenedor_servicios','edit');
 			createArea = false;
 		}
