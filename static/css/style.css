@@ -127,6 +127,9 @@ padding:10px;
 
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
+	.borderRight{
+		border-right: 1px solid silver;
+	}
     .encabezado {
         background: #F7D128 url(../img/encDer.png) no-repeat right -5px; background-size: auto 115%; 
 		margin:0px;
@@ -185,6 +188,9 @@ padding:10px;
 
 /* Anything Smaller than Large  */
 @media (max-width: 1199px) {
+	.borderRight{
+		border-right: 0px;
+	}
     .encabezado {
         background-color: #F7D128;
 		background: #F7D128 url(../img/logo.png) no-repeat right center; background-size: auto 95%; 
