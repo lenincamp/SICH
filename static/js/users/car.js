@@ -1,3 +1,4 @@
+/* global $ */
 $(function(){
 	
 	/* =========================>>> MODELS <<<========================= */
@@ -85,6 +86,7 @@ $(function(){
 	 		$("#spId").attr('data-toggle', trIdMd.replace("Model", ""));
 	 		$("#frmMdModel input[type='text']").val($($("#"+trIdMd).children('td')[0]).html());
 	 		$("#cmbMarkMd").val(($($("#"+trIdMd).children('td')[1]).attr('id')).replace("Model", ""));
+			$("#cmbCatMd").val(($($("#"+trIdMd).children('td')[0]).attr('id')).replace("Category", ""));
 	 	}
 	 	else
 	 	{
@@ -110,6 +112,7 @@ $(function(){
 	$.renderizeRowTbModels = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
 	   $(nRow).attr('id',aData['mod_id']);
+	   $($(nRow).children('td')[0]).attr('id',aData['cat_id']+"Category");
 	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']+"Model");
 	}
 						  
@@ -133,6 +136,7 @@ $(function(){
 				option += "<option value='"+val.cat_id+"'>"+val.cat_nom+"</option>";
 			});
 			$("#cmbCat").html(option);
+			$("#cmbCatMd").html(option);
 		},"json");
 	};
 	$.loadCmbCategory();
@@ -404,6 +408,14 @@ $(function(){
 	 }
 	 
 	/* =========================>>> CARS <<<========================= */
+	$.txtCodigo = function(){
+		if( $("#cmbMarkAjx option:selected").text().toUpperCase() == "CHEVROLET" ){
+			$("#divTxtCodigo").html("<label for='txtName'>Código:</label><input type='text' required='true' class='form-control' id='txtCodigo' name='txtCodigo' placeholder='Ingrese Código'/>");
+		}else{
+			$("#divTxtCodigo").html("");
+		}
+	}
+	
 	$.loadCmbMarks = function(){
 		$.post( "/sich/car/get_marks_all/", function(response) {
 			var option = "";
@@ -413,6 +425,7 @@ $(function(){
 			$("#cmbMarkAjx").html(option);
 			$("#cmbMark").html(option);
 			$("#cmbMarkMd").html(option);
+			$.txtCodigo();
 			$.loadCmbModels(response.data[0].mar_id);
 		}, 'json');
 	}
@@ -421,6 +434,7 @@ $(function(){
 	
 	$("#cmbMarkAjx").change(function(){
 		$.loadCmbModels( $(this).val() );
+		$.txtCodigo();
 	});
 	
 	$.loadCmbModels = function( id, idCmb ){
@@ -642,5 +656,4 @@ $(function(){
 			createCar = false;
 		}
 	});
-	
 });

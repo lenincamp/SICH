@@ -157,7 +157,7 @@ $(function(){
 	   $(nRow).attr('id',aData['cli_id']);
 	}
 	
-	$.fnTbl('#tbClients',"/sich/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"cli_tel"}],$.renderizeRow);
+	$.fnTbl('#tbClients',"/sich/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"id_tel"}],$.renderizeRow);
 	
 	$("#ltClient").click(function(event){
 		//$("#tbModels").ajax.reload();
@@ -166,6 +166,15 @@ $(function(){
 			create = false;
 		}
 	});
+	
+	$("#btnTels").click(function ( event ) {
+		if( $("#txtTelefono").val().length === 10 ) {
+			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtTelefono").val()+"</td></tr>");
+			$($("#txtTelefono").val('')).focus();
+		}
+		
+		$("#divTbTels").fadeIn('fast');
+	})
 	
 	
     

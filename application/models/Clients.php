@@ -17,7 +17,7 @@ class Clients extends CI_Model {
 			SELECT per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_tel, cli_eml
 			FROM cliente
 		*/
-		$response = $this->db->select('per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_tel, cli_eml')
+		$response = $this->db->select('per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, id_tel,cli_eml')
 						 ->from('cliente')
 						 ->get()->result_array();
 		return $response;

@@ -332,7 +332,7 @@
 		
 		<!-- Modal HTML -->
 		<div id="mdModel" class="modal fade">
-			<div class="modal-dialog modal-sm">
+			<div class="modal-dialog modal-md">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -346,12 +346,24 @@
 								<label for="txtNameMd">Nombre:</label>
 								<input type="text" class="form-control" id="txtNameMd" name="nameMd" placeholder="Ingrese Nombre"/>
 						  	</div>
-			  
-						  	<div class="form-group">
-								<label for="txtMark">Marca:</label>
-								<select class="form-control" name="id_markMd" id="cmbMarkMd">
-								</select>
-						  	</div>
+			 
+							<div class="row">
+				  			  	<div class="col-xs-6">
+								  <div class="form-group">
+									<label for="cmbMark">Marca:</label>
+									<select class="form-control" name="id_markMd" id="cmbMarkMd">
+									</select>
+								  </div>
+								</div>
+								<div class="col-xs-6">
+								  <div class="form-group">
+									<label for="cmbCat">Categoria:</label>
+									<select class="form-control" name="id_catMd" id="cmbCatMd">
+									</select>
+								  </div>
+								</div>
+							 </div>
+							  
 						</div>
 					
 						<div class="modal-footer">
@@ -454,9 +466,8 @@
 											<span class="input-group-addon"><i></i></span>
 										</div>
 									  </div>
-									  <div class="form-group col-xs-12 col-md-6">
-										<label for="txtName">Código:</label>
-										<input type="text" required="true" class="form-control" id="txtCodigo" name="txtCodigo" placeholder="Ingrese Código"/>
+									  <div class="form-group col-xs-12 col-md-6" id="divTxtCodigo">
+										
 									  </div>
 								  </fieldset>
 								  <div class="row">
