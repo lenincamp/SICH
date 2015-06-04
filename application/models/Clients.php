@@ -14,13 +14,17 @@ class Clients extends CI_Model {
 	public function get_all()
 	{
 		/*
-			SELECT per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_tel, cli_eml
+			SELECT per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_eml
 			FROM cliente
 		*/
-		$response = $this->db->select('per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, id_tel,cli_eml')
+		$response = $this->db->select('per_id, per_ced, per_nom, per_ape, cli_id, cli_dir, cli_eml')
 						 ->from('cliente')
 						 ->get()->result_array();
 		return $response;
+	}
+	
+	public function get_tels($data){
+		return $this->db->select('tel_num')->get_where('telefonos', $data)->result_array();
 	}
 	
 	public function get($data) {
