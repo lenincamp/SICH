@@ -1,3 +1,5 @@
+/* global $ */
+/* global PNotify */
 $(function(){
 	
 	/*
@@ -14,8 +16,8 @@ $(function(){
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
-			var obj=eval(response)
-			response=obj.insert_client
+				var obj=eval(response);
+				response=obj.insert_client;
 				if(response=="2")
 				{
 					new PNotify({
@@ -98,9 +100,9 @@ $(function(){
 				}
 			}
 		});
-	 }
+	 };
 	 
-	 var trId
+	 var trId;
 	 
 	 $.chargeDataModal = function(id){
 		$.ajax({
@@ -122,7 +124,7 @@ $(function(){
 				}
 			}
 		});
-	}
+	};
 	 
 	 $.editDeleteModel = function(btn, edt){
 	 	trId = $($($(btn).parent()).parent()).attr('id');
@@ -135,7 +137,7 @@ $(function(){
 	 	{
 	 		$.confirmMessage($.deleteClient);
 	 	} 	
-	 }
+	 };
 	
 	/*
 	 * -------------------------------------------------------------------
@@ -151,20 +153,58 @@ $(function(){
 						  "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
 							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
 						  "</button>";
-						  
-	$.renderizeRow = function( nRow, aData, iDataIndex ) {
-	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
-	   $(nRow).attr('id',aData['cli_id']);
-	}
 	
-	$.fnTbl('#tbClients',"/sich/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"},{"data":"cli_tel"}],$.renderizeRow);
+	$.loadTelsCli = function( btn ){
+		
+		$.post("/sich/client/get_tels_all/", {id:btn}, function( response ) {
+			
+			if( response.length != 0 ){
+				var ol = "<ol>";
+				$.each(response, function( index, val ){
+					ol += "<li>"+val.tel_num+"</li>";
+				});
+				ol += "</ol>";
+				$("#"+btn).popover({
+					html: true,
+	                animation: false,
+	                content: ol,
+				    placement: 'bottom'
+				});
+			}else{
+				
+				$("#"+btn).popover({
+					html: true,
+	                animation: false,
+	                content: "El Cliente no tiene registrados número de teléfono",
+				    placement: 'bottom'
+				});
+			}
+		},'json');
+	};
+					  
+	$.renderizeRow = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'><button id='"+aData['cli_id']+"' onclick='$.loadTelsCli(this.id);'>ver</button></td><td class='text-center'>"+btnsOpTblModels+"</td>");
+	   $(nRow).attr('id',aData['cli_id']);
+	};
+	
+	$.fnTbl('#tbClients',"/sich/client/get_clients_all/",[{ "data": "per_ced"},{"data":"per_nom"},{"data":"per_ape"}],$.renderizeRow);
 	
 	$("#ltClient").click(function(event){
-		//$("#tbModels").ajax.reload();
 		if(create){
 			$('#tbClients').DataTable().ajax.reload();
 			create = false;
 		}
+	});
+	
+	var tels = [];
+	$("#btnTels").click(function ( event ) {
+		if( $("#txtTelefono").val().length === 10 ) {
+			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtTelefono").val()+"</td></tr>");
+			$($("#txtTelefono").val('')).focus();
+			tels.push($("#txtTelefono").val(''));
+			$("#divTbTels").fadeIn('fast');
+		}
+		console.log(tels);
 	});
 	
 	

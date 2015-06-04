@@ -106,7 +106,8 @@ class Car extends Private_Controller {
     	{
     		$data = array(
     			'mod_nom'  => $this->input->post('nameMd'),
-				'id_marca' => $this->input->post('id_markMd')
+				'id_marca' => $this->input->post('id_markMd'),
+				'cat_id'   => $this->input->post('id_catMd')
     		);
 			$response = $this->model->update($this->input->get('trId'), $data);
 			echo json_encode($response);

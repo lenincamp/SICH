@@ -15,30 +15,61 @@
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 					<form id="frmNewClient">
-					  <div class="form-group">
-						<label for="txtName">C.I./R.U.C.:</label>
-						<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
-					  </div>
-					  <div class="form-group">
-						<label for="txtName">Nombre:</label>
-						<input type="text" required="true" class="form-control" id="txtNombre" name="txtNombre" placeholder="Ingrese Nombre"/>
-					  </div>
-					  <div class="form-group">
-						<label for="txtName">Apellido:</label>
-						<input type="text" required="true" class="form-control" id="txtApellido" name="txtApellido" placeholder="Ingrese Apellido"/>
-					  </div>
-					  <div class="form-group">
-						<label for="txtName">Teléfono:</label>
-						<input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
-					  </div>
-					  <div class="form-group">
-						<label for="txtName">E-mail:</label>
-						<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
-					  </div>
-					  <div class="form-group">
-						<label for="txtName">Dirección:</label>
-						<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
-					  </div>
+						<fieldset class="scheduler-border">
+						  <legend class="scheduler-border">Datos</legend>		  
+						  <div class="form-group">
+							<label for="txtName">C.I./R.U.C.:</label>
+							<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">Nombre:</label>
+							<input type="text" required="true" class="form-control" id="txtNombre" name="txtNombre" placeholder="Ingrese Nombre"/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">Apellido:</label>
+							<input type="text" required="true" class="form-control" id="txtApellido" name="txtApellido" placeholder="Ingrese Apellido"/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">E-mail:</label>
+							<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">Dirección:</label>
+							<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
+						  </div>
+						</fieldset>
+					  
+					  
+					  <fieldset class="scheduler-border">
+						<legend class="scheduler-border">Telefonos</legend>
+					  	<div class="form-group">
+							
+							<div class="input-group">
+						      <input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
+						      <span class="input-group-btn">
+						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTels"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
+						      </span>
+						    </div>
+							
+							
+							<br>
+							<div style="overflow-x:hidden; overflow-y:auto; max-height:110px;display:none;" id="divTbTels">
+								<table class="table-hovered table-bordered" cellspacing="0" width="100%">
+									
+									<thead>
+										<tr>
+											<th class="text-center">Teléfono</th>
+										</tr>
+									</thead>
+									<tbody id="tbodyTels">
+										
+									</tbody>
+								</table>
+							</div>
+						</div>  
+					  </fieldset>
+					  
+					  
 					  <div class="row">
 						  <div class="col-xs-offset-4 col-md-offset-5">
 							<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
@@ -72,7 +103,7 @@
 								<th class="text-center"> Cédula </th>
 								<th class="text-center"> Nombres </th>
 								<th class="text-center"> Apellidos </th>
-								<th class="text-center"> Teléfono </th>
+								<th class="text-center"> Teléfono(s) </th>
 								<th class="text-center">Acción</th>
 							</tr>
 						</thead>

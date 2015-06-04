@@ -63,14 +63,6 @@ class Client extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		/*$data = array(
-    			'per_ced'  => $this->input->post('txtCedula'),
-				'per_nom' => $this->input->post('txtNombre'),
-				'per_ape' => $this->input->post('txtApellido'),
-				'cli_dir' => $this->input->post('txtDireccion'),
-				'cli_tel' => $this->input->post('txtTelefono'),
-				'cli_eml' => $this->input->post('txtEmail')
-    		);*/
 			$data = array(
     			$this->input->post('txtCedula'),
 				$this->input->post('txtNombre'),
@@ -80,7 +72,6 @@ class Client extends Private_Controller {
 				$this->input->post('txtEmail')
     		);
 
-			//$response = $this->clients->save($data);
 			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?)",$data);
 
 			echo json_encode($response);
@@ -100,6 +91,28 @@ class Client extends Private_Controller {
     	{
     		$data = $this->clients->get_all();
 			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_tels_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			if($this->input->post('id'))
+			{
+				$data = array(
+					'id_cli' => $this->input->post('id')
+				);
+				$response = $this->clients->get_tels($data);
+				echo json_encode($response);
+			}
 		}
 		else
 		{
