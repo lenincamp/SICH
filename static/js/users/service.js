@@ -17,8 +17,6 @@ $(function(){
 			data: $(this).serialize(),
 			success: function(response) {
 				if(response){
-					console.log(response);
-					var obj=eval(response);
 					response=response.insert_service;
 					switch(response) {
 						case "2":
@@ -34,9 +32,6 @@ $(function(){
 							break;
 						case "0":
 							$.errorMessage();
-						default:
-							console.log(response);
-							console.log(typeof response);
 					}
 				}else{		
 					$.errorMessage();

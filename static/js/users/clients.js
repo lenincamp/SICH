@@ -12,37 +12,25 @@ $(function(){
 		event.preventDefault();
 		$.ajax({
 			type: "POST",
-			url: "/sich/client/save_client/",
+			url: "/sich/client/save_client/?tels="+tels,
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
-				var obj=eval(response);
+				var obj = eval(response);
 				response=obj.insert_client;
 				if(response=="2")
 				{
-					new PNotify({
-							title: 'Registro existente',
-							text: 'La C.I./R.U.C. ingresado ya se encuentra registrado.',
-							type: 'notice'
-						});
+					$.errorMessage('La C.I./R.U.C. ingresado ya se encuentra registrado.');
 				}
 				else
 				{
 					if(response=="1"){
-						new PNotify({
-							title: 'Notificación',
-							text: 'Registro Exitoso',
-							type: 'success'
-						});
+						$.successMessage('Registro Exitoso');
 						$("#frmNewClient input[type='text']").val('');
 						$("#frmNewClient input[type='email']").val('');
 						create = true;
 					}else{		
-						new PNotify({
-							title: 'Oh No!',
-							text: 'Error en el registro.',
-							type: 'error'
-						});
+						$.errorMessage('Error en el Registro');
 					}
 				}
 			}
@@ -199,12 +187,11 @@ $(function(){
 	var tels = [];
 	$("#btnTels").click(function ( event ) {
 		if( $("#txtTelefono").val().length === 10 ) {
+			tels.push($("#txtTelefono").val());
 			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtTelefono").val()+"</td></tr>");
 			$($("#txtTelefono").val('')).focus();
-			tels.push($("#txtTelefono").val(''));
 			$("#divTbTels").fadeIn('fast');
 		}
-		console.log(tels);
 	});
 	
 	

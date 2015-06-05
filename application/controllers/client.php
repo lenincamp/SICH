@@ -69,11 +69,11 @@ class Client extends Private_Controller {
 				$this->input->post('txtApellido'),
 				$this->input->post('txtDireccion'),
 				$this->input->post('txtTelefono'),
-				$this->input->post('txtEmail')
+				$this->input->post('txtEmail'),
+				explode(',', $this->input->get('tels'))
     		);
-
-			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?)",$data);
-
+			
+			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
