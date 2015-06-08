@@ -63,17 +63,18 @@ class Client extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
+			$telefonos = explode(',', $this->input->get('tels'));
+			
 			$data = array(
     			$this->input->post('txtCedula'),
 				$this->input->post('txtNombre'),
 				$this->input->post('txtApellido'),
 				$this->input->post('txtDireccion'),
-				$this->input->post('txtTelefono'),
-				$this->input->post('txtEmail')
+				$this->input->post('txtEmail'),
+				"{".implode(",",$telefonos)."}"
     		);
-
+			
 			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?)",$data);
-
 			echo json_encode($response);
 		}
 		else
@@ -151,14 +152,18 @@ class Client extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
+			$telefonos = explode(',', $this->input->get('tels'));
+			
 			$data = array(
-    			'per_nom' => $this->input->post('txtNombreMd'),
-				'per_ape' => $this->input->post('txtApellidoMd'),
-				'cli_dir' => $this->input->post('txtDireccionMd'),
-				'cli_tel' => $this->input->post('txtTelefonoMd'),
-				'cli_eml' => $this->input->post('txtEmailMd')
+				$this->input->post('txtNombreMd'),
+				$this->input->post('txtApellidoMd'),
+				$this->input->post('txtDireccionMd'),
+				$this->input->post('txtEmailMd'),
+				$this->input->get('trId'),
+				"{".implode(",",$telefonos)."}"
     		);
-			$response = $this->clients->update($this->input->get('trId'), $data);
+			
+			$response = $this->clients->selectSQL("SELECT update_client(?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else

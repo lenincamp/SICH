@@ -13,7 +13,7 @@
 		  <div class="panel-body">
 			
 			<div class="row">
-				<div class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
+				<div id="divFrmClient" class="col-md-6 col-md-offset-3" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
 					<form id="frmNewClient">
 						<fieldset class="scheduler-border">
 						  <legend class="scheduler-border">Datos</legend>		  
@@ -45,7 +45,7 @@
 					  	<div class="form-group">
 							
 							<div class="input-group">
-						      <input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
+						      <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
 						      <span class="input-group-btn">
 						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTels"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
 						      </span>
@@ -58,7 +58,9 @@
 									
 									<thead>
 										<tr>
+											<th class="text-center">#</th>
 											<th class="text-center">Teléfono</th>
+											<th class="text-center">Acción</th>
 										</tr>
 									</thead>
 									<tbody id="tbodyTels">
@@ -129,33 +131,69 @@
 			<form role="form" id='frmMdClient'>
 				<div class="modal-body">		
 				
-					<span id="spId"></span>
-					<div class="form-group">
-						<label for="txtNombreMd">Nombre:</label>
-						<input type="text" class="form-control" id="txtNombreMd" name="txtNombreMd" placeholder="Ingrese Nombre"/>
-					</div>
-					<div class="form-group">
-						<label for="txtApellidoMd">Apellido:</label>
-						<input type="text" class="form-control" id="txtApellidoMd" name="txtApellidoMd" placeholder="Ingrese Apellido"/>
-					</div>
-					<div class="form-group">
-						<label for="txtTelefonoMd">Teléfono:</label>
-						<input type="text" class="form-control" id="txtTelefonoMd" name="txtTelefonoMd" placeholder="Ingrese Teléfono"/>
-					</div>
-					<div class="form-group">
-						<label for="txtEmailMd">E-mail:</label>
-						<input type="email" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese E-mail"/>
-					</div>
-					<div class="form-group">
-						<label for="txtDireccionMd">Dirección:</label>
-						<input type="text" class="form-control" id="txtDireccionMd" name="txtDireccionMd" placeholder="Ingrese Direccion"/>
-					</div>
-
+					<span id="spIdCliMd"></span>
+					
+					<fieldset class="scheduler-border">
+						  <legend class="scheduler-border">Datos</legend>		  
+						  <div class="form-group">
+							<label for="txtNameMd">C.I./R.U.C.:</label>
+							<input type="text" required="true" class="form-control" id="txtCedulaMd" name="txtCedulaMd" placeholder="Ingrese C.I./R.U.C."/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">Nombre:</label>
+							<input type="text" required="true" class="form-control" id="txtNombreMd" name="txtNombreMd" placeholder="Ingrese Nombre"/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">Apellido:</label>
+							<input type="text" required="true" class="form-control" id="txtApellidoMd" name="txtApellidoMd" placeholder="Ingrese Apellido"/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">E-mail:</label>
+							<input type="email" required="true" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese Email"/>
+						  </div>
+						  <div class="form-group">
+							<label for="txtName">Dirección:</label>
+							<input type="text" required="true" class="form-control" id="txtDireccionMd" name="txtDireccionMd" placeholder="Ingrese Dirección"/>
+						  </div>
+						</fieldset>
+					  
+					  
+					  <fieldset class="scheduler-border">
+						<legend class="scheduler-border">Telefonos</legend>
+					  	<div class="form-group">
+							
+							<div class="input-group">
+						      <input type="text" class="form-control" id="txtTelefonoMd" placeholder="Ingrese Teléfono"/>
+						      <span class="input-group-btn">
+						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTelsMd"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
+						      </span>
+						    </div>
+							
+							
+							<br>
+							<div style="overflow-x:hidden; overflow-y:auto; max-height:110px;display:none;" id="divTbTelsMd">
+								<table class="table-hovered table-bordered" cellspacing="0" width="100%">
+									
+									<thead>
+										<tr>
+											<th class="text-center">#</th>
+											<th class="text-center">Teléfono</th>
+											<th class="text-center">Acción</th>
+										</tr>
+									</thead>
+									<tbody id="tbodyTelsMd">
+										
+									</tbody>
+								</table>
+							</div>
+						</div>  
+					  </fieldset>
+					
 				</div>
 			
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-11">
+						<div class="col-md-8">
 							<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
 							<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
 						</div>
@@ -165,4 +203,6 @@
 		</div>
 	</div>
 </div>
+
+
 <!-- End Modal HTML -->
