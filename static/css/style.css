@@ -341,3 +341,9 @@ legend.scheduler-border {
     padding:0 10px; /* To give a bit of padding on the left and right */
     border-bottom:none;
 }
+
+canvas{
+background:transparent;  margin-bottom:35%; margin-top:15%;
+border-radius:50%;-moz-border-radius:50%;-webkit-border-radius:50%;
+
+}

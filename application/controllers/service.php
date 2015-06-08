@@ -212,6 +212,47 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
+	public function search_service_by_id_and_cat()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			if($this->input->post('id'))
+    		{
+    			$data= array($this->input->post('id'),$this->input->post('cat'));
+				$response = $this->services->selectSQLMultiple("SELECT dcs.*, srv.srv_nom from detalle_categoria_servicio dcs, servicio srv where srv.srv_id=dcs.srv_id and dcs.srv_id=? and dcs.cat_id=?",$data);
+				echo json_encode(array("data"=>$response));
+			}
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	
+	public function get_das_by_idServ()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			if($this->input->post('id'))
+    		{
+    			$data= array($this->input->post('id'));
+				$response = $this->services->selectSQLMultiple("SELECT * from detalle_area_servicio das, area_trabajo at where das.srv_id=? and das.das_est=true and at.art_id=das.art_id",$data);
+				echo json_encode($response);
+			}
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
 	public function search_area_service_by_id()
 	{
 		if(!@$this->user) redirect ('main');
