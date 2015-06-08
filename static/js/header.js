@@ -50,3 +50,160 @@ function pegarInputs(idPadre){
 		});
 	}
 }
+
+var resultSearch=false;
+var idBusqueda;
+var resultadoDiferencia=new Array();
+var arrayActual;
+var arrayConcatenado=new Array();
+function elementosRepetidos(element, index, array) {
+	if(arrayConcatenado.lenght==0)
+	{
+		arrayConcatenado=element
+	}
+	else
+	{
+		arrayConcatenado=arrayConcatenado.concat(element)
+	}
+	/*if(idBusqueda!=index)
+	{
+		var diferencia= arr_diff(arrayActual,element)
+		resultadoDiferencia.concat(diferencia)
+	}*/
+}
+
+function buscarElements(element, index, array) {
+	if(!resultSearch)
+    for(var i=0; i<element.length; i++)
+	{
+		if(element[i]=="cat"+idBusqueda||element[i]=="editcat"+idBusqueda)
+		{
+			resultSearch=true;
+		}
+	}
+	
+}
+
+window.servicios= new Array();
+function loadDetails(idCotenedor, prefijo,idChk)
+{
+	 
+	if($('#srv'+idChk).prop('checked'))
+	{
+		$.renderizeDivDetailsService(idCotenedor, prefijo,idChk);
+	}
+	else
+	{
+		arrayConcatenado=new Array();
+		if(window.servicios[idChk]==null)
+			{console.log("nulo")}
+			else{console.log("else")}
+		idBusqueda=idChk;
+		arrayActual=window.servicios[idChk]
+		window.servicios.forEach(elementosRepetidos)
+		console.log("diferencia::"+arrayConcatenado)
+		var duplicados=getDuplicates(arrayConcatenado)
+		console.log("diferenciaFinal::"+duplicados)
+		for(var i=0; i<arrayActual.length; i++)
+		{
+			var paso=true
+			for(var j=0; j<duplicados.length; j++)
+			{
+				if(duplicados[j]==arrayActual[i])
+				{	
+					paso=false;
+					j=duplicados.length
+				}
+			}
+			if(paso)
+			{
+				$('#div'+prefijo+arrayActual[i]).remove();
+			}
+		}
+		if (idChk > -1) {
+			//window.servicios.splice(idChk, 1);
+			window.servicios[idChk]=new Array()
+		}
+		$("#divCst"+idChk).remove()
+		$.calcularTotal();
+	}
+	bordesDivs("header")
+}
+
+function bordesDivs(msj)
+{
+	console.log(msj)
+	var menu=document.getElementById("detallesTrabajo")
+	var opciones = menu.getElementsByTagName("div");
+	var arsid="";
+		for(var i=0;i<opciones.length;i++)
+		{
+			$('#'+opciones[i].id).removeClass("borderRight")
+			arsid+=","+(opciones[i].id.substring(6))
+			if((i+1)%3==0)
+			{
+				$('#'+opciones[i].id).removeClass("borderRight")
+			}
+			else
+			{
+				$('#'+opciones[i].id).addClass("borderRight");
+			
+			}
+			$("#ars").attr('data-toggle', arsid.substring(1));
+		}
+}
+
+function buscarServicio(id)
+{
+	resultSearch=false;
+	idBusqueda=id;
+	window.servicios.forEach(buscarElements);
+	return resultSearch;
+}
+
+function getDuplicates(arr) {
+ var i,
+	 j,
+     len=arr.length,
+     out=[],
+     obj={};
+
+ var sorted_arr = arr.sort(); // You can define the comparing function here. 
+                             // JS by default uses a crappy string compare.
+var results = [];
+for (var i = 0; i < arr.length - 1; i++) {
+    if (sorted_arr[i + 1] == sorted_arr[i]) {
+        results.push(sorted_arr[i]);
+    }
+}
+ return results;
+}
+
+function eliminateDuplicates(arr) {
+ var i,
+     len=arr.length,
+     out=[],
+     obj={};
+
+ for (i=0;i<len;i++) {
+    obj[arr[i]]=0;
+ }
+ for (i in obj) {
+    out.push(i);
+ }
+ return out;
+}
+
+
+function arr_diff(a1, a2)
+{
+  var a=[], diff=[];
+  for(var i=0;i<a1.length;i++)
+    a[a1[i]]=true;
+  for(var i=0;i<a2.length;i++)
+    if(a[a2[i]]) delete a[a2[i]];
+    else a[a2[i]]=true;
+  for(var k in a)
+    diff.push(k);
+  return diff;
+}
