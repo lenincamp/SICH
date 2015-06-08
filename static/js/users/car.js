@@ -593,9 +593,13 @@ $(function(){
 	 			$("#mdBdCar #frmCar #txtPlaca").val(response.veh_pla);
 	 			$("#mdBdCar #frmCar #txtAnio").val(response.veh_yar);
 	 			$("#mdBdCar #frmCar #txtColor").val(response.veh_col);
-	 			$("#mdBdCar #frmCar #txtCodigo").val(response.veh_cla);
-	 			$('.demo2').colorpicker();
-	 			console.log(response);
+	 			if( response.veh_cla == null ){
+					$($("#mdBdCar #frmCar #txtCodigo").parent()).hide();
+					$("#mdBdCar #frmCar #txtCodigo").val("");
+				}else{
+					$("#mdBdCar #frmCar #txtCodigo").val(response.veh_cla);	
+				}
+				$('.demo2').colorpicker();
 	 		},'json');
 	 		
 	 		$("#mdCar").modal("show");

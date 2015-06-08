@@ -58,7 +58,9 @@
 									
 									<thead>
 										<tr>
+											<th class="text-center">#</th>
 											<th class="text-center">Teléfono</th>
+											<th class="text-center">Acción</th>
 										</tr>
 									</thead>
 									<tbody id="tbodyTels">

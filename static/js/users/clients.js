@@ -8,33 +8,47 @@ $(function(){
 	 * -------------------------------------------------------------------
 	 */
 	var create = false;
+	var tels = [];
 	$("#frmNewClient").on("submit",function(event){
 		event.preventDefault();
-		$.ajax({
-			type: "POST",
-			url: "/sich/client/save_client/?tels="+tels,
-			dataType: 'json',
-			data: $(this).serialize(),
-			success: function(response) {
-				var obj = eval(response);
-				response=obj.insert_client;
-				if(response=="2")
-				{
-					$.errorMessage('La C.I./R.U.C. ingresado ya se encuentra registrado.');
+		
+		$("#tbodyTels tr").each(function(){
+		    $(this).find('td').each(function( index ){ 
+				if( index == 1 ){
+					tels.push($.trim($(this).html()));
 				}
-				else
-				{
-					if(response=="1"){
-						$.successMessage('Registro Exitoso');
-						$("#frmNewClient input[type='text']").val('');
-						$("#frmNewClient input[type='email']").val('');
-						create = true;
-					}else{		
-						$.errorMessage('Error en el Registro');
+			});
+		});
+		if(tels.length > 0){
+			$.ajax({
+				type: "POST",
+				url: "/sich/client/save_client/?tels="+tels,
+				dataType: 'json',
+				data: $(this).serialize(),
+				success: function(response) {
+					if(response.insert_client=="2")
+					{
+						$.errorMessage('La C.I./R.U.C. ingresado ya se encuentra registrado.');
+					}
+					else
+					{
+						if(response.insert_client=="1"){
+							$.successMessage('Registro Exitoso');
+							$("#frmNewClient input[type='text']").val('');
+							$("#frmNewClient input[type='email']").val('');
+							tels.length=0;
+							cont=1;
+							$("#divTbTels").fadeOut('fast');
+							create = true;
+						}else{		
+							$.errorMessage('Error en el Registro');
+						}
 					}
 				}
-			}
-		});
+			});
+		}else{
+			$.errorMessage("Debe tener al menos un teléfono!!");
+		}
 	});
 	
 	/*
@@ -144,7 +158,7 @@ $(function(){
 	
 	$.loadTelsCli = function( btn ){
 		
-		$.post("/sich/client/get_tels_all/", {id:btn}, function( response ) {
+		$.post("/sich/client/get_tels_all/", {id:btn.replace("Btn","")}, function( response ) {
 			
 			if( response.length != 0 ){
 				var ol = "<ol>";
@@ -156,22 +170,24 @@ $(function(){
 					html: true,
 	                animation: false,
 	                content: ol,
-				    placement: 'bottom'
-				});
+				    placement: 'bottom',
+					title :  '<span class="text-info"><strong>Teléfono(s)</strong></span> <button type="button" id="close" class="close" onclick=$("#'+btn+'").popover("hide");> &times;</button>'
+				}).popover('show');
 			}else{
 				
 				$("#"+btn).popover({
 					html: true,
 	                animation: false,
 	                content: "El Cliente no tiene registrados número de teléfono",
-				    placement: 'bottom'
-				});
+				    placement: 'bottom',
+					title :  '<span class="text-info"><strong>Teléfono(s)</strong></span> <button type="button" id="close" class="close" onclick=$("#'+btn+'").popover("hide");>&times;</button>'
+				}).popover('show');
 			}
 		},'json');
 	};
 					  
 	$.renderizeRow = function( nRow, aData, iDataIndex ) {
-	   $(nRow).append("<td class='text-center'><button id='"+aData['cli_id']+"' onclick='$.loadTelsCli(this.id);'>ver</button></td><td class='text-center'>"+btnsOpTblModels+"</td>");
+	   $(nRow).append("<td class='text-center'><button id='"+aData['cli_id']+"Btn' onclick='$.loadTelsCli(this.id);'>ver</button></td><td class='text-center'>"+btnsOpTblModels+"</td>");
 	   $(nRow).attr('id',aData['cli_id']);
 	};
 	
@@ -184,16 +200,57 @@ $(function(){
 		}
 	});
 	
-	var tels = [];
+	$.cancelEditTel = function( btn ){
+		var tr = $($(btn).parent()).parent();
+		var tel = $.trim($($($(btn).parent()).children('input')[0]).val());
+		if( tel.length >= 7 && tel.length<=10 ){
+			$($(tr).children('td')[1]).html(tel);
+		}else{
+			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
+			 $($($(tr).children('td')[1]).children('input')).focus();
+		}
+	};
+	
+	//op = true --> edit; else delete
+	$.editDeleteTel = function( btn, op ){
+		event.preventDefault();
+		var tr = $($(btn).parent()).parent();
+		var telTb = $.trim($($(tr).children('td')[1]).html());
+		if( op ){
+			 $($(tr).children('td')[1]).html("<input value='"+telTb+"' onfocus='this.value = this.value;' onkeyup='if(event.keyCode == 27 || event.keyCode == 13){$.cancelEditTel(this);}'><button type='button' onclick='$.cancelEditTel(this);'>x</button>");
+			 $($($(tr).children('td')[1]).children('input')).focus();
+		}else{
+			$(tr).fadeOut('fast', function(){
+				$(this).remove();
+				cont--;
+			});
+		}
+	};
+	
+	var btnsOpTblTels = "<button style='border: 0; background: transparent' onclick='$.editDeleteTel(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteTel(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+	
+	var cont = 1;
 	$("#btnTels").click(function ( event ) {
-		if( $("#txtTelefono").val().length === 10 ) {
-			tels.push($("#txtTelefono").val());
-			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtTelefono").val()+"</td></tr>");
+		var num =  $.trim($("#txtTelefono").val()).length;
+		if( num >= 7 && num <= 10 ) {
+			$("#tbodyTels").append("<tr><td class='text-center'>"+(cont++)+"</td><td class='text-center'>"+$("#txtTelefono").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
 			$($("#txtTelefono").val('')).focus();
 			$("#divTbTels").fadeIn('fast');
+		}else{
+			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
 		}
 	});
 	
+	$("#txtTelefono").keyup( function( event ){
+		if( event.keyCode == 13 ){
+			$("#btnTels").click();
+		}
+	});
 	
     
 });

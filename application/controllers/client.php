@@ -63,17 +63,18 @@ class Client extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
+			$telefonos = explode(',', $this->input->get('tels'));
+			
 			$data = array(
     			$this->input->post('txtCedula'),
 				$this->input->post('txtNombre'),
 				$this->input->post('txtApellido'),
 				$this->input->post('txtDireccion'),
-				$this->input->post('txtTelefono'),
 				$this->input->post('txtEmail'),
-				explode(',', $this->input->get('tels'))
+				"{".implode(",",$telefonos)."}"
     		);
 			
-			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?,?)",$data);
+			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
