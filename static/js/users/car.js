@@ -270,6 +270,138 @@ $(function(){
 	 	} 	
 	 }
 	 
+	 /* =========================>>> DETAILS INVENTARY <<<========================= */
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Create inventario submit(Ajax)
+	 * -------------------------------------------------------------------
+	 */
+	var createInventario = false;
+	$("#frmInventario").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/save_inventary/",
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				switch(response) {
+					case 0:
+						$.errorMessage("El Detalle de Inventario ya ha sido registrado anteriormente.");
+						break;
+					case 1:
+						$.successMessage();
+						$("#txtNameInventario").val('');
+						createInventario = true;
+						$.loadCmbInventarios();
+						break;
+					case 2:
+						$.errorMessage();
+						break;
+				}
+			}
+		});
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Edit inventario submit(Ajax) --- modal form
+	 * -------------------------------------------------------------------
+	 */
+	 
+	 $("#frmMdInventario").on("submit",function(event){
+		event.preventDefault();
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/edit_inventary/?trIdInv="+$("#spIdInv").attr('data-toggle'),
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				if(response){
+					$('#tbInventarios').DataTable().ajax.reload();
+					$("#frmMdInventario input[type='text']").val('');
+					$("#inventarioModal").modal('hide');
+					$.successMessage();
+					$.loadCmbInventarios();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Generate Table inventarios list
+	 *	function renderizeRow renderize tr, td for table
+	 *	@param : btnsOpTblInventarios => variable(string): buttons for dateTable
+	 * -------------------------------------------------------------------
+	 */
+	var btnsOpTblInventario = "<button style='border: 0; background: transparent' onclick='$.editDeleteInventario(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteInventario(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+						  
+	$.renderizeRowTbInventarios = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'>"+btnsOpTblInventario+"</td>");
+	   $(nRow).attr('id',aData['pie_id']+"Inventario");
+	}
+						  
+	var flagInv = true;
+	$("#ltInventario").click(function(event){
+		if (flagInv){
+			$.fnTbl('#tbInventarios',"/sich/car/get_inventary_all/",[{"data":"pie_nom"}],$.renderizeRowTbInventarios);
+			flagInv = false;		
+		}
+		else if(createInventario){
+			$('#tbInventarios').DataTable().ajax.reload();
+			createInventario = false;
+		}
+	});
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  function editDeleteInventario(btn) -> load modal form edit or delete
+	 *	@param : btn => parameter this btn(editInventario) onclick
+	 *	@param : edt => edit o delete param(true=>edit, false=>delete)
+	 * -------------------------------------------------------------------
+	 */
+	$.deleteInventario = function(){
+		$.ajax({
+			type: "POST",
+			url: "/sich/car/delete_inventary/",
+			dataType: 'json',
+			data: {id:trIdInv.replace("Inventario", "")},
+			success: function(response) {
+				if(response){
+					$.successMessage("Se ha Eliminado el Registro");
+					$('#tbInventarios').DataTable().row( $("#"+trIdInv) ).remove().draw();
+					$.loadCmbInventarios();
+					$('#tbModels').DataTable().ajax.reload();
+				}else{		
+					$.errorMessage();
+				}
+			}
+		});
+	}
+	 
+	 var trIdInv;
+	 $.editDeleteInventario = function(btn, edt){
+	 	trIdInv = $($($(btn).parent()).parent()).attr('id');
+	 	if(edt){
+	 		$("#txtNameInventarioEdit").val($($("#"+trIdInv).children('td')[0]).html());
+	 		$("#inventarioModal").modal('show');
+	 		$("#spIdInv").attr('data-toggle', trIdInv.replace("Inventario", ""));
+	 		
+	 	}
+	 	else
+	 	{
+	 		$.confirmMessage($.deleteInventario, "Si elimina la marca se eliminaran todos sus modelos. <br> ¿Está Seguro De Eliminar La Marca?");
+	 	} 	
+	 }
 	 
 	/* =========================>>> CATEGORIES <<<========================= */
 	

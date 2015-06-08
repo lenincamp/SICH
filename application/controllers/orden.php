@@ -4,7 +4,7 @@ class Orden extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('clients','areas'));
+		$this->load->model(array('clients','areas','services','details_inventary','orders'));
 	}
 	/*
 	 * -------------------------------------------------------------------
@@ -14,11 +14,12 @@ class Orden extends Private_Controller {
 	public function start()
 	{
 		if(!@$this->user) redirect ('main');
-		$title['title'] = 'clientes';
+		$title['title'] = 'orden de trabajo';
 
 		$data['js'] = array(
 			base_url()."static/js/library/alls.js",
-			base_url()."static/js/users/clients.js",
+			base_url()."static/js/canvas.js",
+			base_url()."static/js/users/orden.js",
 			base_url()."static/js/pnotify.custom.min.js",
 			base_url()."static/js/jquery.dataTables.min.js",
 			base_url()."static/js/dataTables.bootstrap.js"
@@ -29,6 +30,9 @@ class Orden extends Private_Controller {
 			base_url()."static/css/dataTables.bootstrap.css"
 		);
 		$contenido['detallesTrabajo']  = $this->areas->selectSQLAll("select * from get_all_areas() where art_est=true",null);
+		$contenido['servicios']  = $this->services->get_all();
+		$contenido['inventario']  = $this->details_inventary->get_all();
+		$contenido['formasPago']  = $this->orders->selectSQLMultiple("select * from forma_pago",null);
 		$this->load->view('templates/header', $title);
 		$this->load->view('user/orden',$contenido);
 		$this->load->view('templates/footer', $data);

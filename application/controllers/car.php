@@ -4,7 +4,7 @@ class Car extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('cars','mark','model','category'));
+		$this->load->model(array('cars','mark','model','category','details_inventary'));
 	}
 
 
@@ -210,6 +210,80 @@ class Car extends Private_Controller {
 		return FALSE;
 	}
 	
+	/* =========================>>> DETAILS INVENTARY <<<========================= */
+	
+	public function save_inventary()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'pie_nom'  => $this->input->post('txtNameInventario')
+    		);
+
+			$response = $this->details_inventary->save($data);
+			echo $response;
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_inventary_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = $this->details_inventary->get_all();
+			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function edit_inventary()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array(
+    			'pie_nom'  => $this->input->post('txtNameInventarioEdit')
+    		);
+			$response = $this->details_inventary->update($this->input->get('trIdInv'), $data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function delete_inventary()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		$data = array('pie_id' => $this->input->post('id'));
+			$response = $this->details_inventary->delete($data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
 	/* =========================>>> CATEGORIES <<<========================= */
 	
 	public function save_category()
@@ -360,6 +434,23 @@ class Car extends Private_Controller {
     	{
     		$data = $this->cars->get_all();
 			echo json_encode(array("data"=>$data));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			//show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_for_client()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data=array('cli_id' => $this->input->get('id'));
+    		$response = $this->cars->get_for_client($data);
+			echo json_encode(array("data"=>$response));
 		}
 		else
 		{
