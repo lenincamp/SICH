@@ -56,26 +56,37 @@ $(function(){
 	 *  Edit client submit(Ajax) --- modal form
 	 * -------------------------------------------------------------------
 	 */
+	 var telsMd = [];
 	 $("#frmMdClient").on("submit",function(event){
 		event.preventDefault();
-		$.ajax({
-			type: "POST",
-			url: "/sich/client/edit_client/?trId="+$("#spId").attr('data-toggle'),
-			dataType: 'json',
-			data: $(this).serialize(),
-			success: function(response) {
-				if(response){
-					$('#tbModels').DataTable().ajax.reload();
-					$("#frmMdClient input[type='text']").val('');
-					$("#frmMdClient input[type='email']").val('');
-					$("#mdClient").modal('hide');
-					$.successMessage();
-					$('#tbClients').DataTable().ajax.reload();
-				}else{		
-					$.errorMessage();
+		$("#tbodyTelsMd tr").each(function(){
+		    $(this).find('td').each(function( index ){ 
+				if( index == 1 ){
+					telsMd.push($.trim($(this).html()));
 				}
-			}
+			});
 		});
+		if(telsMd.length > 0){
+			$.ajax({
+				type: "POST",
+				url: "/sich/client/edit_client/?trId="+$("#spIdCliMd").attr('data-toggle')+"&tels="+telsMd,
+				dataType: 'json',
+				data: $(this).serialize(),
+				success: function(response) {
+					if(response.update_client == '1'){
+						$("#frmMdClient input[type='text']").val('');
+						$("#frmMdClient input[type='email']").val('');
+						telsMd.length=0;
+						contMd=1;
+						$("#mdClient").modal('hide');
+						$.successMessage();
+						$('#tbClients').DataTable().ajax.reload();
+					}else{		
+						$.errorMessage();
+					}
+				}
+			});
+		}
 	});
 	
 	/*
@@ -92,11 +103,11 @@ $(function(){
 			type: "POST",
 			url: "/sich/client/delete_client/",
 			dataType: 'json',
-			data: {id:trId},
+			data: {id:trIdClt},
 			success: function(response) {
 				if(response){
 					$.successMessage();
-					$('#tbClients').DataTable().row( $("#"+trId) ).remove().draw();
+					$('#tbClients').DataTable().row( $("#"+trIdClt) ).remove().draw();
 				}else{		
 					$.errorMessage();
 				}
@@ -104,36 +115,31 @@ $(function(){
 		});
 	 };
 	 
-	 var trId;
-	 
-	 $.chargeDataModal = function(id){
-		$.ajax({
-			type: "POST",
-			url: "/sich/client/search_client_by_id",
-			dataType: 'json',
-			data: {id:trId},
-			success: function(response) {
+	 var trIdClt;
+	 $.editDeleteModel = function(btn, edt){
+	 	trIdClt = $.trim($($($(btn).parent()).parent()).attr('id'));
+	 	if(edt){
+			$("#spIdCliMd").attr('data-toggle',trIdClt);
+			$.post("/sich/client/search_client_by_id", {id:trIdClt}, function( response ){
 				$("#mdClient").modal('show');
-				if(response!=null){
-					var obj = eval(response);
-					$('#txtNombreMd').val(obj.per_nom);
-					$('#txtApellidoMd').val(obj.per_ape);
-					$('#txtTelefonoMd').val(obj.cli_tel);
-					$('#txtDireccionMd').val(obj.cli_dir);
-					$('#txtEmailMd').val(obj.cli_eml);
+				if( response!=null ){
+					$($('#txtCedulaMd').val(response.per_ced)).attr('disabled',true);
+					$($('#txtNombreMd').val(response.per_nom)).focus();
+					$('#txtApellidoMd').val(response.per_ape);
+					$('#txtDireccionMd').val(response.cli_dir);
+					$('#txtEmailMd').val(response.cli_eml);
+					$.post("/sich/client/get_tels_all/", {id:response.cli_id}, function( resp ){
+						$("#tbodyTelsMd").html("");
+						$.each(resp, function( i, val) {	
+							$("#tbodyTelsMd").append("<tr><td class='text-center'>"+(i+1)+"</td><td class='text-center'>"+val.tel_num+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+							$("#divTbTelsMd").fadeIn('fast');
+							contMd = i+2;	
+						});
+					},'json');
 				}else{
 					$.errorMessage();
 				}
-			}
-		});
-	};
-	 
-	 $.editDeleteModel = function(btn, edt){
-	 	trId = $($($(btn).parent()).parent()).attr('id');
-	 	if(edt){
-	 		
-	 		$("#spId").attr('data-toggle', trId);
-	 		$.chargeDataModal(trId);
+			},'json');
 	 	}
 	 	else
 	 	{
@@ -235,7 +241,7 @@ $(function(){
 						  "</button>";
 	
 	var cont = 1;
-	$("#btnTels").click(function ( event ) {
+	$("#btnTels").click(function(){
 		var num =  $.trim($("#txtTelefono").val()).length;
 		if( num >= 7 && num <= 10 ) {
 			$("#tbodyTels").append("<tr><td class='text-center'>"+(cont++)+"</td><td class='text-center'>"+$("#txtTelefono").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
@@ -245,10 +251,27 @@ $(function(){
 			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
 		}
 	});
+	var contMd = 1;
+	$("#btnTelsMd").click(function(){
+		var num =  $.trim($("#txtTelefonoMd").val()).length;
+		if( num >= 7 && num <= 10 ) {
+			$("#tbodyTelsMd").append("<tr><td class='text-center'>"+(contMd++)+"</td><td class='text-center'>"+$("#txtTelefonoMd").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$($("#txtTelefonoMd").val('')).focus();
+			$("#divTbTelsMd").fadeIn('fast');
+		}else{
+			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
+		}
+	});
 	
 	$("#txtTelefono").keyup( function( event ){
 		if( event.keyCode == 13 ){
 			$("#btnTels").click();
+		}
+	});
+	
+	$("#txtTelefonoMd").keyup( function( event ){
+		if( event.keyCode == 13 ){
+			$("#btnTelsMd").click();
 		}
 	});
 	

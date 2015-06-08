@@ -24,7 +24,7 @@ class Clients extends CI_Model {
 	}
 	
 	public function get_tels($data){
-		return $this->db->select('tel_num')->get_where('telefonos', $data)->result_array();
+		return $this->db->get_where('telefonos', $data)->result_array();
 	}
 	
 	public function get($data) {
@@ -45,15 +45,5 @@ class Clients extends CI_Model {
 	{
 		$query = $this->db->query($sql,$data);
 		Return $query->row();
-	}
- 
-	public function update($id, $data)
-	{
-		if($id){
-			return $this->db->update('cliente', $data, array('cli_id' => $id));
-		}
-		else{
-			return FALSE;
-		}
 	}
 }
