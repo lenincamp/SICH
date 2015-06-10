@@ -431,7 +431,7 @@ $(function(){
 	 $.deleteMark = function(){
 	 	$.ajax({
 			type: "POST",
-			url: "/sich/car/delete_mark/",
+			url: "/sich/service/delete_area/",
 			dataType: 'json',
 			data: {id:trIdArea},
 			success: function(response) {
@@ -456,7 +456,7 @@ $(function(){
 	 	}
 	 	else
 	 	{
-	 		$.confirmMessage($.deleteMark, "Si elimina la marca se eliminaran todos sus modelos. <br> ¿Está Seguro De Eliminar La Marca?");
+	 		$.confirmMessage($.deleteMark, "¿Está seguro de eliminar el Detalle de Trabajo?");
 	 	} 	
 	 }
     
