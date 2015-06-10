@@ -20,7 +20,9 @@ class Car extends Private_Controller {
 			base_url()."static/js/bootstrap-colorpicker.min.js",
 			base_url()."static/js/docs.js",
 			base_url()."static/js/jquery.dataTables.min.js",
-			base_url()."static/js/dataTables.bootstrap.js"
+			base_url()."static/js/dataTables.bootstrap.js",
+			base_url()."static/js/fileinput.min.js",
+			base_url()."static/js/fileinput_locale_es.js"
 		);
 		
 		//array_push($this->$data['js'], base_url()."static/js/users/car.js");
@@ -35,7 +37,8 @@ class Car extends Private_Controller {
 		$title['css'] = array(
 			base_url()."static/css/pnotify.custom.min.css",
 			base_url()."static/css/bootstrap-colorpicker.min.css",
-			base_url()."static/css/dataTables.bootstrap.css"
+			base_url()."static/css/dataTables.bootstrap.css",
+			base_url()."static/css/fileinput.min.css"
 		);
 
 		$this->load->view('templates/header', $title);
@@ -364,13 +367,23 @@ class Car extends Private_Controller {
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
-    	{
+    	{	
+			$path = "./uploads/";
+			$filesUrl = $_FILES;
+			if($this->do_upload())
+			{
+				$img = $path.$filesUrl['images']['name'][0].",".$path.$filesUrl['images']['name'][1];
+			}
+			else
+			{
+				$img = $path.$filesUrl['images']['name'][0];
+			}
+			
     		$data = array(
     			$this->input->post('txtCedula'),
 				$this->input->post('txtNombre'),
 				$this->input->post('txtApellido'),
 				$this->input->post('txtDireccion'),
-				$this->input->post('txtTelefono'),
 				$this->input->post('txtEmail'),
 				$this->input->post('txtChasis'),
 				$this->input->post('txtPlaca'),
@@ -379,19 +392,47 @@ class Car extends Private_Controller {
 				$this->input->post('txtCodigo'),
 				$this->input->post('txtColor'),
 				$this->input->get('id'),
-				$this->input->post('cmbIdModel')
+				$this->input->post('cmbIdModel'),
+				"{".$this->input->get('tels')."}",
+				"{".$img."}"
     		);
 
-			$response = $this->cars->querySQL("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
-			//exit(print_r($response));
+			$response = $this->cars->querySQL("SELECT insert_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
+			
 		}
 		else
 		{
 			exit('No direct script access allowed');
-			//show_404();
 		}
 		return FALSE;
+	}
+	
+	function do_upload()
+	{
+		
+	    $files = $_FILES;
+	    $cpt = count($_FILES['images']['name']);
+	    for($i=0; $i<$cpt; $i++)
+	    {
+			//if($files['images']['size'][$i] > (1024000) && $files['images']['size'][$i] <= (2048000)) //can't be larger than 1 MB - 2mb
+			//{
+		        $_FILES['images']['name']= $files['images']['name'][$i];
+		        $_FILES['images']['type']= $files['images']['type'][$i];
+		        $_FILES['images']['tmp_name']= $files['images']['tmp_name'][$i];
+		        $_FILES['images']['error']= $files['images']['error'][$i];
+		        $_FILES['images']['size']= $files['images']['size'][$i];    
+			    move_uploaded_file($_FILES['images']['tmp_name'], './uploads/'.$_FILES['images']['name']);
+			//}
+			
+	    }
+		if ($cpt>1)
+		{
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	public function update_car()
@@ -400,24 +441,23 @@ class Car extends Private_Controller {
 		if ($this->input->is_ajax_request()) 
     	{
     		$data = array(
-    			$this->input->post('txtCedula'),
-				$this->input->post('txtNombre'),
-				$this->input->post('txtApellido'),
-				$this->input->post('txtDireccion'),
-				$this->input->post('txtTelefono'),
-				$this->input->post('txtEmail'),
-				$this->input->post('txtChasis'),
-				$this->input->post('txtPlaca'),
-				$this->input->post('txtAnio'),
-				$this->input->post('txtMotor'),
-				$this->input->post('txtCodigo'),
-				$this->input->post('txtColor'),
-				$this->input->post('cmbIdModel'),
+				$this->input->post('txtNombreMd'),
+				$this->input->post('txtApellidoMd'),
+				$this->input->post('txtDireccionMd'),
+				$this->input->post('txtEmailMd'),
+				$this->input->post('txtChasisMd'),
+				$this->input->post('txtPlacaMd'),
+				$this->input->post('txtAnioMd'),
+				$this->input->post('txtMotorMd'),
+				$this->input->post('txtCodigoMd'),
+				$this->input->post('txtColorMd'),
+				$this->input->post('cmbIdModelMd'),
 				$this->input->get('id'),
-				$this->input->get('idCl')
+				$this->input->get('idCl'),
+				"{".$this->input->get('tels')."}"
     		);
 
-			$response = $this->cars->querySQL("SELECT update_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			$response = $this->cars->querySQL("SELECT update_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else

@@ -101,28 +101,6 @@ class Client extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function get_tels_all()
-	{
-		if(!@$this->user) redirect ('main');
-		if ($this->input->is_ajax_request()) 
-    	{
-			if($this->input->post('id'))
-			{
-				$data = array(
-					'id_cli' => $this->input->post('id')
-				);
-				$response = $this->clients->get_tels($data);
-				echo json_encode($response);
-			}
-		}
-		else
-		{
-			exit('No direct script access allowed');
-			show_404();
-		}
-		return FALSE;
-	}
-	
 	public function search_client_by_id()
 	{
 		if(!@$this->user) redirect ('main');

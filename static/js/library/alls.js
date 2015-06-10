@@ -21,6 +21,15 @@ $(function(){
 		$(this).find('input:text:visible:first').focus();
 	 });
 	 
+	 $.infoMressage = function(text){
+		text = typeof text !== 'undefined' ? text : 'Procesando Los Datos Por Favor Espere!';
+		new PNotify({
+		    title: 'Cargando....',
+		    text: text,
+		    type: 'info'
+		});	 
+	 }
+	 
 	 $.successMessage = function(text){
 	 	text = typeof text !== 'undefined' ? text : 'Proceso Exitoso.';
 	 	new PNotify({

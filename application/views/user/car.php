@@ -399,7 +399,7 @@
 					<div class="panel-body">
 						<div class="row">
 							<div id="divFrmCar" class="col-md-8 col-md-offset-2" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
-								<form id="frmCar">
+								<form id="frmCar" enctype="multipart/form-data">
 								  <span id="spClient"></span>
 								  <fieldset class="scheduler-border" id="fstDataCli">
 									<legend class="scheduler-border">Datos Cliente</legend>
@@ -416,10 +416,6 @@
 										<input type="text" required="true" class="form-control" id="txtApellido" name="txtApellido" placeholder="Ingrese Apellido"/>
 									  </div>
 									  <div class="form-group col-xs-12">
-										<label for="txtTelefono">Teléfono:</label>
-										<input type="text" required="true" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
-									  </div>
-									  <div class="form-group col-xs-12">
 										<label for="txtEmail">E-mail:</label>
 										<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
 									  </div>
@@ -427,6 +423,37 @@
 										<label for="txtDireccion">Dirección:</label>
 										<input type="text" required="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Ingrese Dirección"/>
 									  </div>
+									  
+									  <fieldset class="scheduler-border">
+										<legend class="scheduler-border"><h5>Telefonos</h5></legend>
+									  	<div class="form-group">
+											
+											<div class="input-group">
+										      <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono" maxlength="10"/>
+										      <span class="input-group-btn">
+										        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTels"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
+										      </span>
+										    </div>
+											
+											
+											<br>
+											<div style="overflow-x:hidden; overflow-y:auto; max-height:110px;display:none;" id="divTbTels">
+												<table class="table-hovered table-bordered" cellspacing="0" width="100%">
+													
+													<thead>
+														<tr>
+															<th class="text-center">Teléfono</th>
+															<th class="text-center">Acción</th>
+														</tr>
+													</thead>
+													<tbody id="tbodyTels">
+														
+													</tbody>
+												</table>
+											</div>
+										</div>  
+									  </fieldset>
+									  
 								  </fieldset>
 								  <fieldset class="scheduler-border" id="fstDataCar">
 									<legend class="scheduler-border">Datos Vehículo</legend>
@@ -469,7 +496,15 @@
 									  <div class="form-group col-xs-12 col-md-6" id="divTxtCodigo">
 										
 									  </div>
+									  <div class="form-group col-xs-12">
+										<label for="images">Fotos:</label>
+										<input name="images[]" id="images" type="file"  multiple="true" />
+									  </div>
+									  	  
+								  
 								  </fieldset>
+								  
+								  
 								  <div class="row">
 									  <div class="col-md-offset-5">
 										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
@@ -522,7 +557,7 @@
 			</div>
 		</div>
 		
-		<!-- Modal HTML -->
+		<!-- Modal Vehiculo HTML -->
 		<div id="mdCar" class="modal fade">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -530,12 +565,122 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Editar Vehículo</h4>
 					</div>
-					<div class="modal-body" id="mdBdCar">		
-					</div>
+					<form role="form" id='frmMdCar'>
+						<div class="modal-body" id="mdBdCar">
+						  <span id="spMdCar"></span>
+						  <fieldset class="scheduler-border" id="fstMdDataCli">
+							<span id="spMdClient"></span>
+							<legend class="scheduler-border">Datos Cliente</legend>
+							  <div class="form-group col-xs-12">
+								<label for="txtCedulaMd">C.I./R.U.C.:</label>
+								<input type="text" required="true" class="form-control" id="txtCedulaMd" name="txtCedulaMd" placeholder="Ingrese C.I./R.U.C."/>
+							  </div>
+							  <div class="form-group col-xs-12">
+								<label for="txtNombreMd">Nombre:</label>
+								<input type="text" required="true" class="form-control" id="txtNombreMd" name="txtNombreMd" placeholder="Ingrese Nombre"/>
+							  </div>
+							  <div class="form-group col-xs-12">
+								<label for="txtApellidoMd">Apellido:</label>
+								<input type="text" required="true" class="form-control" id="txtApellidoMd" name="txtApellidoMd" placeholder="Ingrese Apellido"/>
+							  </div>
+							  <div class="form-group col-xs-12">
+								<label for="txtEmailMd">E-mail:</label>
+								<input type="email" required="true" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese Email"/>
+							  </div>
+							  <div class="form-group col-xs-12">
+								<label for="txtDireccionMd">Dirección:</label>
+								<input type="text" required="true" class="form-control" id="txtDireccionMd" name="txtDireccionMd" placeholder="Ingrese Dirección"/>
+							  </div>
+							  
+							  <fieldset class="scheduler-border">
+								<legend class="scheduler-border"><h5>Telefonos</h5></legend>
+							  	<div class="form-group">
+									
+									<div class="input-group">
+								      <input type="text" class="form-control" id="txtTelefonoMd" name="txtTelefonoMd" placeholder="Ingrese Teléfono" maxlength="10"/>
+								      <span class="input-group-btn">
+								        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTelsMd"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
+								      </span>
+								    </div>
+									
+									
+									<br>
+									<div style="overflow-x:hidden; overflow-y:auto; max-height:110px;display:none;" id="divTbTelsMd">
+										<table class="table-hovered table-bordered" cellspacing="0" width="100%">
+											
+											<thead>
+												<tr>
+													<th class="text-center">Teléfono</th>
+													<th class="text-center">Acción</th>
+												</tr>
+											</thead>
+											<tbody id="tbodyTelsMd">
+												
+											</tbody>
+										</table>
+									</div>
+								</div>  
+							  </fieldset>
+							  
+						  </fieldset>
+						  <fieldset class="scheduler-border" id="fstDataCarMd">
+							<legend class="scheduler-border">Datos Vehículo</legend>
+							  <div class="form-group col-md-6" id="divCmbMarkAjxMd">
+								<label for="cmbMarkAjxMd">Marca:</label>
+								<select class="form-control" name="cmbIdMarkMd" id="cmbMarkAjxMd">
+								</select>
+								
+							  </div>
+							  <div class="form-group col-md-6" id="divCmbMarkAjx">
+								<label for="cmbModelAjxMd">Modelo:</label>
+								<select class="form-control" name="cmbIdModelMd" id="cmbModelAjxMd">
+								</select>
+								
+							  </div>
+							  <div class="form-group col-xs-12">
+								<label for="txtNChasisMd">Chasis:</label>
+								<input type="text" class="form-control" id="txtNChasisMd" name="txtChasisMd" placeholder="Ingrese Nombre"/>
+							  </div>
+							  <div class="form-group col-xs-12">
+								<label for="txtMotorMd">Motor:</label>
+								<input type="text" required="true" class="form-control" id="txtMotorMd" name="txtMotorMd" placeholder="Ingrese Motor"/>
+							  </div>
+							  <div class="form-group col-xs-12 col-md-6">
+								<label for="txtPlaca">Placa:</label>
+								<input type="text" required="true" class="form-control" id="txtPlacaMd" name="txtPlacaMd" placeholder="Ingrese Placa"/>
+							  </div>
+							  
+							  <div class="form-group col-xs-12 col-md-6">
+								<label for="txtAnio">Año:</label>
+								<input type="number" min="1980" required="true" class="form-control" id="txtAnioMd" name="txtAnioMd" placeholder="Ingrese Año"/>
+							  </div>
+							  <div class="form-group col-xs-12 col-md-6">
+								<label for="txtColor">Color:</label>
+								<div class="input-group demo2">
+									<input type="text" value="" class="form-control" id="txtColorMd" name="txtColorMd"/>
+									<span class="input-group-addon"><i></i></span>
+								</div>
+							  </div>
+							  <div class="form-group col-xs-12 col-md-6" id="divTxtCodigoMd">
+								
+							  </div>
+						  </fieldset>	
+						</div>
+						
+						<div class="modal-footer">
+							<div class="row">
+								<div class="col-md-8">
+									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
+									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
+								</div>
+							</div>
+						</div>
+					</form>
+						
 				</div>	
 			</div>
 		</div>
-		<!-- End Modal HTML -->
+		<!-- End Modal Vehiculo HTML -->
 		
 		<!-- END VEHICULO -->
 		<!-- DETALLE DE INVENTARIO -->
