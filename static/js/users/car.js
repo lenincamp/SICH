@@ -76,7 +76,7 @@ $(function(){
 				}
 			}
 		});
-	 }
+	 };
 	 
 	 var trIdMd;
 	 $.editDeleteModel = function(btn, edt){
@@ -92,7 +92,7 @@ $(function(){
 	 	{
 	 		$.confirmMessage($.deleteModel);
 	 	} 	
-	 }
+	 };
 	
 	/*
 	 * -------------------------------------------------------------------
@@ -114,7 +114,7 @@ $(function(){
 	   $(nRow).attr('id',aData['mod_id']);
 	   $($(nRow).children('td')[0]).attr('id',aData['cat_id']+"Category");
 	   $($(nRow).children('td')[1]).attr('id',aData['mar_id']+"Model");
-	}
+	};
 						  
 	var flagMd = true;
 	$("#ltModel").click(function(event){
@@ -219,7 +219,7 @@ $(function(){
 	$.renderizeRowTbMarks = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblMark+"</td>");
 	   $(nRow).attr('id',aData['mar_id']+"Mark");
-	}
+	};
 						  
 	var flagMk = true;
 	$("#ltMark").click(function(event){
@@ -257,7 +257,7 @@ $(function(){
 				}
 			}
 		});
-	}
+	};
 	 
 	 var trIdMk;
 	 $.editDeleteMark = function(btn, edt){
@@ -272,7 +272,7 @@ $(function(){
 	 	{
 	 		$.confirmMessage($.deleteMark, "Si elimina la marca se eliminaran todos sus modelos. <br> ¿Está Seguro De Eliminar La Marca?");
 	 	} 	
-	 }
+	 };
 	 
 	 /* =========================>>> DETAILS INVENTARY <<<========================= */
 	
@@ -352,7 +352,7 @@ $(function(){
 	$.renderizeRowTbInventarios = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblInventario+"</td>");
 	   $(nRow).attr('id',aData['pie_id']+"Inventario");
-	}
+	};
 						  
 	var flagInv = true;
 	$("#ltInventario").click(function(event){
@@ -390,7 +390,7 @@ $(function(){
 				}
 			}
 		});
-	}
+	};
 	 
 	 var trIdInv;
 	 $.editDeleteInventario = function(btn, edt){
@@ -405,7 +405,7 @@ $(function(){
 	 	{
 	 		$.confirmMessage($.deleteInventario, "Si elimina la marca se eliminaran todos sus modelos. <br> ¿Está Seguro De Eliminar La Marca?");
 	 	} 	
-	 }
+	 };
 	 
 	/* =========================>>> CATEGORIES <<<========================= */
 	
@@ -485,7 +485,7 @@ $(function(){
 	$.renderizeRowTbCateg = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblCateg+"</td>");
 	   $(nRow).attr('id',aData['cat_id']);
-	}
+	};
 						  
 	var flagCateg = true;
 	$("#ltCateg").click(function(event){
@@ -522,7 +522,7 @@ $(function(){
 				}
 			}
 		});
-	}
+	};
 	 
 	 var trIdCateg;
 	 $.editDeleteCateg = function(btn, edt){
@@ -537,16 +537,24 @@ $(function(){
 	 	{
 	 		$.confirmMessage($.deleteCateg, "Está Seguro De Eliminar La Categoría?");
 	 	} 	
-	 }
+	 };
 	 
 	/* =========================>>> CARS <<<========================= */
 	$.txtCodigo = function(){
 		if( $("#cmbMarkAjx option:selected").text().toUpperCase() == "CHEVROLET" ){
-			$("#divTxtCodigo").html("<label for='txtName'>Código:</label><input type='text' required='true' class='form-control' id='txtCodigo' name='txtCodigo' placeholder='Ingrese Código'/>");
+			$("#divTxtCodigo").html("<label for='txtCodigo'>Código:</label><input type='text' required='true' class='form-control' id='txtCodigo' name='txtCodigo' placeholder='Ingrese Código'/>");
 		}else{
 			$("#divTxtCodigo").html("");
 		}
-	}
+	};
+	
+	$.txtCodigoMd = function(){
+		if( $("#cmbMarkAjxMd option:selected").text().toUpperCase() == "CHEVROLET" ){
+			$("#divTxtCodigoMd").html("<label for='txtCodigoMd'>Código:</label><input type='text' required='true' class='form-control' id='txtCodigoMd' name='txtCodigoMd' placeholder='Ingrese Código'/>");
+		}else{
+			$("#divTxtCodigoMd").html("");
+		}
+	};
 	
 	$.loadCmbMarks = function(){
 		$.post( "/sich/car/get_marks_all/", function(response) {
@@ -555,18 +563,24 @@ $(function(){
 				option += "<option value='"+val.mar_id+"'>"+val.mar_nom+"</option>";
 			});
 			$("#cmbMarkAjx").html(option);
+			$("#cmbMarkAjxMd").html(option);
 			$("#cmbMark").html(option);
 			$("#cmbMarkMd").html(option);
 			$.txtCodigo();
 			$.loadCmbModels(response.data[0].mar_id);
 		}, 'json');
-	}
+	};
 	
 	$.loadCmbMarks();
 	
 	$("#cmbMarkAjx").change(function(){
 		$.loadCmbModels( $(this).val() );
 		$.txtCodigo();
+	});
+	
+	$("#cmbMarkAjxMd").change(function(){
+		$.loadCmbModels( $(this).val(), "#cmbModelAjxMd" );
+		$.txtCodigoMd();
 	});
 	
 	$.loadCmbModels = function( id, idCmb ){
@@ -578,11 +592,11 @@ $(function(){
 			});
 			$(idCmb).html(option);
 			if(idCmb !== "#cmbModelAjx"){
-				$(idCmb).val($.trim($($("#"+trIdCar).children('td')[3]).attr("id")));
+				$(idCmb).val($($("#"+trIdCar).children('td')[3]).attr("id"));
 			}
 			
 		}, 'json');
-	}
+	};
 	
 	$.disEnaInputCli = function(disEn, response){
 		response = typeof response !== 'undefined' ? response : null;
@@ -590,10 +604,17 @@ $(function(){
 			$("#spClient").attr("data-toggle", response.cli_id);
 			$($("#txtNombre").val(response.per_nom)).attr('disabled','true');
 			$($("#txtApellido").val(response.per_ape)).attr('disabled','true');
-			$($("#txtTelefono").val(response.cli_tel)).attr('disabled','true');
 			$($("#txtEmail").val(response.cli_eml)).attr('disabled','true');
 			$($("#txtDireccion").val(response.cli_dir)).attr('disabled','true');
-			
+			$($("#txtTelefono").val("")).attr('disabled','true');
+			var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
+			if ( $.trim(telefonos[0]) != ''){
+				$("#tbodyTels").html("");
+				$.each(telefonos, function( i, val) {	
+					$("#tbodyTels").append("<tr><td class='text-center'>"+val+"</td><td class='text-center'>--</td></tr>");
+					$("#divTbTels").fadeIn('fast');
+				});
+			}
 			/*$('#bodyPage').animate({
 				scrollTop: $("#fstDataCar").offset().top
 			}, 1000);*/
@@ -601,33 +622,41 @@ $(function(){
 			$("#spClient").removeAttr("data-toggle");
 			$($($("#txtNombre").val("")).removeAttr('disabled')).focus();
 			$($("#txtApellido").val("")).removeAttr('disabled');
-			$($("#txtTelefono").val("")).removeAttr('disabled');
 			$($("#txtEmail").val("")).removeAttr('disabled');
 			$($("#txtDireccion").val("")).removeAttr('disabled');
+			$($("#txtTelefono").val("")).removeAttr('disabled');
+			$("#tbodyTels").html("");
+			$("#divTbTels").fadeOut('fast');
 		}
-	}
+	};
 	
 	$.inputsMdCli = function(response){
-		$("#mdBdCar #frmCar input").removeAttr('disabled');
-		$("#mdBdCar #frmCar #spClient").attr("data-toggle", response.cli_id);
-		$($("#mdBdCar #frmCar #txtCedula").val(response.per_ced)).attr('disabled','true');
-		$("#mdBdCar #frmCar #txtNombre").val(response.per_nom);
-		$("#mdBdCar #frmCar #txtApellido").val(response.per_ape);
-		$("#mdBdCar #frmCar #txtTelefono").val(response.cli_tel);
-		$("#mdBdCar #frmCar #txtEmail").val(response.cli_eml);
-		$("#mdBdCar #frmCar #txtDireccion").val(response.cli_dir);
-		$("#mdBdCar #frmCar #cmbMarkAjx").change(function(){
-			$.loadCmbModels( $(this).val(), "#mdBdCar #frmCar #cmbModelAjx" );
-		});
-		$("#mdBdCar #frmCar #cmbMarkAjx").val($.trim($($("#"+trIdCar).children('td')[2]).attr("id")));
-		$("#mdBdCar #frmCar #cmbMarkAjx").change();
+		$("#frmMdCar input").removeAttr('disabled');
+		$("#spMdClient").attr("data-toggle", response.cli_id);
+		$($("#txtCedulaMd").val(response.per_ced)).attr('disabled','true');
+		$("#txtNombreMd").val(response.per_nom);
+		$("#txtApellidoMd").val(response.per_ape);
+		var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
 		
-		
-	}
+		if ( $.trim(telefonos[0]) != ''){
+			$("#tbodyTelsMd").html("");
+			$.each(telefonos, function( i, val) {	
+				$("#tbodyTelsMd").append("<tr><td class='text-center'>"+val+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+				$("#divTbTelsMd").fadeIn('fast');
+			});
+		}
+
+		$("#txtEmailMd").val(response.cli_eml);
+		$("#txtDireccionMd").val(response.cli_dir);
+		$("#cmbMarkAjxMd").val($.trim($($("#"+trIdCar).children('td')[2]).attr("id")));
+		$("#cmbMarkAjxMd").change();
+	};
 	
 	$.clearImputCar = function(){
 		$("#fstDataCar input").val("");
-	}
+		$("#fstDataCarMd input").val("");
+		$(".fileinput-remove-button").click();
+	};
 	
 	$.searchClientByCi = function(ci, msg, mdl){
 		msg = typeof msg !== 'undefined' ? msg : false;
@@ -652,7 +681,7 @@ $(function(){
 				}
 			}, 'json');
 		}
-	}
+	};
 	
 	$("#txtCedula").focusout(function(event){
 		$.searchClientByCi($.trim($(this).val()));
@@ -662,32 +691,72 @@ $(function(){
 		$.searchClientByCi($.trim($("#txtCedula").val()), true);
 	});
 	
+	/*
+	 * -------------------------------------------------------------------
+	 *  SAVE CARS
+	 * -------------------------------------------------------------------
+	 */
 	var createCar = false;
+	var tels = [];
 	$("#frmCar").on('submit', function(event){
+		var formData = new FormData($("#frmCar")[0]);
 		event.preventDefault();
-		var url = "";
-		if(typeof $("#spClient").attr("data-toggle") !== 'undefined'){
-			url = "/sich/car/save_car/?id="+$("#spClient").attr("data-toggle");
+		$("#tbodyTels tr").each(function(){
+		    $(this).find('td').each(function( index ){ 
+				if( index == 0 ){
+					tels.push($.trim($(this).html()));
+				}
+			});
+		});
+		if(tels.length > 0){
+			var url = "";
+			if(typeof $("#spClient").attr("data-toggle") !== 'undefined'){
+				url = "/sich/car/save_car/?id="+$("#spClient").attr("data-toggle")+"&tels="+tels;
+			}else{
+				url = "/sich/car/save_car/?id="+0+"&tels="+tels;
+			}
+			
+			$.ajax({
+	        	url: url,  
+	            type: 'POST',
+	            data: formData,
+				dataType:'json',
+	            //necesario para subir archivos via ajax
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            // mientras se envia el archivo
+	            beforeSend: function(){               
+	               $.infoMressage();
+	            },
+	            //si finalizo correctamente
+	            success: function(response){
+					switch(response.insert_car) {
+						case '0':
+							$.errorMessage();
+							break;
+						case '1':
+							$.successMessage();
+							$($("#txtCedula").val("")).focus();
+							$.disEnaInputCli(false);
+							$.clearImputCar();
+							createCar = true;
+							tels.length = 0;
+							break;
+						case '2':
+							$.errorMessage("El Vehiculo Ya Existe!");
+							break;
+
+					}	
+				},
+	            //si ocurrido un error
+	            error: function(){
+	                $.errorMessage("");
+	            }
+	        });
 		}else{
-			url = "/sich/car/save_car/?id="+0;
+			$.errorMessage("Debe tener al menos un teléfono!!");
 		}
-		$.post(url,$(this).serialize(), function(response){	
-			switch(response.insert_car) {
-				case '0':
-					$.errorMessage();
-					break;
-				case '1':
-					$.successMessage();
-					$("#txtCedula").val("");
-					$.disEnaInputCli(false);
-					$.clearImputCar();
-					createCar = true;
-					break;
-				case '2':
-					$.errorMessage("El Vehiculo Ya Existe!");
-					break;
-			}	
-		}, 'json');
 	});
 	
 	$.deleteCar = function(){
@@ -705,57 +774,67 @@ $(function(){
 				}
 			}
 		});
-	}
+	};
 	 
 	$('#mdCar').on('shown.bs.modal', function () {
-		$("#mdBdCar #frmCar #txtNombre").focus();
+		$("#txtNombreMd").focus();
 	});
 	
 	var trIdCar;
 	$.editDeleteCar = function(btn, edt){
 		trIdCar = $.trim($($($(btn).parent()).parent()).attr('id'));
 		if(edt){
-	 		$("#mdBdCar").html("<span id='spIdCarMd' data-toggle='"+$.trim($($('#'+trIdCar).children('td')[0]).attr('id'))+"'></span>"+$("#divFrmCar").html());
-	 		$("#mdBdCar #searchClient").hide();
-	 		$.searchClientByCi($.trim($($("#"+trIdCar).children('td')[0]).html()), false, true);
-	
-	 		$.post("/sich/car/get_car_by_id/", {id:trIdCar.replace("Car","")}, function(response){
-	 			$("#mdBdCar #frmCar #txtNChasis").val(response.veh_cha);
-	 			$("#mdBdCar #frmCar #txtMotor").val(response.veh_mot);
-	 			$("#mdBdCar #frmCar #txtPlaca").val(response.veh_pla);
-	 			$("#mdBdCar #frmCar #txtAnio").val(response.veh_yar);
-	 			$("#mdBdCar #frmCar #txtColor").val(response.veh_col);
-	 			if( response.veh_cla == null ){
-					$($("#mdBdCar #frmCar #txtCodigo").parent()).hide();
-					$("#mdBdCar #frmCar #txtCodigo").val("");
-				}else{
-					$("#mdBdCar #frmCar #txtCodigo").val(response.veh_cla);	
-				}
+	 		$("#spMdCar").attr("data-toggle",$.trim($($('#'+trIdCar).children('td')[0]).attr('id')));
+			$.searchClientByCi($.trim($($("#"+trIdCar).children('td')[0]).html()), false, true);
+			$.post("/sich/car/get_car_by_id/", {id:trIdCar.replace("Car","")}, function(response){
+	 			$("#txtNChasisMd").val(response.veh_cha);
+	 			$("#txtMotorMd").val(response.veh_mot);
+	 			$("#txtPlacaMd").val(response.veh_pla);
+	 			$("#txtAnioMd").val(response.veh_yar);
+	 			$("#txtColorMd").val(response.veh_col);
 				$('.demo2').colorpicker();
 	 		},'json');
 	 		
 	 		$("#mdCar").modal("show");
-	 		
-	 		$("#mdBdCar #frmCar").on('submit', function(event){
-				event.preventDefault();
-				var url = "/sich/car/update_car/?id="+trIdCar.replace("Car","")+"&idCl="+$("#spIdCarMd").attr('data-toggle');
-				$.post( url, $(this).serialize(), function(response){
-	 			if(response.update_car == '1'){
-	 				$('#tbCars').DataTable().ajax.reload();
-	 				$("#mdCar").modal("hide");
-	 				$.successMessage();
-	 			}else{
-	 				$.errorMessage();
-	 			}
-	 			
-	 		},'json');
-			});
 	 	}
 	 	else
 	 	{
 	 		$.confirmMessage($.deleteCar, "Está Seguro De Eliminar El Vehículo?");
 	 	} 	
-	 }
+	 };
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  EDIT CARS
+	 * -------------------------------------------------------------------
+	 */
+	var telsMd = [];
+	$("#frmMdCar").on('submit', function(event){
+		event.preventDefault();
+		$("#tbodyTelsMd tr").each(function(){
+		    $(this).find('td').each(function( index ){ 
+				if( index == 0 ){
+					telsMd.push($.trim($(this).html()));
+				}
+			});
+		});
+		if(telsMd.length > 0){
+			var url = "/sich/car/update_car/?id="+trIdCar.replace("Car","")+"&idCl="+$("#spMdCar").attr('data-toggle')+"&tels="+telsMd;
+			$.post( url, $(this).serialize(), function(response){
+	 			if(response.update_car == '1'){
+	 				$('#tbCars').DataTable().ajax.reload();
+	 				$("#mdCar").modal("hide");
+	 				$.successMessage();
+					telsMd.length = 0;
+	 			}else{
+	 				$.errorMessage();
+	 			}
+	 			
+	 		},'json');
+		}else{
+			$.errorMessage("Debe tener al menos un teléfono!!");
+		}
+	});
 	
 	var btnsOpTblCars = "<button style='border: 0; background: transparent' onclick='$.editDeleteCar(this, true);'>"+
 							"<img src='/sich/static/img/edit.png' title='Editar'>"+
@@ -770,7 +849,7 @@ $(function(){
 		$($(nRow).children('td')[0]).attr("id",aData['cli_id']);
 		$($(nRow).children('td')[2]).attr("id",aData['mar_id']);
 		$($(nRow).children('td')[3]).attr("id",aData['mod_id']);
-	}
+	};
 	
 	var flagCar = true;
 	$("#ltCar").click(function(event){
@@ -792,4 +871,79 @@ $(function(){
 			createCar = false;
 		}
 	});
+	
+	$.cancelEditTel = function( btn ){
+		var tr = $($(btn).parent()).parent();
+		var tel = $.trim($($($(btn).parent()).children('input')[0]).val());
+		if( tel.length >= 7 && tel.length<=10 ){
+			$($(tr).children('td')[0]).html(tel);
+		}else{
+			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
+			 $($($(tr).children('td')[0]).children('input')).focus();
+		}
+	};
+	
+	//op = true --> edit; else delete
+	$.editDeleteTel = function( btn, op ){
+		event.preventDefault();
+		var tr = $($(btn).parent()).parent();
+		var telTb = $.trim($($(tr).children('td')[0]).html());
+		if( op ){
+			 $($(tr).children('td')[0]).html("<input maxlength='10' value='"+telTb+"' onfocus='this.value = this.value;' onkeyup='if(event.keyCode == 27 || event.keyCode == 13){$.cancelEditTel(this);}'><button type='button' onclick='$.cancelEditTel(this);'>x</button>");
+			 $($($(tr).children('td')[0]).children('input')).focus();
+		}else{
+			$(tr).fadeOut('fast', function(){
+				$(this).remove();
+			});
+		}
+	};
+	
+	var btnsOpTblTels = "<button style='border: 0; background: transparent' onclick='$.editDeleteTel(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteTel(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+	
+	
+	$("#btnTels").click(function(){
+		var num =  $.trim($("#txtTelefono").val()).length;
+		if( num >= 7 && num <= 10 ) {
+			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtTelefono").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$($("#txtTelefono").val('')).focus();
+			$("#divTbTels").fadeIn('fast');
+		}else{
+			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
+		}
+	});
+	
+	$("#btnTelsMd").click(function(){
+		var num =  $.trim($("#txtTelefonoMd").val()).length;
+		if( num >= 7 && num <= 10 ) {
+			$("#tbodyTelsMd").append("<tr><td class='text-center'>"+$("#txtTelefonoMd").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$($("#txtTelefonoMd").val('')).focus();
+			$("#divTbTelsMd").fadeIn('fast');
+		}else{
+			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
+		}
+	});
+	
+	$("#txtTelefono").keyup( function( event ){
+		if( event.keyCode == 13 ){
+			$("#btnTels").click();
+		}
+	});
+	
+	$("#txtTelefonoMd").keyup( function( event ){
+		if( event.keyCode == 13 ){
+			$("#btnTelsMd").click();
+		}
+	});
+	
+	$("#images").fileinput({
+		showCaption: false, maxFileCount: 2, language: "es",
+    	//uploadUrl: "http://localhost/site/file-upload-batch",
+   		allowedFileExtensions: ["jpg", "png"],showUpload: false
+	});
+	
 });

@@ -14,7 +14,7 @@ $(function(){
 		
 		$("#tbodyTels tr").each(function(){
 		    $(this).find('td').each(function( index ){ 
-				if( index == 1 ){
+				if( index == 0 ){
 					tels.push($.trim($(this).html()));
 				}
 			});
@@ -37,7 +37,6 @@ $(function(){
 							$("#frmNewClient input[type='text']").val('');
 							$("#frmNewClient input[type='email']").val('');
 							tels.length=0;
-							cont=1;
 							$("#divTbTels").fadeOut('fast');
 							create = true;
 						}else{		
@@ -61,7 +60,7 @@ $(function(){
 		event.preventDefault();
 		$("#tbodyTelsMd tr").each(function(){
 		    $(this).find('td').each(function( index ){ 
-				if( index == 1 ){
+				if( index == 0 ){
 					telsMd.push($.trim($(this).html()));
 				}
 			});
@@ -77,7 +76,6 @@ $(function(){
 						$("#frmMdClient input[type='text']").val('');
 						$("#frmMdClient input[type='email']").val('');
 						telsMd.length=0;
-						contMd=1;
 						$("#mdClient").modal('hide');
 						$.successMessage();
 						$('#tbClients').DataTable().ajax.reload();
@@ -115,6 +113,10 @@ $(function(){
 		});
 	 };
 	 
+	 $('#mdClient').on('shown.bs.modal', function () {
+		$("#txtNombreMd").focus();
+	 });
+	 
 	 var trIdClt;
 	 $.editDeleteModel = function(btn, edt){
 	 	trIdClt = $.trim($($($(btn).parent()).parent()).attr('id'));
@@ -124,18 +126,18 @@ $(function(){
 				$("#mdClient").modal('show');
 				if( response!=null ){
 					$($('#txtCedulaMd').val(response.per_ced)).attr('disabled',true);
-					$($('#txtNombreMd').val(response.per_nom)).focus();
+					$('#txtNombreMd').val(response.per_nom);
 					$('#txtApellidoMd').val(response.per_ape);
 					$('#txtDireccionMd').val(response.cli_dir);
 					$('#txtEmailMd').val(response.cli_eml);
-					$.post("/sich/client/get_tels_all/", {id:response.cli_id}, function( resp ){
+					var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
+					if ( $.trim(telefonos[0]) != ''){
 						$("#tbodyTelsMd").html("");
-						$.each(resp, function( i, val) {	
-							$("#tbodyTelsMd").append("<tr><td class='text-center'>"+(i+1)+"</td><td class='text-center'>"+val.tel_num+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+						$.each(telefonos, function( i, val) {	
+							$("#tbodyTelsMd").append("<tr><td class='text-center'>"+val+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
 							$("#divTbTelsMd").fadeIn('fast');
-							contMd = i+2;	
 						});
-					},'json');
+					}
 				}else{
 					$.errorMessage();
 				}
@@ -164,12 +166,12 @@ $(function(){
 	
 	$.loadTelsCli = function( btn ){
 		
-		$.post("/sich/client/get_tels_all/", {id:btn.replace("Btn","")}, function( response ) {
-			
-			if( response.length != 0 ){
+		$.post("/sich/client/search_client_by_id/", {id:btn.replace("Btn","")}, function( response ) {
+			var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
+			if ( $.trim(telefonos[0]) != ''){
 				var ol = "<ol>";
-				$.each(response, function( index, val ){
-					ol += "<li>"+val.tel_num+"</li>";
+				$.each(telefonos, function( index, val ){
+					ol += "<li>"+val+"</li>";
 				});
 				ol += "</ol>";
 				$("#"+btn).popover({
@@ -180,7 +182,6 @@ $(function(){
 					title :  '<span class="text-info"><strong>Teléfono(s)</strong></span> <button type="button" id="close" class="close" onclick=$("#'+btn+'").popover("hide");> &times;</button>'
 				}).popover('show');
 			}else{
-				
 				$("#"+btn).popover({
 					html: true,
 	                animation: false,
@@ -210,10 +211,10 @@ $(function(){
 		var tr = $($(btn).parent()).parent();
 		var tel = $.trim($($($(btn).parent()).children('input')[0]).val());
 		if( tel.length >= 7 && tel.length<=10 ){
-			$($(tr).children('td')[1]).html(tel);
+			$($(tr).children('td')[0]).html(tel);
 		}else{
 			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
-			 $($($(tr).children('td')[1]).children('input')).focus();
+			 $($($(tr).children('td')[0]).children('input')).focus();
 		}
 	};
 	
@@ -221,14 +222,13 @@ $(function(){
 	$.editDeleteTel = function( btn, op ){
 		event.preventDefault();
 		var tr = $($(btn).parent()).parent();
-		var telTb = $.trim($($(tr).children('td')[1]).html());
+		var telTb = $.trim($($(tr).children('td')[0]).html());
 		if( op ){
-			 $($(tr).children('td')[1]).html("<input value='"+telTb+"' onfocus='this.value = this.value;' onkeyup='if(event.keyCode == 27 || event.keyCode == 13){$.cancelEditTel(this);}'><button type='button' onclick='$.cancelEditTel(this);'>x</button>");
-			 $($($(tr).children('td')[1]).children('input')).focus();
+			 $($(tr).children('td')[0]).html("<input maxlength='10' value='"+telTb+"' onfocus='this.value = this.value;' onkeyup='if(event.keyCode == 27 || event.keyCode == 13){$.cancelEditTel(this);}'><button type='button' onclick='$.cancelEditTel(this);'>x</button>");
+			 $($($(tr).children('td')[0]).children('input')).focus();
 		}else{
 			$(tr).fadeOut('fast', function(){
 				$(this).remove();
-				cont--;
 			});
 		}
 	};
@@ -240,22 +240,21 @@ $(function(){
 							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
 						  "</button>";
 	
-	var cont = 1;
 	$("#btnTels").click(function(){
 		var num =  $.trim($("#txtTelefono").val()).length;
 		if( num >= 7 && num <= 10 ) {
-			$("#tbodyTels").append("<tr><td class='text-center'>"+(cont++)+"</td><td class='text-center'>"+$("#txtTelefono").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtTelefono").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
 			$($("#txtTelefono").val('')).focus();
 			$("#divTbTels").fadeIn('fast');
 		}else{
 			$.errorMessage("El número de teléfono debe ser de 7 a 10 dígitos");
 		}
 	});
-	var contMd = 1;
+	
 	$("#btnTelsMd").click(function(){
 		var num =  $.trim($("#txtTelefonoMd").val()).length;
 		if( num >= 7 && num <= 10 ) {
-			$("#tbodyTelsMd").append("<tr><td class='text-center'>"+(contMd++)+"</td><td class='text-center'>"+$("#txtTelefonoMd").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$("#tbodyTelsMd").append("<tr><td class='text-center'>"+$("#txtTelefonoMd").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
 			$($("#txtTelefonoMd").val('')).focus();
 			$("#divTbTelsMd").fadeIn('fast');
 		}else{

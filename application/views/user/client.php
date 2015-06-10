@@ -45,7 +45,7 @@
 					  	<div class="form-group">
 							
 							<div class="input-group">
-						      <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono"/>
+						      <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono" maxlength="10"/>
 						      <span class="input-group-btn">
 						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTels"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
 						      </span>
@@ -58,7 +58,6 @@
 									
 									<thead>
 										<tr>
-											<th class="text-center">#</th>
 											<th class="text-center">Teléfono</th>
 											<th class="text-center">Acción</th>
 										</tr>
@@ -163,7 +162,7 @@
 					  	<div class="form-group">
 							
 							<div class="input-group">
-						      <input type="text" class="form-control" id="txtTelefonoMd" placeholder="Ingrese Teléfono"/>
+						      <input type="text" class="form-control" id="txtTelefonoMd" placeholder="Ingrese Teléfono" maxlength="10"/>
 						      <span class="input-group-btn">
 						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTelsMd"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
 						      </span>
@@ -176,7 +175,6 @@
 									
 									<thead>
 										<tr>
-											<th class="text-center">#</th>
 											<th class="text-center">Teléfono</th>
 											<th class="text-center">Acción</th>
 										</tr>
