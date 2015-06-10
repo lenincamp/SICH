@@ -55,6 +55,7 @@ var resultSearch=false;
 var idBusqueda;
 var resultadoDiferencia=new Array();
 var arrayActual;
+window.arrayGlobal=new Array();
 var arrayConcatenado=new Array();
 function elementosRepetidos(element, index, array) {
 	if(arrayConcatenado.lenght==0)
@@ -65,11 +66,6 @@ function elementosRepetidos(element, index, array) {
 	{
 		arrayConcatenado=arrayConcatenado.concat(element)
 	}
-	/*if(idBusqueda!=index)
-	{
-		var diferencia= arr_diff(arrayActual,element)
-		resultadoDiferencia.concat(diferencia)
-	}*/
 }
 
 function buscarElements(element, index, array) {

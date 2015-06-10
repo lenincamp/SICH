@@ -43,13 +43,13 @@ class Orden extends Private_Controller {
 	 * MODELS
 	 * -------------------------------------------------------------------
 	 */
-	public function delete_client()
+	public function delete_orden()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = array('cli_id' => $this->input->post('id'));
-			$response = $this->clients->delete($data);
+    		$data = array('ord_id' => $this->input->post('id'));
+			$response = $this->orders->delete($data);
 			echo json_encode($response);
 		}
 		else
@@ -59,31 +59,61 @@ class Orden extends Private_Controller {
 		}
 		return FALSE;
 	}
-	public function save_client()
+	public function save_orden()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		/*$data = array(
-    			'per_ced'  => $this->input->post('txtCedula'),
-				'per_nom' => $this->input->post('txtNombre'),
-				'per_ape' => $this->input->post('txtApellido'),
-				'cli_dir' => $this->input->post('txtDireccion'),
-				'cli_tel' => $this->input->post('txtTelefono'),
-				'cli_eml' => $this->input->post('txtEmail')
-    		);*/
-			$data = array(
-    			$this->input->post('txtCedula'),
-				$this->input->post('txtNombre'),
-				$this->input->post('txtApellido'),
-				$this->input->post('txtDireccion'),
-				$this->input->post('txtTelefono'),
-				$this->input->post('txtEmail')
+			$IdsServicios=explode(",",$this->input->get('srv'));
+			$costos=array();
+			$IdsAreas=explode(",",$this->input->get('idsArt'));
+			$areas=array();
+			$IdsInventario=explode(",",$this->input->get('idsInv'));
+			$inventario=array();
+			foreach ($IdsAreas as $keyA => $valueA) 
+			{
+				if($this->input->post('cat'.$valueA))
+				{
+					array_push($areas,$this->input->post('cat'.$valueA));
+				}
+			}
+			foreach ($IdsInventario as $keyA => $valueA) 
+			{
+				if($this->input->post('inv'.$valueA))
+				{
+					array_push($inventario,$this->input->post('inv'.$valueA));
+				}
+			}
+			foreach ($IdsServicios as $keyA => $valueA) 
+			{
+				if($this->input->post('prc'.$valueA))
+				{
+					array_push($costos,$this->input->post('prc'.$valueA));
+				}
+			}
+			$abono=$this->input->post('txtAbono')?$this->input->post('txtAbono'):0;
+			$reserva=$this->input->post('chkReserva')?true:false;
+    		$data = array(
+    			$this->input->post('txtNumeroOrden'),
+				$this->input->post('txtFecha'),
+				$this->input->post('txtFechaIngreso'),
+				$this->input->post('txtFechaEntrega'),
+				$this->input->post('txtCosto'),
+				$reserva,
+				$abono,
+				$this->input->post('txtTarjeta'),
+				$this->input->post('txtObservacionesGeneral'),
+				substr($this->input->get('idVeh'), 0, strlen($this->input->get('idVeh'))-3),
+				$this->input->post('slcFormaPAgo'),
+				$this->input->get('cmb'),
+				$this->input->post('txtKilometraje'),
+				$this->input->post('txtObservacionInventario'),
+				"{".implode(",",$inventario)."}",
+				"{".implode(",",$costos)."}",
+				"{".$this->input->get('srv')."}",
+				"{".implode(",",$areas)."}"
     		);
-
-			//$response = $this->clients->save($data);
-			$response = $this->clients->selectSQL("SELECT insert_client(?,?,?,?,?,?)",$data);
-
+			$response = $this->orders->selectSQL("SELECT insert_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
@@ -94,12 +124,12 @@ class Orden extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function get_clients_all()
+	public function get_orders_all()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-    		$data = $this->clients->get_all();
+    		$data = $this->orders->selectSQLMultiple("SELECT * from orden_trabajo_basico",array());
 			echo json_encode(array("data"=>$data));
 		}
 		else

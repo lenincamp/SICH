@@ -1,3 +1,4 @@
+window.combustible="";
 var pasoGas=true
 $( document ).ready(function() {
 	console.log("inicia")
@@ -17,8 +18,10 @@ function limpiar(btn)
 	var canvas=padre.getElementsByTagName('canvas')
 	canvas=canvas[0]
 	var context = canvas.getContext('2d');
+	context.beginPath();
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	pasoGas=true
+	window.combustible="";
 }
 
 function relMouseCoords(event)
@@ -37,7 +40,6 @@ function relMouseCoords(event)
 			totalOffsetY += canvas.offsetTop - canvas.scrollTop;
 		}
 		while(canvas = canvas.offsetParent)
-
 		canvasX = event.pageX - totalOffsetX;
 		canvasY = event.pageY - totalOffsetY;
 		var canvas = this;
@@ -49,7 +51,7 @@ function relMouseCoords(event)
 		context.lineWidth = 3;
 		context.strokeStyle = '#ff0000';
 		context.stroke();
-		console.log(canvasX+"<=x ::: y=> "+canvasY);
+		window.combustible=canvasX+"-"+canvasY;
 	}
 }
 	//HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
@@ -70,5 +72,6 @@ function relMouseCoords(event)
 		context.strokeStyle = '#ff0000';
 		context.lineTo(canvas_x,canvas_y);
 		context.stroke();
+		window.combustible=canvas_x+"-"+canvas_y
 	}
   }
