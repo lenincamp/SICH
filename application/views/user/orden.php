@@ -13,7 +13,7 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-10 col-md-offset-1" style="border: 1px solid #ccc; padding:10px 35px 40px 35px;background-color:#FFF;">	
-						<form id="frmCar">
+						<form id="frmOrd">
 						  <fieldset class="scheduler-border">
 							<legend class="scheduler-border">Datos Generales</legend>
 								<div class="form-group col-sm-6" style="margin-right:1px;">
@@ -29,8 +29,8 @@
 									<input type="text" readOnly="true" class="form-control" id="txtCosto" name="txtCosto" value="0,00"/>
 								</div>
 								<div class="form-group col-md-6">
-									<label for="txtFormaPAgo">Forma de Pago:</label>
-									<select class="form-control" id="txtFormaPAgo" name="txtFormaPAgo">
+									<label for="slcFormaPAgo">Forma de Pago:</label>
+									<select class="form-control" id="slcFormaPAgo" name="slcFormaPAgo">
 									<?php
 										if ( ! empty($formasPago))
 										{
@@ -91,6 +91,8 @@
 								if ( ! empty($inventario))
 								{
 									$contador=1;
+									$ids="";
+									$separador="";
 									foreach ($inventario as $key => $value) 
 									{
 										$clase=$contador%3==0?"":"borderRight";
@@ -98,8 +100,11 @@
 										<label for='inv".$value['pie_id']."' style='width:90%;'>".$value['pie_nom']."</label>
 										<input type='checkbox' class='form-control' id='inv".$value['pie_id']."' name='inv".$value['pie_id']."' value='".$value['pie_id']."' style='display:table-cell; height:auto; width:auto;'>
 										</div>";
+										$ids=$ids.$separador.$value['pie_id'];
+										$separador=",";
 										$contador++;
 									}
+									echo "<span id='idsInv' data-toggle='".$ids."'/>";
 								}
 								else
 								{
@@ -126,13 +131,14 @@
 						  <fieldset class="scheduler-border">
 							<legend class="scheduler-border">Servicios</legend>
 							<div class="form-group col-md-6">
-								<label for="txtName">Fecha de Ingreso:</label>
+								<label for="txtFechaIngreso">Fecha de Ingreso:</label>
 								<input type="date" class="form-control" id="txtFechaIngreso" name="txtFechaIngreso"/>
 							</div>
 							<div class="form-group col-md-6">
-								<label for="txtName">Fecha de Estimada de Entrega:</label>
+								<label for="txtFechaEntrega">Fecha de Estimada de Entrega:</label>
 								<input type="date" class="form-control" id="txtFechaEntrega" name="txtFechaEntrega"/>
 							</div>
+							<span id='servicios' />
 							<?php
 								if ( ! empty($servicios))
 								{
@@ -153,6 +159,7 @@
 								}
 							?>
 							<legend style="margin-top:20px;">Detalles del Trabajo</legend>
+							<span id='idsArt' />
 							<div id="detallesTrabajo">
 								<!--carga dinamica con ajax-->
 							</div>
@@ -182,7 +189,7 @@
 							</div>
 						  </fieldset>
 						  <div class="row">
-							  <div class="col-md-offset-5">
+							  <div class="col-md-offset-5" id="buttonsAction">
 								<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
 							  </div>
 						  </div>
@@ -199,7 +206,7 @@
 	  <div class="panel panel-primary">
 		<div class="panel-heading" role="tab" id="headingListCar">
 		  <h4 class="panel-title">
-			<a class="collapsed" id="ltCar" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
+			<a class="collapsed" id="ltOrd" data-toggle="collapse" data-parent="#accordionCar" href="#collapseListCar" aria-expanded="false" aria-controls="collapseListCar">
 			  LISTAR ORDENES DE TRABAJO
 			</a>
 		  </h4>
@@ -208,11 +215,17 @@
 		  <div class="panel-body">
 			
 			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<table data-order='[[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbCar">
+				<div class="col-xs-12">
+					<table data-order='[[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbOrd">
 						<thead>
 							<tr>
-								<th class="text-center"> Nombre </th>
+								<th class="text-center">N°</th>
+								<th class="text-center">Fecha</th>
+								<th class="text-center">Cliente</th>
+								<th class="text-center">Fecha Ing.</th>
+								<th class="text-center">Fecha Ent.</th>
+								<th class="text-center">Reserva</th>
+								<th class="text-center">Total</th>
 								<th class="text-center">Acción</th>
 							</tr>
 						</thead>
@@ -228,3 +241,74 @@
 	</div>
 <!-- END ORDEN DE TRABAJO -->
 </div>
+<!-- Modal HTML -->
+<div id="mdOrden" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Editar Orden de Trabajo</h4>
+			</div>
+			<form role="form" id='frmMdClient'>
+				<div class="modal-body">		
+					<span id="spIdOrden"></span>
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border">Datos Generales</legend>
+							<div class="form-group col-sm-6" style="margin-right:1px;">
+								<label for="txtNumeroOrden">N° de Orden:</label>
+								<input type="text" class="form-control" id="txtNumeroOrden" name="txtNumeroOrden" placeholder="Ingrese N° de Orden"/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="txtFecha">Fecha:</label>
+								<input type="date" required="true" class="form-control" id="txtFecha" name="txtFecha"/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="txtCosto">Costo Total:</label>
+								<input type="text" readOnly="true" class="form-control" id="txtCosto" name="txtCosto" value="0,00"/>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="slcFormaPAgo">Forma de Pago:</label>
+								<select class="form-control" id="slcFormaPAgo" name="slcFormaPAgo">
+								<?php
+									if ( ! empty($formasPago))
+									{
+										foreach ($formasPago as $key => $value) 
+										{
+											echo "<option value=".$value['fpg_id'].">".$value['fpg_nom']."</option>";
+										}
+									}
+								?>
+								</select>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="txtTarjeta">Pago con tarjeta:</label>
+								<input type="number" class="form-control" id="txtTarjeta" name="txtTarjeta" placeholder="Ingrese N° de Tarjeta"/>
+							</div>
+							<div class="form-group col-md-6" style="padding-top:16px; padding-bottom:16px;">
+								<label for="chkReserva" style="width:auto;">Reserva:</label>
+								<input type="checkBox" class="form-control" id="chkReserva" name="chkReserva" value="true"  style="display:table-cell; height:auto; width:auto;"/>
+							</div>
+							<div class="form-group col-md-6" style="display:none;" id="divAbono">
+								<label for="txtAbono">Abono:</label>
+								<input type="number" step="0.01" class="form-control" id="txtAbono" name="txtAbono" placeholder="Ingrese abono"/>
+							</div>
+							<div class="form-group col-xs-12" d>
+								<label for="txtObservacionesGeneral">Observaciones:</label>
+								<input type="text" class="form-control" id="txtObservacionesGeneral" name="txtObservacionesGeneral" placeholder="Ingrese Observaciones"/>
+							</div>
+					  </fieldset>
+				</div>
+			
+				<div class="modal-footer">
+					<div class="row">
+						<div align="center" id="buttonsActionEdit">
+							<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
+							<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- End Modal HTML -->
