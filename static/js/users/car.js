@@ -792,6 +792,34 @@ $(function(){
 	 			$("#txtPlacaMd").val(response.veh_pla);
 	 			$("#txtAnioMd").val(response.veh_yar);
 	 			$("#txtColorMd").val(response.veh_col);
+				$("#txtCodigoMd").val(response.veh_cla);
+				var imgs;
+				if(response.veh_img != null){
+					imgs = response.veh_img.replace("{","").replace("}","").replace(/"/g,"").split(',');
+					//$("#divImagesMd").html('<label for="imagesMd">Fotos:</label><input name="imagesMd[]" id="imagesMd" type="file"  multiple="true" />');
+					if($.trim(imgs[0]) !== ''){
+						var img = [];
+						$.each(imgs, function(i, val){
+							img.push( "<img src='/sich/"+imgs[i]+"' class='file-preview-image'>")
+						});
+						$("#imagesMd").fileinput({
+						    initialPreview: img,
+							showPreview: true,showCaption: true, maxFileCount: 2, language: "es",
+					   		allowedFileExtensions: ["jpg", "png"], showUpload: false
+						});
+					}else{
+						$("#imagesMd").fileinput({
+							showCaption: false, maxFileCount: 2, language: "es",
+					   		allowedFileExtensions: ["jpg", "png"],showUpload: false
+						});
+					}
+				}else{
+					$("#imagesMd").fileinput({
+						showCaption: false, maxFileCount: 2, language: "es",
+				   		allowedFileExtensions: ["jpg", "png"],showUpload: false
+					});
+				}
+
 				$('.demo2').colorpicker();
 	 		},'json');
 	 		
@@ -820,17 +848,39 @@ $(function(){
 		});
 		if(telsMd.length > 0){
 			var url = "/sich/car/update_car/?id="+trIdCar.replace("Car","")+"&idCl="+$("#spMdCar").attr('data-toggle')+"&tels="+telsMd;
-			$.post( url, $(this).serialize(), function(response){
-	 			if(response.update_car == '1'){
-	 				$('#tbCars').DataTable().ajax.reload();
-	 				$("#mdCar").modal("hide");
-	 				$.successMessage();
-					telsMd.length = 0;
-	 			}else{
-	 				$.errorMessage();
-	 			}
-	 			
-	 		},'json');
+
+			var formData = new FormData($("#frmMdCar")[0]);
+			$.ajax({
+	        	url: url,  
+	            type: 'POST',
+	            data: formData,
+				dataType:'json',
+	            //necesario para subir archivos via ajax
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            // mientras se envia el archivo
+	            beforeSend: function(){               
+	               $.infoMressage();
+	            },
+	            //si finalizo correctamente
+	            success: function(response){
+		 			if(response.update_car == '1'){
+		 				$('#tbCars').DataTable().ajax.reload();
+		 				$("#mdCar").modal("hide");
+		 				$.successMessage();
+						telsMd.length = 0;
+		 			}else{
+		 				$.errorMessage();
+		 			}
+		 			
+		 		},
+	            //si ocurrido un error
+	            error: function(){
+	                $.errorMessage("");
+	            }
+	        });
+			 
 		}else{
 			$.errorMessage("Debe tener al menos un teléfono!!");
 		}

@@ -55,7 +55,8 @@ class Car extends Private_Controller {
     	{
     		$data = array(
     			'mod_nom'  => $this->input->post('name'),
-				'id_marca' => $this->input->post('id_mark')
+				'id_marca' => $this->input->post('id_mark'),
+				'cat_id'   => $this->input->post('id_cat')
     		);
 
 			$response = $this->model->save($data);
@@ -368,15 +369,16 @@ class Car extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{	
-			$path = "./uploads/";
+			$path = "uploads/";
 			$filesUrl = $_FILES;
-			if($this->do_upload())
+			$new_name = $this->input->post('txtPlaca');
+			if($this->do_upload($this->input->post('txtPlaca'), 'images'))
 			{
-				$img = $path.$filesUrl['images']['name'][0].",".$path.$filesUrl['images']['name'][1];
+				$img = $path.$new_name."_".$filesUrl['images']['name'][0].",".$path.$new_name."_".$filesUrl['images']['name'][1];
 			}
 			else
 			{
-				$img = $path.$filesUrl['images']['name'][0];
+				$img = $path.$new_name."_".$filesUrl['images']['name'][0];
 			}
 			
     		$data = array(
@@ -408,21 +410,21 @@ class Car extends Private_Controller {
 		return FALSE;
 	}
 	
-	function do_upload()
+	function do_upload($ci,$name)
 	{
-		
 	    $files = $_FILES;
-	    $cpt = count($_FILES['images']['name']);
+	    $cpt = count($_FILES[$name]['name']);
 	    for($i=0; $i<$cpt; $i++)
 	    {
 			//if($files['images']['size'][$i] > (1024000) && $files['images']['size'][$i] <= (2048000)) //can't be larger than 1 MB - 2mb
 			//{
-		        $_FILES['images']['name']= $files['images']['name'][$i];
-		        $_FILES['images']['type']= $files['images']['type'][$i];
-		        $_FILES['images']['tmp_name']= $files['images']['tmp_name'][$i];
-		        $_FILES['images']['error']= $files['images']['error'][$i];
-		        $_FILES['images']['size']= $files['images']['size'][$i];    
-			    move_uploaded_file($_FILES['images']['tmp_name'], './uploads/'.$_FILES['images']['name']);
+		        $_FILES[$name]['name']		= $files[$name]['name'][$i];
+		        $_FILES[$name]['type']		= $files[$name]['type'][$i];
+		        $_FILES[$name]['tmp_name']	= $files[$name]['tmp_name'][$i];
+		        $_FILES[$name]['error']		= $files[$name]['error'][$i];
+		        $_FILES[$name]['size']		= $files[$name]['size'][$i];
+				$new_name = $ci."_".$_FILES[$name]['name'];
+			    move_uploaded_file($_FILES[$name]['tmp_name'], './uploads/'.$new_name);
 			//}
 			
 	    }
@@ -440,6 +442,17 @@ class Car extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
+			$path = "uploads/";
+			$filesUrl = $_FILES;
+			$new_name = $this->input->post('txtPlacaMd');
+			if($this->do_upload($this->input->post('txtPlacaMd'), 'imagesMd'))
+			{
+				$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0].",".$path.$new_name."_".$filesUrl['imagesMd']['name'][1];
+			}
+			else
+			{
+				$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0];
+			}
     		$data = array(
 				$this->input->post('txtNombreMd'),
 				$this->input->post('txtApellidoMd'),
@@ -454,10 +467,11 @@ class Car extends Private_Controller {
 				$this->input->post('cmbIdModelMd'),
 				$this->input->get('id'),
 				$this->input->get('idCl'),
-				"{".$this->input->get('tels')."}"
+				"{".$this->input->get('tels')."}",
+				"{".$img."}"
     		);
 
-			$response = $this->cars->querySQL("SELECT update_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			$response = $this->cars->querySQL("SELECT update_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
