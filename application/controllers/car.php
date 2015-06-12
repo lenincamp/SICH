@@ -411,7 +411,23 @@ class Car extends Private_Controller {
 	{
 	    $files = $_FILES;
 	    $cpt = count($_FILES[$name]['name']);
-	    for($i=0; $i<$cpt; $i++)
+	    
+		if($edt)
+		{	
+			$dir = opendir('./uploads/');
+			while ($file = readdir($dir)) 
+			{ 
+				if($file != '.' && $file != '..' && $file!=".DS_Store")
+				{
+					if (strpos($file, $ci)!==false){
+						unlink('./uploads/'.$file);
+					}
+				}
+			} 
+			closedir($dir);
+		}
+		
+		for($i=0; $i<$cpt; $i++)
 	    {
 	        $_FILES[$name]['name']		= $files[$name]['name'][$i];
 	        $_FILES[$name]['type']		= $files[$name]['type'][$i];
@@ -419,26 +435,7 @@ class Car extends Private_Controller {
 	        $_FILES[$name]['error']		= $files[$name]['error'][$i];
 	        $_FILES[$name]['size']		= $files[$name]['size'][$i];
 			$new_name = $ci."_".$_FILES[$name]['name'];
-			
-			if($edt)
-			{
-					
-				$dir = opendir('./uploads/');
-				while ($file = readdir($dir)) 
-				{ 
-					if($file != '.' && $file != '..' && $file!=".DS_Store")
-					{
-						if (strpos($file, $ci)!==false){
-							unlink('./uploads/'.$file);
-						}
-					}
-				} 
-				closedir($dir);
-				
-			}
-			
 			move_uploaded_file($_FILES[$name]['tmp_name'], './uploads/'.$new_name);
-			
 		    
 	    }
 		if ($cpt>1)
