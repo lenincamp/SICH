@@ -498,7 +498,8 @@
 									  </div>
 									  <div class="form-group col-xs-12">
 										<label for="images">Fotos:</label>
-										<input name="images[]" id="images" type="file"  multiple="true" />
+										<div class="col-xs-12"></div>
+										<input name="images[]" id="images" type="file"  multiple="multiple" required = "required"/>
 									  </div>
 									  	  
 								  
@@ -565,6 +566,7 @@
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h4 class="modal-title">Editar Vehículo</h4>
 					</div>
+					
 					<form role="form" id='frmMdCar'>
 						<div class="modal-body" id="mdBdCar">
 						  <span id="spMdCar"></span>
@@ -664,6 +666,11 @@
 							  <div class="form-group col-xs-12 col-md-6" id="divTxtCodigoMd">
 								
 							  </div>
+							  <div class="form-group col-xs-12" id="divImagesMd">
+								<label for="imagesMd">Fotos:</label>
+								<div class="col-xs-12" id="divImgsMd"></div>
+								<input name="imagesMd[]" id="imagesMd" type="file"  multiple="multiple"/>
+							  </div>
 						  </fieldset>	
 						</div>
 						
@@ -675,9 +682,8 @@
 								</div>
 							</div>
 						</div>
-					</form>
-						
-				</div>	
+					</form>	
+				</div>
 			</div>
 		</div>
 		<!-- End Modal Vehiculo HTML -->

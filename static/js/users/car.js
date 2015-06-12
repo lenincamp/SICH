@@ -655,7 +655,6 @@ $(function(){
 	$.clearImputCar = function(){
 		$("#fstDataCar input").val("");
 		$("#fstDataCarMd input").val("");
-		$(".fileinput-remove-button").click();
 	};
 	
 	$.searchClientByCi = function(ci, msg, mdl){
@@ -792,6 +791,22 @@ $(function(){
 	 			$("#txtPlacaMd").val(response.veh_pla);
 	 			$("#txtAnioMd").val(response.veh_yar);
 	 			$("#txtColorMd").val(response.veh_col);
+				$("#txtCodigoMd").val(response.veh_cla);
+				var imgs;
+				if(response.veh_img != null){
+					imgs = response.veh_img.replace("{","").replace("}","").replace(/"/g,"").split(',');
+					if($.trim(imgs[0]) !== ''){
+						$("#divImgsMd").html("");
+						$.each(imgs, function(i, val){
+							$($("#divImgsMd").append("<img src='/sich/"+imgs[i]+"' class='img-thumbnail img-responsive'>")).attr("style","border: 1px solid #ccc; padding:10px;background-color:#FFF;");
+						});
+					}else{
+						$($("#divImgsMd").html("")).removeAttr("style");
+					}
+				}else{
+					$($("#divImgsMd").html("")).removeAttr("style");
+				}
+
 				$('.demo2').colorpicker();
 	 		},'json');
 	 		
@@ -820,17 +835,39 @@ $(function(){
 		});
 		if(telsMd.length > 0){
 			var url = "/sich/car/update_car/?id="+trIdCar.replace("Car","")+"&idCl="+$("#spMdCar").attr('data-toggle')+"&tels="+telsMd;
-			$.post( url, $(this).serialize(), function(response){
-	 			if(response.update_car == '1'){
-	 				$('#tbCars').DataTable().ajax.reload();
-	 				$("#mdCar").modal("hide");
-	 				$.successMessage();
-					telsMd.length = 0;
-	 			}else{
-	 				$.errorMessage();
-	 			}
-	 			
-	 		},'json');
+
+			var formData = new FormData($("#frmMdCar")[0]);
+			$.ajax({
+	        	url: url,  
+	            type: 'POST',
+	            data: formData,
+				dataType:'json',
+	            //necesario para subir archivos via ajax
+	            cache: false,
+	            contentType: false,
+	            processData: false,
+	            // mientras se envia el archivo
+	            beforeSend: function(){               
+	               $.infoMressage();
+	            },
+	            //si finalizo correctamente
+	            success: function(response){
+		 			if(response.update_car == '1'){
+		 				$('#tbCars').DataTable().ajax.reload();
+		 				$("#mdCar").modal("hide");
+		 				$.successMessage();
+						telsMd.length = 0;
+		 			}else{
+		 				$.errorMessage();
+		 			}
+		 			
+		 		},
+	            //si ocurrido un error
+	            error: function(){
+	                $.errorMessage("");
+	            }
+	        });
+			 
 		}else{
 			$.errorMessage("Debe tener al menos un teléfono!!");
 		}
@@ -940,10 +977,50 @@ $(function(){
 		}
 	});
 	
-	$("#images").fileinput({
-		showCaption: false, maxFileCount: 2, language: "es",
-    	//uploadUrl: "http://localhost/site/file-upload-batch",
-   		allowedFileExtensions: ["jpg", "png"],showUpload: false
+	$.errorDiv = function(msg){
+		return '<div class="alert alert-danger" role="alert">'+
+				  '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>'+
+				  '<span class="sr-only">Error:</span>'+
+				  msg+
+				'</div>';
+	};
+	
+	$(':file').change(function () {
+	    var tam = this.files.length;
+	    var fileupload = $(this);
+	    $($(fileupload).parent().children('div')[0]).html("");
+		console.log(tam);
+		if(tam >=1 && tam<=2){
+	   
+	        var cont = true;
+	        $.each(this.files, function(i, val){
+	            var nombre = val.name;
+	            var tamano = val.size;
+	            var tipo   = val.type.replace("image/",".");
+	            console.log(tipo);
+	            //2.5MB
+	            if (tipo !== ".png" && tipo !== ".jpg" || tamano > 2097152){
+	                cont= false;
+	                i = tam;
+					$($(fileupload).parent().children('div')[0]).html("");
+	            }
+	            
+	            if(cont){
+	                var reader = new FileReader();
+	                reader.onload = function (e) {
+	                    $($($(fileupload).parent().children('div')[0]).append("<img src='"+e.target.result+"' class='img-thumbnail img-responsive'>")).attr("style","border: 1px solid #ccc; padding:10px;background-color:#FFF;");
+	                };
+	                reader.readAsDataURL(val);
+	                
+	            }else{
+	                $($($(fileupload).parent().children('div')[0]).html($.errorDiv(" El tipo de imagen permitido es png y jpg. Máximo 2.5MB!"))).removeAttr("style");
+					fileupload.val('');
+	            }
+	        });
+	    }else{
+	        $($($(fileupload).parent().children('div')[0]).html($.errorDiv(" se puede seleccionar máximo 2 fotos!"))).removeAttr("style");
+			fileupload.val('');
+	    }
 	});
 	
 });
