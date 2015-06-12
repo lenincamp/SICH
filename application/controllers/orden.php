@@ -124,6 +124,72 @@ class Orden extends Private_Controller {
 		return FALSE;
 	}
 	
+	public function edit_orden()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$IdsServicios=explode(",",$this->input->get('srv'));
+			$costos=array();
+			$IdsAreas=explode(",",$this->input->get('idsArt'));
+			$areas=array();
+			$IdsInventario=explode(",",$this->input->get('idsInv'));
+			$inventario=array();
+			foreach ($IdsAreas as $keyA => $valueA) 
+			{
+				if($this->input->post('Editcat'.$valueA))
+				{
+					array_push($areas,$this->input->post('Editcat'.$valueA));
+				}
+			}
+			foreach ($IdsInventario as $keyA => $valueA) 
+			{
+				if($this->input->post('invEdit'.$valueA))
+				{
+					array_push($inventario,$this->input->post('invEdit'.$valueA));
+				}
+			}
+			foreach ($IdsServicios as $keyA => $valueA) 
+			{
+				if($this->input->post('prcEdit'.$valueA))
+				{
+					array_push($costos,$this->input->post('prcEdit'.$valueA));
+				}
+			}
+			$abono=$this->input->post('txtAbonoEdit')?$this->input->post('txtAbono'):0;
+			$reserva=$this->input->post('chkReservaEdit')?true:false;
+    		$data = array(
+    			$this->input->post('txtNumeroOrdenEdit'),
+				$this->input->post('txtFechaEdit'),
+				$this->input->post('txtFechaIngresoEdit'),
+				$this->input->post('txtFechaEntregaEdit'),
+				$this->input->post('txtCostoEdit'),
+				$reserva,
+				$abono,
+				$this->input->post('txtTarjetaEdit'),
+				$this->input->post('txtObservacionesGeneralEdit'),
+				substr($this->input->get('idVeh'), 0, strlen($this->input->get('idVeh'))-3),
+				$this->input->post('slcFormaPAgoEdit'),
+				$this->input->get('cmb'),
+				$this->input->post('txtKilometrajeEdit'),
+				$this->input->post('txtObservacionInventarioEdit'),
+				"{".implode(",",$inventario)."}",
+				"{".implode(",",$costos)."}",
+				"{".$this->input->get('srv')."}",
+				"{".implode(",",$areas)."}",
+				$this->input->get('trId')
+    		);
+			$response = $this->orders->selectSQL("SELECT update_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			echo json_encode($response);
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
 	public function get_orders_all()
 	{
 		if(!@$this->user) redirect ('main');
@@ -140,14 +206,20 @@ class Orden extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function search_client_by_id()
+	public function search_order()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-			$data= array('cli_id' => $this->input->post('id'));
-    		$response = $this->clients->get($data);
-			echo json_encode($response);
+			$data= array($this->input->post("id"));
+			
+			$response=array();
+			$response[0] = $this->orders->selectSQLMultiple("SELECT ot.*, veh.veh_id, cli.per_ced from orden_trabajo ot, vehiculo veh, cliente cli where ord_id=? and ot.id_veh=veh.veh_id and cli.cli_id=veh.id_cli",$data);
+			$response[1] = $this->orders->selectSQLMultiple("select * from inventario where ord_id=? ",$data);
+			$response[2] = $this->orders->selectSQLMultiple("select dipa.* from inventario inv, detalle_inventario_piezas_auto dipa where inv.ord_id=? and dipa.inv_id=inv.inv_id ",$data);
+			$response[3] = $this->orders->selectSQLMultiple("select * from detalle_servicio_orden where ord_id=? ",$data);
+			$response[4] = $this->orders->selectSQLMultiple("select * from detalle_orden_area where ord_id=? ",$data);
+			echo json_encode(array("data"=>$response));
 		}
 		else
 		{

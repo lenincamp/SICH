@@ -3,6 +3,7 @@ var pasoGas=true
 $( document ).ready(function() {
 	console.log("inicia")
 	asignarEventos("canvasInsert")
+	asignarEventos("canvasEdit")
 });
 
 function asignarEventos(id)
@@ -10,6 +11,22 @@ function asignarEventos(id)
 	var canvas = document.getElementById(id);
 	canvas.addEventListener("touchstart", doTouchStart, true);
 	canvas.addEventListener("click", relMouseCoords, true);
+}
+
+function dibujar(id, posx, posy)
+{
+	var canvas = document.getElementById(id);
+	var context = canvas.getContext('2d');
+	context.beginPath();
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	context.moveTo(canvas.width/2, canvas.height);
+	context.lineWidth = 3;
+	context.strokeStyle = '#ff0000';
+	context.lineTo(posx,posy);
+	context.stroke();
+	window.combustible=posx+"-"+posy
+	pasoGas=false
+	window.combustible
 }
 
 function limpiar(btn)

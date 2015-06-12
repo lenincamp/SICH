@@ -451,6 +451,7 @@ class Car extends Private_Controller {
     	{
 			$data=array('cli_id' => $this->input->get('id'));
     		$response = $this->cars->get_for_client($data);
+			//echo $response;
 			echo json_encode(array("data"=>$response));
 		}
 		else
