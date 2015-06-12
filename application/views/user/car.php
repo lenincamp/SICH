@@ -368,7 +368,7 @@
 					
 						<div class="modal-footer">
 							<div class="row">
-								<div class="col-md-10 col-md-offset-1">
+								<div class="col-md-8">
 									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
 									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
 								</div>
