@@ -72,7 +72,7 @@ function buscarElements(element, index, array) {
 	if(!resultSearch)
     for(var i=0; i<element.length; i++)
 	{
-		if(element[i]=="cat"+idBusqueda||element[i]=="editcat"+idBusqueda)
+		if(element[i]=="cat"+idBusqueda||element[i]=="Editcat"+idBusqueda)
 		{
 			resultSearch=true;
 		}
@@ -81,10 +81,12 @@ function buscarElements(element, index, array) {
 }
 
 window.servicios= new Array();
+window.flag=true
+window.lock=true
 function loadDetails(idCotenedor, prefijo,idChk)
 {
 	 
-	if($('#srv'+idChk).prop('checked'))
+	if($('#srv'+prefijo+idChk).prop('checked'))
 	{
 		$.renderizeDivDetailsService(idCotenedor, prefijo,idChk);
 	}
@@ -113,7 +115,7 @@ function loadDetails(idCotenedor, prefijo,idChk)
 			}
 			if(paso)
 			{
-				$('#div'+prefijo+arrayActual[i]).remove();
+				$('#div'+arrayActual[i]).remove();
 			}
 		}
 		if (idChk > -1) {
@@ -121,6 +123,7 @@ function loadDetails(idCotenedor, prefijo,idChk)
 			window.servicios[idChk]=new Array()
 		}
 		$("#divCst"+idChk).remove()
+		$("#divCstEdit"+idChk).remove()
 		$.calcularTotal();
 	}
 	bordesDivs("header")
@@ -129,7 +132,13 @@ function loadDetails(idCotenedor, prefijo,idChk)
 function bordesDivs(msj)
 {
 	console.log(msj)
-	var menu=document.getElementById("detallesTrabajo")
+	subBordes("detallesTrabajo")
+	subBordes("detallesTrabajoEdit")
+}
+
+function subBordes(id)
+{
+	var menu=document.getElementById(id)
 	var opciones = menu.getElementsByTagName("div");
 	var arsid="";
 		for(var i=0;i<opciones.length;i++)
@@ -149,12 +158,33 @@ function bordesDivs(msj)
 		}
 }
 
+function buscarElemento(idBusq)
+{
+	var element=window.servicios
+	for(var i=0; i<element.length; i++)
+	{
+		var fila=element[i]
+		if(fila!=null)
+		{
+			for(var j=0; j<fila.length; j++)
+			{
+				if(fila[j]=="cat"+idBusq||fila[j]=="Editcat"+idBusq)
+				{
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 function buscarServicio(id)
 {
 	resultSearch=false;
 	idBusqueda=id;
-	window.servicios.forEach(buscarElements);
-	return resultSearch;
+	//window.servicios.forEach(buscarElements);
+	//return resultSearch;
+	return buscarElemento(idBusqueda)
 }
 
 function getDuplicates(arr) {
