@@ -498,7 +498,8 @@
 									  </div>
 									  <div class="form-group col-xs-12">
 										<label for="images">Fotos:</label>
-										<input name="images[]" id="images" type="file"  multiple="true" />
+										<div class="col-xs-12"></div>
+										<input name="images[]" id="images" type="file"  multiple="multiple" required = "required"/>
 									  </div>
 									  	  
 								  
@@ -667,7 +668,8 @@
 							  </div>
 							  <div class="form-group col-xs-12" id="divImagesMd">
 								<label for="imagesMd">Fotos:</label>
-								<input name="imagesMd[]" id="imagesMd" type="file"  multiple="true" />
+								<div class="col-xs-12" id="divImgsMd"></div>
+								<input name="imagesMd[]" id="imagesMd" type="file"  multiple="multiple"/>
 							  </div>
 						  </fieldset>	
 						</div>

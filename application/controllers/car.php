@@ -20,9 +20,7 @@ class Car extends Private_Controller {
 			base_url()."static/js/bootstrap-colorpicker.min.js",
 			base_url()."static/js/docs.js",
 			base_url()."static/js/jquery.dataTables.min.js",
-			base_url()."static/js/dataTables.bootstrap.js",
-			base_url()."static/js/fileinput.min.js",
-			base_url()."static/js/fileinput_locale_es.js"
+			base_url()."static/js/dataTables.bootstrap.js"
 		);
 		
 		//array_push($this->$data['js'], base_url()."static/js/users/car.js");
@@ -37,8 +35,7 @@ class Car extends Private_Controller {
 		$title['css'] = array(
 			base_url()."static/css/pnotify.custom.min.css",
 			base_url()."static/css/bootstrap-colorpicker.min.css",
-			base_url()."static/css/dataTables.bootstrap.css",
-			base_url()."static/css/fileinput.min.css"
+			base_url()."static/css/dataTables.bootstrap.css"
 		);
 
 		$this->load->view('templates/header', $title);
@@ -445,14 +442,25 @@ class Car extends Private_Controller {
 			$path = "uploads/";
 			$filesUrl = $_FILES;
 			$new_name = $this->input->post('txtPlacaMd');
-			if($this->do_upload($this->input->post('txtPlacaMd'), 'imagesMd'))
+			$img_arr = "";
+			
+			if(($_FILES['imagesMd']['name'][0]))
 			{
-				$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0].",".$path.$new_name."_".$filesUrl['imagesMd']['name'][1];
+				if($this->do_upload($this->input->post('txtPlacaMd'), 'imagesMd'))
+				{
+					$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0].",".$path.$new_name."_".$filesUrl['imagesMd']['name'][1];
+				}
+				else
+				{
+					$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0];
+				}
+				$img_arr = "{".$img."}";
 			}
 			else
 			{
-				$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0];
+				$img_arr = "{}";
 			}
+			
     		$data = array(
 				$this->input->post('txtNombreMd'),
 				$this->input->post('txtApellidoMd'),
@@ -468,7 +476,7 @@ class Car extends Private_Controller {
 				$this->input->get('id'),
 				$this->input->get('idCl'),
 				"{".$this->input->get('tels')."}",
-				"{".$img."}"
+				$img_arr
     		);
 
 			$response = $this->cars->querySQL("SELECT update_car(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);

@@ -655,7 +655,6 @@ $(function(){
 	$.clearImputCar = function(){
 		$("#fstDataCar input").val("");
 		$("#fstDataCarMd input").val("");
-		$(".fileinput-remove-button").click();
 	};
 	
 	$.searchClientByCi = function(ci, msg, mdl){
@@ -796,28 +795,16 @@ $(function(){
 				var imgs;
 				if(response.veh_img != null){
 					imgs = response.veh_img.replace("{","").replace("}","").replace(/"/g,"").split(',');
-					//$("#divImagesMd").html('<label for="imagesMd">Fotos:</label><input name="imagesMd[]" id="imagesMd" type="file"  multiple="true" />');
 					if($.trim(imgs[0]) !== ''){
-						var img = [];
+						$("#divImgsMd").html("");
 						$.each(imgs, function(i, val){
-							img.push( "<img src='/sich/"+imgs[i]+"' class='file-preview-image'>")
-						});
-						$("#imagesMd").fileinput({
-						    initialPreview: img,
-							showPreview: true,showCaption: true, maxFileCount: 2, language: "es",
-					   		allowedFileExtensions: ["jpg", "png"], showUpload: false
+							$($("#divImgsMd").append("<img src='/sich/"+imgs[i]+"' class='img-thumbnail img-responsive'>")).attr("style","border: 1px solid #ccc; padding:10px;background-color:#FFF;");
 						});
 					}else{
-						$("#imagesMd").fileinput({
-							showCaption: false, maxFileCount: 2, language: "es",
-					   		allowedFileExtensions: ["jpg", "png"],showUpload: false
-						});
+						$($("#divImgsMd").html("")).removeAttr("style");
 					}
 				}else{
-					$("#imagesMd").fileinput({
-						showCaption: false, maxFileCount: 2, language: "es",
-				   		allowedFileExtensions: ["jpg", "png"],showUpload: false
-					});
+					$($("#divImgsMd").html("")).removeAttr("style");
 				}
 
 				$('.demo2').colorpicker();
@@ -990,10 +977,50 @@ $(function(){
 		}
 	});
 	
-	$("#images").fileinput({
-		showCaption: false, maxFileCount: 2, language: "es",
-    	//uploadUrl: "http://localhost/site/file-upload-batch",
-   		allowedFileExtensions: ["jpg", "png"],showUpload: false
+	$.errorDiv = function(msg){
+		return '<div class="alert alert-danger" role="alert">'+
+				  '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>'+
+				  '<span class="sr-only">Error:</span>'+
+				  msg+
+				'</div>';
+	};
+	
+	$(':file').change(function () {
+	    var tam = this.files.length;
+	    var fileupload = $(this);
+	    $($(fileupload).parent().children('div')[0]).html("");
+		console.log(tam);
+		if(tam >=1 && tam<=2){
+	   
+	        var cont = true;
+	        $.each(this.files, function(i, val){
+	            var nombre = val.name;
+	            var tamano = val.size;
+	            var tipo   = val.type.replace("image/",".");
+	            console.log(tipo);
+	            //2.5MB
+	            if (tipo !== ".png" && tipo !== ".jpg" || tamano > 2097152){
+	                cont= false;
+	                i = tam;
+					$($(fileupload).parent().children('div')[0]).html("");
+	            }
+	            
+	            if(cont){
+	                var reader = new FileReader();
+	                reader.onload = function (e) {
+	                    $($($(fileupload).parent().children('div')[0]).append("<img src='"+e.target.result+"' class='img-thumbnail img-responsive'>")).attr("style","border: 1px solid #ccc; padding:10px;background-color:#FFF;");
+	                };
+	                reader.readAsDataURL(val);
+	                
+	            }else{
+	                $($($(fileupload).parent().children('div')[0]).html($.errorDiv(" El tipo de imagen permitido es png y jpg. Máximo 2.5MB!"))).removeAttr("style");
+					fileupload.val('');
+	            }
+	        });
+	    }else{
+	        $($($(fileupload).parent().children('div')[0]).html($.errorDiv(" se puede seleccionar máximo 2 fotos!"))).removeAttr("style");
+			fileupload.val('');
+	    }
 	});
 	
 });
