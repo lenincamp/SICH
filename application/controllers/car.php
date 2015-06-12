@@ -407,23 +407,39 @@ class Car extends Private_Controller {
 		return FALSE;
 	}
 	
-	function do_upload($ci,$name)
+	function do_upload($ci,$name,$edt=false)
 	{
 	    $files = $_FILES;
 	    $cpt = count($_FILES[$name]['name']);
 	    for($i=0; $i<$cpt; $i++)
 	    {
-			//if($files['images']['size'][$i] > (1024000) && $files['images']['size'][$i] <= (2048000)) //can't be larger than 1 MB - 2mb
-			//{
-		        $_FILES[$name]['name']		= $files[$name]['name'][$i];
-		        $_FILES[$name]['type']		= $files[$name]['type'][$i];
-		        $_FILES[$name]['tmp_name']	= $files[$name]['tmp_name'][$i];
-		        $_FILES[$name]['error']		= $files[$name]['error'][$i];
-		        $_FILES[$name]['size']		= $files[$name]['size'][$i];
-				$new_name = $ci."_".$_FILES[$name]['name'];
-			    move_uploaded_file($_FILES[$name]['tmp_name'], './uploads/'.$new_name);
-			//}
+	        $_FILES[$name]['name']		= $files[$name]['name'][$i];
+	        $_FILES[$name]['type']		= $files[$name]['type'][$i];
+	        $_FILES[$name]['tmp_name']	= $files[$name]['tmp_name'][$i];
+	        $_FILES[$name]['error']		= $files[$name]['error'][$i];
+	        $_FILES[$name]['size']		= $files[$name]['size'][$i];
+			$new_name = $ci."_".$_FILES[$name]['name'];
 			
+			if($edt)
+			{
+					
+				$dir = opendir('./uploads/');
+				while ($file = readdir($dir)) 
+				{ 
+					if($file != '.' && $file != '..' && $file!=".DS_Store")
+					{
+						if (strpos($file, $ci)!==false){
+							unlink('./uploads/'.$file);
+						}
+					}
+				} 
+				closedir($dir);
+				
+			}
+			
+			move_uploaded_file($_FILES[$name]['tmp_name'], './uploads/'.$new_name);
+			
+		    
 	    }
 		if ($cpt>1)
 		{
@@ -444,9 +460,9 @@ class Car extends Private_Controller {
 			$new_name = $this->input->post('txtPlacaMd');
 			$img_arr = "";
 			
-			if(($_FILES['imagesMd']['name'][0]))
+			if($_FILES['imagesMd']['name'][0])
 			{
-				if($this->do_upload($this->input->post('txtPlacaMd'), 'imagesMd'))
+				if($this->do_upload($this->input->post('txtPlacaMd'), 'imagesMd', true))
 				{
 					$img = $path.$new_name."_".$filesUrl['imagesMd']['name'][0].",".$path.$new_name."_".$filesUrl['imagesMd']['name'][1];
 				}
