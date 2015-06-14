@@ -397,6 +397,9 @@ $(function(){
 						  "</button>"+
 						  "<button style='border: 0; background: transparent' onclick='$.editDeleteOrden(this, false);'>"+
 							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent;' onclick='$.editDeleteOrden(this, false);'>"+
+							"<img src='/sich/static/img/imprimir.png' title='Imprimir' height=24px;>"+
 						  "</button>";
 						  
 	$.renderizeRowTbModels = function( nRow, aData, iDataIndex ) {
