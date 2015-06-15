@@ -401,3 +401,27 @@
 	</div>
 </div>
 <!-- End Modal HTML -->
+<!-- Modal Imprimir HTML -->
+<div id="imprimirModal" class="modal fade">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Imprimir Orden de Trabajo</h4>
+			</div>
+			<div class="modal-body">
+				<fieldset class="scheduler-border">
+						<legend class="scheduler-border">¿Qué deseas imprimir?</legend>
+					<span id="spIdInv"></span>
+					<div class="form-group col-sm-6" align="center">
+						<a onclick="$.descargar('1')" href="#" class="btn btn-success btn-lg col-xs-11" role="button">Factura</a>
+					</div>
+					<div class="form-group col-sm-6" align="center">
+						<a onclick="$.descargar('2')" href="#" class="btn btn-info btn-lg col-xs-11" role="button">Orden de Trabajo</a>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End Imprmir HTML -->
