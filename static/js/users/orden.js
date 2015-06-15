@@ -392,20 +392,38 @@ $(function(){
 	 		$.confirmMessage($.deleteOrden,"¿Está seguro de eliminar la Orden de Trabajo?");
 	 	} 	
 	 }
+	 var trIdImp;
+	$.imprimir = function(btn){
+	 	trIdImp = $($($(btn).parent()).parent()).attr('id');
+	 	$("#imprimirModal").modal('show');
+	}
+	
+	$.descargar = function(opc){
+	 	switch(opc)
+		{
+			case "1":
+				window.open("/sich/report/factura?id="+trIdImp);
+				break;
+			case "2":
+				window.open("/sich/report/orden?id="+trIdImp);
+				break;
+		}
+	}
 	var btnsOpTblModels = "<button style='border: 0; background: transparent' onclick='$.editDeleteOrden(this, true);'>"+
-							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar' height=20px>"+
 						  "</button>"+
 						  "<button style='border: 0; background: transparent' onclick='$.editDeleteOrden(this, false);'>"+
-							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar' height=20px>"+
 						  "</button>"+
-						  "<button style='border: 0; background: transparent;' onclick='$.editDeleteOrden(this, false);'>"+
-							"<img src='/sich/static/img/imprimir.png' title='Imprimir' height=24px;>"+
+						  "<button style='border: 0; background: transparent;' onclick='$.imprimir(this);'>"+
+							"<img src='/sich/static/img/imprimir.png' title='Imprimir' height=20px>"+
 						  "</button>";
 						  
 	$.renderizeRowTbModels = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblModels+"</td>");
 	   $(nRow).attr('id',aData['ord_id']);
 	   $($(nRow).children('td')[5]).html($($(nRow).children('td')[5]).html()=="t"?"SI":"NO");
+	   $($(nRow).children('td')[7]).css('padding','2px');
 	}
 	
 

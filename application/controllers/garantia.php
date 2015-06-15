@@ -38,38 +38,21 @@ class Garantia extends Private_Controller {
 	
 	/* =========================>>> GARANTIAS <<<========================= */
 	
-	public function save_service()
+	public function save_guarantee()
 	{
-		$detalles=array();
-		$precios=array();
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-			
-
-			$categorias=explode(",",$this->input->get('ctgId'));
-			$areas=explode(",",$this->input->get('arsId'));
-			foreach ($areas as $keyA => $valueA) 
-			{
-				if($this->input->post('cat'.$valueA))
-				{
-					array_push($detalles,$this->input->post('cat'.$valueA));
-				}
-			}
-			foreach ($categorias as $keyC => $valueC) 
-			{
-				if($this->input->post('prc'.$valueC))
-				{
-					array_push($precios,$this->input->post('prc'.$valueC));
-				}
-			}
+			$oblg=$this->input->post('chkOblgGarant')?true:false;
+			$est=$this->input->post('chkPendGarant')?false:true;
 			$data = array(
-				$this->input->post('txtNameService'),
-    			"{".$this->input->get('ctgId')."}",
-				"{".implode(",",$detalles)."}",
-				"{".implode(",",$precios)."}"
+				'rev_fch'=>$this->input->post('txtFechaGarant'),
+				'rev_obs'=>$this->input->post('txtObsGarant'),
+				'ord_id'=>$this->input->get('idOrd'),
+				'rev_obl'=>$oblg,
+				'rev_est'=>$est
     		);
-			$response = $this->services->selectSQL("SELECT insert_service(?,?,?,?)",$data);
+			$response = $this->garantias->save($data);
 			echo json_encode($response);
 		}
 		else
@@ -79,71 +62,14 @@ class Garantia extends Private_Controller {
 		}
 		return FALSE;
 	}
-	
-	public function get_service_all()
-	{
-		if(!@$this->user) redirect ('main');
-		if ($this->input->is_ajax_request()) 
-    	{
-    		$data = $this->services->get_all();
-			echo json_encode(array("data"=>$data));
-		}
-		else
-		{
-			exit('No direct script access allowed');
-			show_404();
-		}
-		return FALSE;
-	}
-	
-	public function search_price_service_by_id()
-	{
-		if(!@$this->user) redirect ('main');
-		if ($this->input->is_ajax_request()) 
-    	{
-			if($this->input->post('id'))
-    		{
-    			$data= array($this->input->post('id'));
-				$response = $this->services->selectSQLMultiple("SELECT * from detalle_categoria_servicio where srv_id=?",$data);
-				echo json_encode($response);
-			}
-		}
-		else
-		{
-			exit('No direct script access allowed');
-			show_404();
-		}
-		return FALSE;
-	}
-	
-	public function search_service_by_id_and_cat()
-	{
-		if(!@$this->user) redirect ('main');
-		if ($this->input->is_ajax_request()) 
-    	{
-			if($this->input->post('id'))
-    		{
-    			$data= array($this->input->post('id'),$this->input->post('cat'));
-				$response = $this->services->selectSQLMultiple("SELECT dcs.*, srv.srv_nom from detalle_categoria_servicio dcs, servicio srv where srv.srv_id=dcs.srv_id and dcs.srv_id=? and dcs.cat_id=?",$data);
-				echo json_encode(array("data"=>$response));
-			}
-		}
-		else
-		{
-			exit('No direct script access allowed');
-			show_404();
-		}
-		return FALSE;
-	}
-	
-	public function get_guarantee_by_id()
+		public function get_guarantee_by_id()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
 			if($this->input->post("id"))
 			{
-				$response = $this->garantias->selectSQL("SELECT * from revisiones_view where rev_id=?",array($this->input->post("id")));
+				$response = $this->garantias->selectSQL("SELECT * from revisiones_all_view where rev_id=?",array($this->input->post("id")));
 				echo json_encode(array("data"=>$response));
 			}
 		}
@@ -160,6 +86,22 @@ class Garantia extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
+			$response = $this->garantias->selectSQLMultiple("SELECT * from revisiones_all_view",array());
+			echo json_encode(array("data"=>$response));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
+	public function get_guarantee_pending_all()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
 			$response = $this->garantias->selectSQLMultiple("SELECT * from revisiones_view where rev_est=false",array());
 			echo json_encode(array("data"=>$response));
 		}
@@ -171,17 +113,13 @@ class Garantia extends Private_Controller {
 		return FALSE;
 	}
 	
-	public function search_area_service_by_id()
+	public function get_orders_guarantee_all()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-			if($this->input->post('id'))
-    		{
-    			$data= array($this->input->post('id'));
-				$response = $this->services->selectSQLMultiple("SELECT * from detalle_area_servicio where srv_id=? and das_est=true",$data);
-				echo json_encode($response);
-			}
+			$response = $this->garantias->selectSQLMultiple("SELECT * from orden_trabajo_revision",array());
+			echo json_encode(array("data"=>$response));
 		}
 		else
 		{
@@ -190,7 +128,8 @@ class Garantia extends Private_Controller {
 		}
 		return FALSE;
 	}
-	public function edit_guarantee()
+	
+	public function check_guarantee()
 	{
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
@@ -206,6 +145,28 @@ class Garantia extends Private_Controller {
 		}
 		return FALSE;
 	}
+	
+	public function edit_guarantee()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$oblg=$this->input->post('chkOblgEdit')?true:false;
+			$est=$this->input->post('chkPendEdit')?false:true;
+			if($this->input->get('id'))
+			{
+				$data=array(
+					'rev_fch'=>$this->input->post('txtFechaEdit'),
+					'rev_obs'=>$this->input->post('txtObsEdit'),
+					'rev_obl'=>$oblg,
+					'rev_est'=>$est);
+				$response=$this->garantias->update($this->input->get('id'), $data);
+				echo json_encode($response);
+			}
+		}
+		return FALSE;
+	}
+	
 	
 	public function delete_service()
 	{

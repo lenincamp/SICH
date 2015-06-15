@@ -7,41 +7,42 @@ $(function(){
 	 * -------------------------------------------------------------------
 	 */
 	var create = false;
-	$("#frmServices").on("submit",function(event){
-		$("#buttonsAction").html('<h4 class="text-primary">Guardando...</h4>');
+	$("#frmRevision").on("submit",function(event){
 		event.preventDefault();
-		$.ajax({
-			type: "POST",
-			url: "/sich/service/save_service/?ctgId="+$("#ctg").attr('data-toggle')+"&arsId="+$("#ars").attr('data-toggle'),
-			dataType: 'json',
-			data: $(this).serialize(),
-			success: function(response) {
-				if(response){
-					response=response.insert_service;
-					switch(response) {
-						case "2":
-							$.errorMessage("El Servicio ya ha sido creado con anterioridad.");
-							break;
-						case "1":
+		if(trIdOrd==null||trIdOrd=="undefinied")
+		{
+			$.errorMessage("No ha seleccionado ninguna orden del trabajo. Por favor seleccione una.");
+		}
+		else
+		{
+			$("#buttonsAction").html('<h4 class="text-primary">Guardando...</h4>');
+			$.ajax({
+				type: "POST",
+				url: "/sich/garantia/save_guarantee/?idOrd="+trIdOrd,
+				dataType: 'json',
+				data: $(this).serialize(),
+				success: function(response) {
+					if(response){
 							$.successMessage();
-							$("#frmServices input[type='number']").val('0.00');
-							$("#frmServices input[type='text']").val('');
-							$("#frmMdArea input[type='checkbox']").prop('checked', false);
+							$("#frmRevision input[type='date']").val('');
+							$("#frmRevision input[type='text']").val('');
+							$("#frmRevision input[type='checkbox']").prop('checked', false);
+							$("#frmRevision textarea").val('');
 							create = true;
+							trIdOrd=null;
+							$("#tbOrdenes").find("tr:gt(0)").removeClass("bg-info");
 							$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
-							break;
-						case "0":
-							$.errorMessage();
+							$('#tbOblg').DataTable().ajax.reload();
+					}else{		
+						$.errorMessage();
 					}
-				}else{		
+				},
+				error: function(){
+					$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 					$.errorMessage();
-				}
-			},
-			error: function(){
-				$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
-				$.errorMessage();
-			},
-		});
+				},
+			});
+		}
 	});
 	
 	/*
@@ -54,7 +55,7 @@ $(function(){
 		$("#buttonsActionEdit").html('<h4 class="text-primary">Guardando...</h4>');
 		$.ajax({
 			type: "POST",
-			url: "/sich/garantia/edit_guarantee/?id="+trIdMd,
+			url: "/sich/garantia/check_guarantee/?id="+trIdMd,
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
@@ -157,7 +158,7 @@ $(function(){
 	 */
 	
 	var btnsOpTblServices = "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, true);'>"+
-							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+							"<img src='/sich/static/img/revisar.png' title='Atender' height='24'>"+
 						  "</button>"+
 						  "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
 							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
@@ -169,7 +170,7 @@ $(function(){
 	   var clase=""
 		if(aData['dias']==0)
 		{
-			clase="bg-alter2";
+			clase="bg-alert2";
 		}
 		if((aData['dias']<0 && aData['dias']>=-3)||(aData['dias']>0 && aData['dias']<=3))
 		{
@@ -177,20 +178,157 @@ $(function(){
 		}
 	   $(nRow).addClass(clase);
 	   $($(nRow).children('td')[4]).html(capitalizeFirstLetter($($(nRow).children('td')[4]).html()));
+	   $($(nRow).children('td')[5]).html($($(nRow).children('td')[5]).html()=="t"?"Si":"No");
 	}
-	$.fnTbl('#tbOblg',"/sich/garantia/get_guarantee_all/",[{ "data": "rev_fch"},{ "data": "nombre"},{ "data": "auto"},{ "data": "veh_pla"},{ "data": "servs"}],$.renderizeRowTbServices);
-								  
-	var flagMd = false;
-	$("#ltOblg").click(function(event){
-		//$("#tbService").ajax.reload();
+	$.fnTbl('#tbOblg',"/sich/garantia/get_guarantee_pending_all/",[{ "data": "rev_fch"},{ "data": "nombre"},{ "data": "auto"},{ "data": "veh_pla"},{ "data": "servs"},{ "data": "rev_obl"}],$.renderizeRowTbServices);
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Tabla ordenes de trabajo
+	 * -------------------------------------------------------------------
+	 */
+	
+	 
+	var trIdOrd;
+	$.selectOrd=function(btn)
+	{
+		trIdOrd = $.trim($($($(btn).parent()).parent()).attr('id'));
+		$("#tbOrdenes").find("tr:gt(0)").removeClass("bg-info");
+		$("#"+trIdOrd).addClass("bg-info");
+	}
+	
+	var btnsOpTblOrders =  "<button style='border: 0; background: transparent' onclick='$.selectOrd(this); return false;'>"+
+							"<img src='/sich/static/img/select.png' width='24' title='Seleccionar'>"+
+						  "</button>";
+	
+	$.renderizeRowTbOrdenes = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'>"+btnsOpTblOrders+"</td>");
+	   $(nRow).attr('id',aData['ord_id']);
+	}
+	
+	var flagMd = true;
+	$("#ltCrt").click(function(event){
 		if (flagMd){
-			$.fnTbl('#tbOblg',"/sich/garantia/get_guarantee_all/",[{ "data": "rev_fch"},{ "data": "nombre"},{ "data": "auto"},{ "data": "veh_pla"},{ "data": "servs"},{ "data": "ord_num"},{ "data": "ord_fch"}],$.renderizeRowTbServices);
+			$.fnTbl('#tbOrdenes',"/sich/garantia/get_orders_guarantee_all/",[{ "data": "ord_num"},{ "data": "ord_fch"},{ "data": "nombre"},{ "data": "auto"},{ "data": "veh_pla"},{ "data": "servs"}],$.renderizeRowTbOrdenes);
 			flagMd = false;		
 		}
+		else{
+			$('#tbOrdenes').DataTable().ajax.reload();
+		}
+	});
+	
+	
+	/*
+	 * -------------------------------------------------------------------
+	 *  Tabla todas las garantias
+	 * -------------------------------------------------------------------
+	 */
+	 
+	 $.chargeModalEdicion = function(){
+	 $("#buttonsActionEdicion").html('<h4 class="text-danger">Cargando información...</h4>');
+	 $("#edicionModal input").val("")
+	 $("#edicionModal textarea").val("")
+	var area=0, precio=0
+		$.ajax({
+			type: "POST",
+			url: "/sich/garantia/get_guarantee_by_id/",
+			dataType: 'json',
+			data: {id:trIdEd},
+			success: function(response) {
+				if(response){
+					var data=response.data
+					$("#txtFechaEdit").val(data.rev_fch)
+					$("#txtClienteEdit").val(data.nombre)
+					$("#txtVehiculoEdit").val(data.auto)
+					$("#txtPlacaEdit").val(data.veh_pla)
+					$("#txtServEdit").val(data.servs)
+					$("#txtNumEdit").val(data.ord_num)
+					$("#txtFchEmiEdit").val(data.ord_fch)
+					$("#txtObsEdit").val(data.rev_obs)
+					$("#chkOblgEdit").prop("checked",data.rev_obl=="t"?true:false)
+					$("#chkPendEdit").prop("checked",data.rev_est=="f"?true:false)
+					$("#buttonsActionEdicion").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+					
+				}else{		
+					$.errorMessage();
+				}
+			},
+			error: function(){
+				$("#edicionModal").modal('hide');
+				$.errorMessage();
+			}
+		});
+	 	
+	 }
+	 
+	 var trIdEd;
+	 $.editGarant = function(btn){
+	 	trIdEd = $($($(btn).parent()).parent()).attr('id');
+		$.chargeModalEdicion();
+		$("#edicionModal").modal('show');
+		$("#spIdEdicion").attr('data-toggle', trIdEd);
+	}
+	var btnsOpTblAllGarant = "<button style='border: 0; background: transparent' onclick='$.editGarant(this);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+	$.renderizeRowTbAllGarant = function( nRow, aData, iDataIndex ) {
+	   $(nRow).append("<td class='text-center'>"+btnsOpTblAllGarant+"</td>");
+	   $(nRow).attr('id',aData['rev_id']);
+	   var clase=""
+		if(aData['rev_est']=="t")
+		{
+			clase="bg-success";
+		}
+	   $(nRow).addClass(clase);
+	   $($(nRow).children('td')[4]).html(capitalizeFirstLetter($($(nRow).children('td')[4]).html()));
+	   $($(nRow).children('td')[5]).html($($(nRow).children('td')[5]).html()=="t"?"Si":"No");
+	}
+	var flagGr = true;
+	$("#ltListGarant").click(function(event){
+		if (flagGr){
+			$.fnTbl('#tbListRev',"/sich/garantia/get_guarantee_all/",[{ "data": "rev_fch"},{ "data": "nombre"},{ "data": "auto"},{ "data": "veh_pla"},{ "data": "servs"},{ "data": "rev_obl"}],$.renderizeRowTbAllGarant);
+			flagGr = false;		
+		}
 		else if(create){
-			$('#tbOblg').DataTable().ajax.reload();
+			$('#tbListRev').DataTable().ajax.reload();
 			create = false;
 		}
 	});
 	
+	/*
+	 * -------------------------------------------------------------------
+	 *  EDITAR GARANTIA
+	 * -------------------------------------------------------------------
+	 */
+	 
+	$("#frmMdEdicion").on("submit",function(event){
+		event.preventDefault();
+		$("#buttonsActionEdicion").html('<h4 class="text-primary">Guardando...</h4>');
+		$.ajax({
+			type: "POST",
+			url: "/sich/garantia/edit_guarantee/?id="+trIdEd,
+			dataType: 'json',
+			data: $(this).serialize(),
+			success: function(response) {
+				if(response){
+					$('#tbOblg').DataTable().ajax.reload();
+					$('#tbListRev').DataTable().ajax.reload();
+					$("#frmMdEdicion input").val('');
+					$("#frmMdEdicion textarea").val('');
+					$("#edicionModal").modal('hide');
+					$("#buttonsActionEdicion").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+					$.successMessage();
+				}else{		
+					$.errorMessage();
+				}
+			},
+			error: function(){
+				$("#buttonsActionEdicion").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+				$.errorMessage();
+			},
+		});
+	});
 });
