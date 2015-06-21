@@ -43,7 +43,10 @@ $(function(){
 							$.errorMessage('Error en el Registro');
 						}
 					}
-				}
+				},
+			error: function(){
+				$.errorMessage();
+			}
 			});
 		}else{
 			$.errorMessage("Debe tener al menos un teléfono!!");
@@ -81,7 +84,17 @@ $(function(){
 					}else{		
 						$.errorMessage();
 					}
+<<<<<<< HEAD
+<<<<<<< HEAD
+				},
+				error: function(){
+					$.errorMessage();
+=======
 					telsMd.length=0;
+>>>>>>> deploy
+=======
+					telsMd.length=0;
+>>>>>>> deploy
 				}
 			});
 		}
@@ -109,6 +122,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 };

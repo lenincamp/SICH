@@ -211,7 +211,7 @@ $(function(){
 		$.ajax({
 			type: "POST",
 			async:true,
-			url: "/sich/service/get_areas_all/",
+			url: "/sich/service/get_areas_enable/",
 			dataType: 'json',
 			success: function(response) {
 				if(response){
@@ -231,15 +231,18 @@ $(function(){
 					{
 						contenido="<a class='btn btn-info' role='button' href='/sich/car/start'>No cuentas con ninguna categoría disponible. ¡Crealas!</a>";
 					}
-				$("#ars").attr('data-toggle', arsid.substring(1));
-				$('#'+idCotenedor).html(contenido);
-				if(prefijo=="edit")
-				{
-					$.chargeModalService();
-				}
+					$("#ars").attr('data-toggle', arsid.substring(1));
+					$('#'+idCotenedor).html(contenido);
+					if(prefijo=="edit")
+					{
+						$.chargeModalService();
+					}
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 }
@@ -318,6 +321,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 }
@@ -346,6 +352,7 @@ $(function(){
 						break;
 					case "1":
 						$.successMessage();
+						$.renderizeDivDetailsService('contenedor_servicios','');
 						$("#frmAreaTrab input[type='text']").val('');
 						createArea = true;
 						break;
@@ -355,6 +362,9 @@ $(function(){
 						console.log(response);
 						console.log(typeof response);
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -379,11 +389,13 @@ $(function(){
 					$("#frmMdArea input[type='checkbox']").prop('checked', false);
 					$("#areaModal").modal('hide');
 					$.successMessage();
-					//$.renderizeDivContentServices('contenedor_servicios','');
-					//$.renderizeDivContentServices('edit_contenedor_servicios','edit');
+					$.renderizeDivDetailsService('contenedor_servicios','');
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -415,8 +427,6 @@ $(function(){
 		}
 		else if(createArea){
 			$('#tbAreaTrab').DataTable().ajax.reload();
-			//$.renderizeDivContentServices('contenedor_servicios','');
-			//$.renderizeDivContentServices('edit_contenedor_servicios','edit');
 			createArea = false;
 		}
 	});
@@ -438,9 +448,13 @@ $(function(){
 				if(response){
 					$.successMessage();
 					$('#tbAreaTrab').DataTable().row( $("#"+trIdArea) ).remove().draw();
+					$.renderizeDivDetailsService('contenedor_servicios','');
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 }

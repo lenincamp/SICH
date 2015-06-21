@@ -24,6 +24,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -50,6 +53,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -74,6 +80,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 };
@@ -171,6 +180,9 @@ $(function(){
 						$.errorMessage();
 						break;
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -198,6 +210,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -255,6 +270,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	};
@@ -304,6 +322,9 @@ $(function(){
 						$.errorMessage();
 						break;
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -331,6 +352,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -388,6 +412,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	};
@@ -437,6 +464,9 @@ $(function(){
 						$.errorMessage();
 						break;
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -464,6 +494,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	});
@@ -520,6 +553,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	};
@@ -771,6 +807,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	};

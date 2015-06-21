@@ -79,6 +79,9 @@ $(function(){
 					}else{		
 						$.errorMessage();
 					}
+				},
+				error: function(){
+					$.errorMessage();
 				}
 			});
 		}, 500);
@@ -244,6 +247,9 @@ $(function(){
 							$.errorMessage("servicio No Existe!");
 						}
 					}
+				},
+				error: function(){
+					$.errorMessage();
 				}
 				//}, 'json');
 			});	
@@ -373,6 +379,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 }
@@ -402,10 +411,10 @@ $(function(){
 	 	switch(opc)
 		{
 			case "1":
-				window.open("/sich/report/factura?id="+trIdImp);
+				window.open("/sich/report/factura_pdf?id="+trIdImp);
 				break;
 			case "2":
-				window.open("/sich/report/orden?id="+trIdImp);
+				window.open("/sich/report/orden_pdf?id="+trIdImp);
 				break;
 		}
 	}
@@ -543,6 +552,9 @@ $(function(){
 							$.errorMessage("servicio No Existe!");
 						}
 					}
+				},
+				error: function(){
+					$.errorMessage();
 				}
 			}, 500);
 			//}, 'json');

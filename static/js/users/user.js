@@ -46,6 +46,9 @@ $(function(){
 							});
 						}
 					}	
+				},
+				error: function(){
+					$.errorMessage();
 				}
 			});
 		}

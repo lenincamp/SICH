@@ -83,4 +83,33 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE,
 	'port' => 5432 
+<<<<<<< HEAD
+<<<<<<< HEAD
+);
+
+$db['local'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'postgres',
+	'password' => 'openxava',
+	'database' => 'chan',
+	'dbdriver' => 'postgre',
+	'dbprefix' => '',
+	'pconnect' => TRUE,
+	'db_debug' => TRUE,
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE,
+	'port' => 5432 
+=======
+>>>>>>> deploy
+=======
+>>>>>>> deploy
 );
