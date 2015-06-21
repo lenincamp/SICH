@@ -818,6 +818,10 @@ $(function(){
 		$("#txtNombreMd").focus();
 	});
 	
+	$('#mdCar').on('hidden.bs.modal', function () {
+		telsMd.length = 0;
+	});
+	
 	var trIdCar;
 	$.editDeleteCar = function(btn, edt){
 		trIdCar = $.trim($($($(btn).parent()).parent()).attr('id'));
@@ -895,15 +899,15 @@ $(function(){
 		 				$('#tbCars').DataTable().ajax.reload();
 		 				$("#mdCar").modal("hide");
 		 				$.successMessage();
-						telsMd.length = 0;
 		 			}else{
 		 				$.errorMessage();
 		 			}
-		 			
+		 			telsMd.length = 0;
 		 		},
 	            //si ocurrido un error
 	            error: function(){
 	                $.errorMessage("");
+					telsMd.length = 0;
 	            }
 	        });
 			 
