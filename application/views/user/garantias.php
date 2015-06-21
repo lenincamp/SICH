@@ -64,7 +64,7 @@
 										</div>
 									</fieldset>
 									<div class="row">
-									  <div class="col-md-offset-5" id="buttonsAction">
+									  <div align="center" id="buttonsAction">
 										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
 									  </div>
 									</div>

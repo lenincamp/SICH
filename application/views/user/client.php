@@ -41,7 +41,7 @@
 					  
 					  
 					  <fieldset class="scheduler-border">
-						<legend class="scheduler-border">Telefonos</legend>
+						<legend class="scheduler-border">Teléfonos</legend>
 					  	<div class="form-group">
 							
 							<div class="input-group">
@@ -72,7 +72,7 @@
 					  
 					  
 					  <div class="row">
-						  <div class="col-xs-offset-4 col-md-offset-5">
+						  <div align="center">
 							<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
 						  </div>
 					  </div>
@@ -191,7 +191,7 @@
 			
 				<div class="modal-footer">
 					<div class="row">
-						<div class="col-md-8">
+						<div align="center">
 							<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
 							<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
 						</div>

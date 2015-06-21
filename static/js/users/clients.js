@@ -43,7 +43,10 @@ $(function(){
 							$.errorMessage('Error en el Registro');
 						}
 					}
-				}
+				},
+			error: function(){
+				$.errorMessage();
+			}
 			});
 		}else{
 			$.errorMessage("Debe tener al menos un teléfono!!");
@@ -82,6 +85,9 @@ $(function(){
 					}else{		
 						$.errorMessage();
 					}
+				},
+				error: function(){
+					$.errorMessage();
 				}
 			});
 		}
@@ -109,6 +115,9 @@ $(function(){
 				}else{		
 					$.errorMessage();
 				}
+			},
+			error: function(){
+				$.errorMessage();
 			}
 		});
 	 };

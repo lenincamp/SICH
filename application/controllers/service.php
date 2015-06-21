@@ -76,6 +76,24 @@ class Service extends Private_Controller {
 		return FALSE;
 	}
 	
+	public function get_areas_enable()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+    		//$data = $this->areas->get_all();
+			//echo json_encode(array("data"=>$data));
+			$response = $this->areas->selectSQLAll("select * from get_all_areas() where art_est=true",null);
+			echo json_encode(array("data"=>$response));
+		}
+		else
+		{
+			exit('No direct script access allowed');
+			show_404();
+		}
+		return FALSE;
+	}
+	
 	public function edit_area()
 	{
 		if(!@$this->user) redirect ('main');

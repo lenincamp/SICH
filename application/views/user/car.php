@@ -34,7 +34,7 @@
 								  </div>
 					  
 								  <div class="row">
-									  <div class="col-md-offset-5">
+									  <div align="center">
 										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
 									  </div>
 								  </div>
@@ -138,7 +138,7 @@
 								  </div>
 					  
 								  <div class="row">
-									  <div class="col-md-offset-5">
+									  <div align="center">
 										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
 									  </div>
 								  </div>
@@ -263,7 +263,7 @@
 							 </div>
 				  
 							  <div class="row">
-								  <div class="col-md-offset-5">
+								  <div align="center">
 									<button type="submit" class="button button-3d-primary button-rounded">Crear</button>
 								  </div>
 							  </div>
@@ -368,7 +368,11 @@
 					
 						<div class="modal-footer">
 							<div class="row">
+<<<<<<< HEAD
 								<div class="col-md-8">
+=======
+								<div align="center">
+>>>>>>> origin/alex
 									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
 									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
 								</div>
@@ -507,7 +511,7 @@
 								  
 								  
 								  <div class="row">
-									  <div class="col-md-offset-5">
+									  <div align="center">
 										<button type="submit" class="button button-3d-primary button-rounded">Guardar</button>
 									  </div>
 								  </div>
@@ -676,7 +680,7 @@
 						
 						<div class="modal-footer">
 							<div class="row">
-								<div class="col-md-8">
+								<div align="center">
 									<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button>
 									<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>
 								</div>
