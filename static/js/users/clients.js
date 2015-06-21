@@ -75,13 +75,13 @@ $(function(){
 					if(response.update_client == '1'){
 						$("#frmMdClient input[type='text']").val('');
 						$("#frmMdClient input[type='email']").val('');
-						telsMd.length=0;
 						$("#mdClient").modal('hide');
 						$.successMessage();
 						$('#tbClients').DataTable().ajax.reload();
 					}else{		
 						$.errorMessage();
 					}
+					telsMd.length=0;
 				}
 			});
 		}
@@ -115,6 +115,10 @@ $(function(){
 	 
 	 $('#mdClient').on('shown.bs.modal', function () {
 		$("#txtNombreMd").focus();
+	 });
+	 
+	 $('#mdClient').on('hidden.bs.modal', function () {
+		telsMd.length = 0;
 	 });
 	 
 	 var trIdClt;

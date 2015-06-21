@@ -417,7 +417,7 @@
 									  </div>
 									  <div class="form-group col-xs-12">
 										<label for="txtEmail">E-mail:</label>
-										<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
+										<input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
 									  </div>
 									  <div class="form-group col-xs-12">
 										<label for="txtDireccion">Dirección:</label>
@@ -587,7 +587,7 @@
 							  </div>
 							  <div class="form-group col-xs-12">
 								<label for="txtEmailMd">E-mail:</label>
-								<input type="email" required="true" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese Email"/>
+								<input type="email" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese Email"/>
 							  </div>
 							  <div class="form-group col-xs-12">
 								<label for="txtDireccionMd">Dirección:</label>

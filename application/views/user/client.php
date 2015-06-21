@@ -31,7 +31,7 @@
 						  </div>
 						  <div class="form-group">
 							<label for="txtName">E-mail:</label>
-							<input type="email" required="true" class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
+							<input type="email"  class="form-control" id="txtEmail" name="txtEmail" placeholder="Ingrese Email"/>
 						  </div>
 						  <div class="form-group">
 							<label for="txtName">Dirección:</label>
@@ -148,7 +148,7 @@
 						  </div>
 						  <div class="form-group">
 							<label for="txtName">E-mail:</label>
-							<input type="email" required="true" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese Email"/>
+							<input type="email" class="form-control" id="txtEmailMd" name="txtEmailMd" placeholder="Ingrese Email"/>
 						  </div>
 						  <div class="form-group">
 							<label for="txtName">Dirección:</label>
