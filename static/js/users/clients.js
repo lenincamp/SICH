@@ -85,9 +85,13 @@ $(function(){
 						$.errorMessage();
 					}
 <<<<<<< HEAD
+<<<<<<< HEAD
 				},
 				error: function(){
 					$.errorMessage();
+=======
+					telsMd.length=0;
+>>>>>>> deploy
 =======
 					telsMd.length=0;
 >>>>>>> deploy

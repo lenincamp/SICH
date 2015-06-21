@@ -84,6 +84,7 @@ $db['default'] = array(
 	'save_queries' => TRUE,
 	'port' => 5432 
 <<<<<<< HEAD
+<<<<<<< HEAD
 );
 
 $db['local'] = array(
@@ -107,6 +108,8 @@ $db['local'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE,
 	'port' => 5432 
+=======
+>>>>>>> deploy
 =======
 >>>>>>> deploy
 );
