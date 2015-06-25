@@ -19,7 +19,7 @@
 						  <legend class="scheduler-border">Datos</legend>		  
 						  <div class="form-group">
 							<label for="txtName">C.I./R.U.C.:</label>
-							<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C."/>
+							<input type="text" required="true" class="form-control" id="txtCedula" name="txtCedula" placeholder="Ingrese C.I./R.U.C." maxlength="13"/>
 						  </div>
 						  <div class="form-group">
 							<label for="txtName">Nombre:</label>
@@ -45,7 +45,7 @@
 					  	<div class="form-group">
 							
 							<div class="input-group">
-						      <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono" maxlength="10"/>
+						      <input type="text" class="form-control" id="txtTelefono" name="txtTelefono" placeholder="Ingrese Teléfono" maxlength="10" onkeypress="$.ValidaSoloNumeros()"/>
 						      <span class="input-group-btn">
 						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTels"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
 						      </span>
@@ -162,7 +162,7 @@
 					  	<div class="form-group">
 							
 							<div class="input-group">
-						      <input type="text" class="form-control" id="txtTelefonoMd" placeholder="Ingrese Teléfono" maxlength="10"/>
+						      <input type="text" class="form-control" id="txtTelefonoMd" placeholder="Ingrese Teléfono" maxlength="10" onkeypress="$.ValidaSoloNumeros()"/>
 						      <span class="input-group-btn">
 						        <button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnTelsMd"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-earphone"></i></button>
 						      </span>

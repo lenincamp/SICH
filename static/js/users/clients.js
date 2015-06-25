@@ -2,6 +2,79 @@
 /* global PNotify */
 $(function(){
 	
+	/*===VALIDACIONES===*/
+	$.ValidaSoloNumeros = function() {
+	 if ((event.keyCode < 48) || (event.keyCode > 57)) 
+	  event.returnValue = false;
+	};
+	
+	$.ValidaSoloLetras = function() {
+	 if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122))
+	  event.returnValue = false;
+	};
+	
+    $("#frmNewClient").validate({
+        rules: {
+            txtCedula:{required:true,minlength:10,maxlength:13,digits:true},
+            txtNombre: {minlength: 4,required: true},
+            txtApellido: {minlength: 4,required: true},
+            txtEmail:{minlength: 8,required: true, email:true},
+			txtDireccion:{minlength: 8,required: true}
+        },
+        highlight: function (element) {
+            $(element).parent().removeClass('has-success has-feedback');
+            $(element).parent().addClass("has-error has-feedback");
+        },
+        success: function (element) {
+           $(element).parent().removeClass('has-error has-feedback');
+           $(element).parent().addClass("has-success has-feedback");
+        }
+    });
+	
+	$("#frmMdClient").validate({
+        rules: {
+            txtCedulaMd:{required:true,minlength:10,maxlength:13,digits:true},
+            txtNombreMd: {minlength: 4,required: true},
+            txtApellidoMd: {minlength: 4,required: true},
+            txtEmailMd:{minlength: 8,required: true, email:true},
+			txtDireccionMd:{minlength: 8,required: true}
+        },
+        highlight: function (element) {
+            $(element).parent().removeClass('has-success has-feedback');
+            $(element).parent().addClass("has-error has-feedback");
+        },
+        success: function (element) {
+           $(element).parent().removeClass('has-error has-feedback');
+           $(element).parent().addClass("has-success has-feedback");
+        }
+    });
+	
+    /*=============================*/
+    ///VALIDACION CEDULA
+    var invalidCi = false;
+	
+	$.validateCi = function(id){
+       $(id).validarCedulaEC({
+            strict: true,
+            events: "change",
+            onValid: function () {
+                invalidCi = false;
+				var padre = $(id).parent();
+                padre.removeClass('has-error has-feedback');
+                padre.addClass("has-success has-feedback");
+            },
+            onInvalid: function () {
+                invalidCi = true;
+				var padre = $(id).parent();
+                padre.removeClass('has-success has-feedback');
+                padre.addClass("has-error has-feedback");
+            }
+        }); 
+    };
+
+    $.validateCi("#txtCedula");
+    /*=============================*/
+	
 	/*
 	 * -------------------------------------------------------------------
 	 *  Create client submit(Ajax)
@@ -19,37 +92,45 @@ $(function(){
 				}
 			});
 		});
-		if(tels.length > 0){
-			$.ajax({
-				type: "POST",
-				url: "/sich/client/save_client/?tels="+tels,
-				dataType: 'json',
-				data: $(this).serialize(),
-				success: function(response) {
-					if(response.insert_client=="2")
-					{
-						$.errorMessage('La C.I./R.U.C. ingresado ya se encuentra registrado.');
+		if(!invalidCi){
+			if($("#frmNewClient").validate().numberOfInvalids()==0){
+				if(tels.length > 0){
+					$.ajax({
+						type: "POST",
+						url: "/sich/client/save_client/?tels="+tels,
+						dataType: 'json',
+						data: $(this).serialize(),
+						success: function(response) {
+							if(response.insert_client=="2")
+							{
+								$.errorMessage('La C.I./R.U.C. ingresado ya se encuentra registrado.');
+							}
+							else
+							{
+								if(response.insert_client=="1"){
+									$.successMessage('Registro Exitoso');
+									$("#frmNewClient input[type='text']").val('');
+									$("#frmNewClient input[type='email']").val('');
+									tels.length=0;
+									$("#divTbTels").fadeOut('fast');
+									create = true;
+								}else{		
+									$.errorMessage('Error en el Registro');
+								}
+							}
+						},
+					error: function(){
+						$.errorMessage();
 					}
-					else
-					{
-						if(response.insert_client=="1"){
-							$.successMessage('Registro Exitoso');
-							$("#frmNewClient input[type='text']").val('');
-							$("#frmNewClient input[type='email']").val('');
-							tels.length=0;
-							$("#divTbTels").fadeOut('fast');
-							create = true;
-						}else{		
-							$.errorMessage('Error en el Registro');
-						}
-					}
-				},
-			error: function(){
-				$.errorMessage();
+					});
+				}else{
+					$.errorMessage("Debe tener al menos un teléfono!!");
+				}
+			}else{
+				$.errorMessage("Algunos campos del formulario están mal llenados revise e intente nuevamente..!!");
 			}
-			});
 		}else{
-			$.errorMessage("Debe tener al menos un teléfono!!");
+			$.errorMessage("La Cédula Es Incorrecta!!");
 		}
 	});
 	
@@ -68,28 +149,38 @@ $(function(){
 				}
 			});
 		});
-		if(telsMd.length > 0){
-			$.ajax({
-				type: "POST",
-				url: "/sich/client/edit_client/?trId="+$("#spIdCliMd").attr('data-toggle')+"&tels="+telsMd,
-				dataType: 'json',
-				data: $(this).serialize(),
-				success: function(response) {
-					if(response.update_client == '1'){
-						$("#frmMdClient input[type='text']").val('');
-						$("#frmMdClient input[type='email']").val('');
-						$("#mdClient").modal('hide');
-						$.successMessage();
-						$('#tbClients').DataTable().ajax.reload();
-					}else{		
-						$.errorMessage();
-					}
-				},
-				error: function(){
-					$.errorMessage();
-					telsMd.length=0;
+		if(!invalidCi){
+			if($("#frmNewClient").validate().numberOfInvalids()==0){
+				if(telsMd.length > 0){
+					$.ajax({
+						type: "POST",
+						url: "/sich/client/edit_client/?trId="+$("#spIdCliMd").attr('data-toggle')+"&tels="+telsMd,
+						dataType: 'json',
+						data: $(this).serialize(),
+						success: function(response) {
+							if(response.update_client == '1'){
+								$("#frmMdClient input[type='text']").val('');
+								$("#frmMdClient input[type='email']").val('');
+								$("#mdClient").modal('hide');
+								$.successMessage();
+								$('#tbClients').DataTable().ajax.reload();
+							}else{		
+								$.errorMessage();
+							}
+						},
+						error: function(){
+							$.errorMessage();
+							telsMd.length=0;
+						}
+					});
+				}else{
+					$.errorMessage("Debe tener al menos un teléfono!!");
 				}
-			});
+			}else{
+				$.errorMessage("Algunos campos del formulario están mal llenados revise e intente nuevamente..!!");
+			}
+		}else{
+			$.errorMessage("La Cédula Es Incorrecta!!");
 		}
 	});
 	

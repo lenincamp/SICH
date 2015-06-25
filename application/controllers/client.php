@@ -22,6 +22,9 @@ class Client extends Private_Controller {
 			base_url()."static/js/jquery.dataTables.min.js",
 			base_url()."static/js/dataTables.bootstrap.js",
 			base_url()."static/js/pnotify.custom.min.js",
+			base_url()."static/js/jquery.ci.validator.js",
+			base_url()."static/js/library/validateForms/jquery.validate.min.js",
+			base_url()."static/js/library/validateForms/localization/messages_es.min.js"
 		);
 		
 		$data['funcion']="<script type='text/javascript'> seleccionar('mn_cli') </script>";
