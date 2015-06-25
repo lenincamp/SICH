@@ -18,6 +18,19 @@ class Main extends Private_Controller {
 		$this->load->view('login');
 	}
 	
+	public function updateParams()
+	{
+		if(!@$this->user) redirect ('main');
+		if ($this->input->is_ajax_request()) 
+    	{
+			$data = array(
+				'iva'  => $this->input->post('txtIva'),
+				'num_ord'  => $this->input->post('txtNumOrd')
+			);
+			echo json_encode($this->users->updateParameters($data));
+		}
+	}
+	
 	public function updatePass()
 	{
 		$this->load->helper('security');
@@ -62,6 +75,7 @@ class Main extends Private_Controller {
 	{
 		if(!@$this->user) redirect ('main');
 		$data['js'] = array(
+			base_url()."static/js/library/alls.js",
 			base_url()."static/js/users/user.js",
 			base_url()."static/js/bootstrap-select.min.js",
 			base_url()."static/js/i18n/defaults-es_CL.min.js",
@@ -70,8 +84,9 @@ class Main extends Private_Controller {
 		$title['title'] = 'settings';
 		$title['css'] = array(base_url()."static/css/pnotify.custom.min.css");
 		$data['funcion']="<script type='text/javascript'> seleccionar(null) </script>";
+		$contenido["params"]=$this->users->get_params();
 		$this->load->view('templates/header', $title);
-		$this->load->view('user/setting');
+		$this->load->view('user/setting',$contenido);
 		$this->load->view('templates/footer',$data);
 	}
 	

@@ -160,11 +160,14 @@ $(function(){
 	 * -------------------------------------------------------------------
 	 */
 	
-	var btnsOpTblServices = "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, true);'>"+
-							"<img src='/sich/static/img/revisar.png' title='Atender' height='24'>"+
+	var btnsOpTblServices = "<button style='border: 0; padding:2px; background: transparent' onclick='$.editDeleteModel(this, true);'>"+
+							"<img src='/sich/static/img/revisar.png' title='Atender' height='20'>"+
 						  "</button>"+
-						  "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
-							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "<button style='border: 0; padding:2px; background: transparent' onclick='$.sendMsg(this);'>"+
+							"<img src='/sich/static/img/mensaje.png' title='Mensaje' height='20'>"+
+						  "</button>"+
+						  "<button style='border: 0; padding:2px; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar' height='20'>"+
 						  "</button>";
 						  
 	$.renderizeRowTbServices = function( nRow, aData, iDataIndex ) {
@@ -182,6 +185,7 @@ $(function(){
 	   $(nRow).addClass(clase);
 	   $($(nRow).children('td')[4]).html(capitalizeFirstLetter($($(nRow).children('td')[4]).html()));
 	   $($(nRow).children('td')[5]).html($($(nRow).children('td')[5]).html()=="t"?"Si":"No");
+	   $($(nRow).children('td')[6]).css('padding','1px');
 	}
 	$.fnTbl('#tbOblg',"/sich/garantia/get_guarantee_pending_all/",[{ "data": "rev_fch"},{ "data": "nombre"},{ "data": "auto"},{ "data": "veh_pla"},{ "data": "servs"},{ "data": "rev_obl"}],$.renderizeRowTbServices);
 	
@@ -271,11 +275,37 @@ $(function(){
 		$("#edicionModal").modal('show');
 		$("#spIdEdicion").attr('data-toggle', trIdEd);
 	}
-	var btnsOpTblAllGarant = "<button style='border: 0; background: transparent' onclick='$.editGarant(this);'>"+
-							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+	$.sendMsgAction = function(){
+		var data = {"id":trIdEd};
+			$.post("/sich/orden/sendMailGmail/", data, function(response){
+				console.log(response);
+				if(response=="no email")
+				{
+					$.errorMessage("E-mail del cliente no encontrado!");
+				}
+				else{
+					if(response){	
+						$.successMessage();
+					}else{
+						if(!response){
+							$.errorMessage("Error al enviar carta de garantía, por favor intente de nuevo!");
+						}
+					}
+				}
+			}, 'json');
+	}
+	$.sendMsg = function(btn){
+	 	trIdEd = $($($(btn).parent()).parent()).attr('id');
+		$.confirmMessage($.sendMsgAction,"¿Está seguro de enviar la carta de garantía?");
+	}
+	var btnsOpTblAllGarant = "<button style='border: 0; padding:2px; background: transparent' onclick='$.editGarant(this);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar' width='20'>"+
 						  "</button>"+
-						  "<button style='border: 0; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
-							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "<button style='border: 0; padding:2px; background: transparent' onclick='$.sendMsg(this);'>"+
+							"<img src='/sich/static/img/mensaje.png' title='Mensaje' width='20'>"+
+						  "</button>"+
+						  "<button style='border: 0; padding:2px; background: transparent' onclick='$.editDeleteModel(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar' width='20'>"+
 						  "</button>";
 	$.renderizeRowTbAllGarant = function( nRow, aData, iDataIndex ) {
 	   $(nRow).append("<td class='text-center'>"+btnsOpTblAllGarant+"</td>");
@@ -288,6 +318,7 @@ $(function(){
 	   $(nRow).addClass(clase);
 	   $($(nRow).children('td')[4]).html(capitalizeFirstLetter($($(nRow).children('td')[4]).html()));
 	   $($(nRow).children('td')[5]).html($($(nRow).children('td')[5]).html()=="t"?"Si":"No");
+	   $($(nRow).children('td')[6]).css('padding','1px');
 	}
 	var flagGr = true;
 	$("#ltListGarant").click(function(event){

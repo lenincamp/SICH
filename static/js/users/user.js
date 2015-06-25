@@ -62,4 +62,26 @@ $(function(){
 		}
 	});
 	
+	$("#frmParamsOrd").on("submit",function(event){
+		event.preventDefault();
+			$.ajax({
+				type: "POST",
+				url: "/sich/main/updateParams/",
+				dataType: 'json',
+				data: $(this).serialize(),
+				success: function(response) {
+					if(response)
+					{
+						$.successMessage();
+					}
+					else
+					{
+						$.errorMessage();
+					}	
+				},
+				error: function(){
+					$.errorMessage();
+				}
+			});
+	});
 });

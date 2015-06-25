@@ -54,6 +54,10 @@
 									<label for="txtAbono">Abono:</label>
 									<input type="number" step="0.01" class="form-control" id="txtAbono" name="txtAbono" placeholder="Ingrese abono"/>
 								</div>
+								<div class="form-group col-md-6" style="margin-right:1px;">
+									<label for="txtAsesor">Asesor:</label>
+									<input type="text"  class="form-control" id="txtAsesor" name="txtAsesor" placeholder="Ingrese Asesor"/>
+								</div>
 								<div class="form-group col-xs-12" d>
 									<label for="txtObservacionesGeneral">Observaciones:</label>
 									<input type="text" class="form-control" id="txtObservacionesGeneral" name="txtObservacionesGeneral" placeholder="Ingrese Observaciones"/>
@@ -77,6 +81,14 @@
 							  <div class="form-group col-md-7">
 								<label for="txtDireccion">Dirección:</label>
 								<input type="text" readOnly="true" class="form-control" id="txtDireccion" name="txtDireccion" placeholder="Dirección..."/>
+							  </div>
+							  <div class="form-group col-md-6">
+								<label for="txtPerEnt">Persona que entrega:</label>
+								<input type="text"  class="form-control" id="txtPerEnt" name="txtPerEnt" placeholder="Ingrese persona que entrega"/>
+							  </div>
+							  <div class="form-group col-md-6">
+								<label for="txtEntTlf">Teléfono:</label>
+								<input type="text"  class="form-control" id="txtEntTlf" name="txtEntTlf" placeholder="Ingrese télefono de persona que entrega"/>
 							  </div>
 						  </fieldset>
 						  <fieldset class="scheduler-border">
@@ -273,6 +285,10 @@
 								<label for="txtAbonoEdit">Abono:</label>
 								<input type="number" step="0.01" class="form-control" id="txtAbonoEdit" name="txtAbonoEdit" placeholder="Ingrese abono"/>
 							</div>
+							<div class="form-group col-md-6" style="margin-right:1px;">
+									<label for="txtAsesorEdit">Asesor:</label>
+									<input type="text"  class="form-control" id="txtAsesorEdit" name="txtAsesorEdit" placeholder="Ingrese Asesor"/>
+							</div>
 							<div class="form-group col-xs-12" d>
 								<label for="txtObservacionesGeneralEdit">Observaciones:</label>
 								<input type="text" class="form-control" id="txtObservacionesGeneralEdit" name="txtObservacionesGeneralEdit" placeholder="Ingrese Observaciones"/>
@@ -296,6 +312,14 @@
 						  <div class="form-group col-md-7">
 							<label for="txtDireccionEdit">Dirección:</label>
 							<input type="text" readOnly="true" class="form-control" id="txtDireccionEdit" name="txtDireccionEdit" placeholder="Dirección..."/>
+						  </div>
+						  <div class="form-group col-md-6">
+							<label for="txtPerEntEdit">Persona que entrega:</label>
+							<input type="text"  class="form-control" id="txtPerEntEdit" name="txtPerEntEdit" placeholder="Ingrese persona que entrega"/>
+						  </div>
+						  <div class="form-group col-md-6">
+							<label for="txtEntTlfEdit">Teléfono:</label>
+							<input type="text"  class="form-control" id="txtEntTlfEdit" name="txtEntTlfEdit" placeholder="Ingrese télefono de persona que entrega"/>
 						  </div>
 					</fieldset>
 					<fieldset class="scheduler-border">

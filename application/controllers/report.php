@@ -122,38 +122,8 @@ class Report extends Private_Controller {
 	 * -------------------------------------------------------------------
 	 */
 	 
-	 public function hello_world()
-	 {
-		$this->load->library('cezpdf');
-		try{
-		$tabla=array();
-		$total=0;
-		$response = $this->orders->selectSQLMultiple("select otb.ord_num, otb.ord_fch, nombre, servs, ord_cst from orden_trabajo_revision otr, orden_trabajo_basico otb where otb.ord_id=otr.ord_id",array());
-		foreach ($response as $keyA => $valueA) 
-		{
-			array_push($tabla,array("<i>N° Ord.</i>"=>$valueA["ord_num"],"<i>Fecha</i>"=>$valueA["ord_fch"],"Cliente"=>$valueA["nombre"],"Servicios"=>$valueA["servs"],"Total"=>$valueA["ord_cst"]));
-			$total=$total+$valueA["ord_cst"];
-		}
-		
-		//$this->cezpdf->ezImage("http://192.168.1.9:8080/sich/static/img/Splash.jpg");
-		//$this->cezpdf->addJpegFromFile("http://192.168.1.9:8080/sich/static/img/Splash.jpg",100,100,100,100);
-		//$this->cezpdf->addPngFromFile("http://192.168.1.9:8080/sich/static/img/delete.png",100,100,25,25);
-		$this->cezpdf->ezText('REPORTE DE VENTAS', 12, array('justification' => 'center'));
-		$this->cezpdf->ezSetDy(-10);
-		$content = 'Total: '.$total."\n";
-		$this->cezpdf->ezText($content, 10);
-		$this->cezpdf->ezTable($tabla,12);
-		$this->cezpdf->line(20,50,580,50); 
-		$this->cezpdf->ezStartPageNumbers(80,35,10,'','','');
-		$this->cezpdf->ezStream();
-		}catch(Exception $ex)
-		{
-			echo $ex;
-		}
-	 }
-	 
-	 public function ventas_pdf()
-	 {
+	public function ventas_pdf()
+	{
 		if(!@$this->user) redirect ('main');
 		$desde=$this->input->get("desde");
 		$hasta=$this->input->get("hasta");
@@ -187,6 +157,7 @@ class Report extends Private_Controller {
 		
 		// create new PDF document
 		$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf->setPrintHeader(false);
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		// set font
@@ -226,7 +197,7 @@ class Report extends Private_Controller {
 
 		//Close and output PDF document
 		$pdf->Output('reporte_ingresos_'.(($desde==$hasta)?$desde:($desde."_al_".$hasta)).'.pdf', 'I');
-	 }
+	}
 	
 	public function factura_pdf()
 	 {
@@ -238,15 +209,11 @@ class Report extends Private_Controller {
 		$docs="";
 		$general = $this->orders->selectSQLMultiple("select * from orden_trabajo_basico where ord_id=?",array($idOrd));
 		$servs = $this->orders->selectSQLMultiple("select * from detalle_servicio_orden dso,  servicio srv where dso.srv_id=srv.srv_id and ord_id=?",array($idOrd));
-		/*foreach ($response as $keyA => $valueA) 
-		{
-			array_push($tabla,array($valueA["ord_num"],$valueA["ord_fch"],$valueA["nombre"],$valueA["servs"],$valueA["ord_cst"]));
-			$total=$total+$valueA["ord_cst"];
-			$facturas++;
-		}*/
-		
+		$parametros=$this->orders->selectSQLMultiple("select * from parametros;",array());
+		$parametros=$parametros[0];
 		// create new PDF document
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf->setPrintHeader(false);
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		// set font
@@ -274,8 +241,8 @@ class Report extends Private_Controller {
 		}
 		$html.=str_repeat('<tr><td colspan="5" style="height:15px;"></td></tr>', 8-$contador);
 		$html.='<tr><td colspan="3" style="height:17px;"></td><td colspan="2" align="right">'.$general[0]["ord_cst"].'</td></tr>
-		<tr><td colspan="3" style="height:17px;"></td><td colspan="2" align="right">'.round($general[0]["ord_cst"]*0.12,2).'</td></tr>
-		<tr><td colspan="3" style="height:17px;"></td><td colspan="2" align="right">'.round($general[0]["ord_cst"]*1.12,2).'</td></tr>
+		<tr><td colspan="3" style="height:17px;"></td><td colspan="2" align="right">'.round($general[0]["ord_cst"]*($parametros["iva"]/100),2).'</td></tr>
+		<tr><td colspan="3" style="height:17px;"></td><td colspan="2" align="right">'.round($general[0]["ord_cst"]*(1+($parametros["iva"]/100)),2).'</td></tr>
 		</table>';
 		$html = utf8_encode ($html);
 		
@@ -331,6 +298,7 @@ class Report extends Private_Controller {
 		
 		// create new PDF document
 		$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf->setPrintHeader(false);
 		// set auto page breaks
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 		// set font
@@ -370,6 +338,185 @@ class Report extends Private_Controller {
 		//Close and output PDF document
 		$pdf->Output('garantias.pdf', 'I');
 	 }
+	 
+	 public function orden_pdf()
+	{
+		if(!@$this->user) redirect ('main');
+		$data= array($this->input->get("id"));
+		$cliente = $this->orders->selectSQLMultiple("SELECT cli.* from orden_trabajo ot, vehiculo veh, cliente cli where ord_id=? and ot.id_veh=veh.veh_id and cli.cli_id=veh.id_cli",$data);
+		$vehiculo = $this->orders->selectSQLMultiple("SELECT veh.* , mod.mod_nom, mar.mar_nom from orden_trabajo ot, vehiculo veh, modelo mod, marca mar where ord_id=? and ot.id_veh=veh.veh_id and mod.mod_id=veh.id_modelo and mar.mar_id=mod.id_marca",$data);
+		$ordentrb = $this->orders->selectSQLMultiple("SELECT * from orden_trabajo, forma_pago where ord_id=? and fpg_id=id_fpg",$data);
+		$servs = $this->orders->selectSQLMultiple("select * from detalle_servicio_orden dso,  servicio srv where dso.srv_id=srv.srv_id and ord_id=?",$data);
+		$detallesTrabajo = $this->orders->selectSQLMultiple("SELECT * from detalle_orden_area doa, area_trabajo art where doa.art_id=art.art_id and art.art_est=true and ord_id=? ",$data);
+		$invent = $this->orders->selectSQLMultiple("select dipa.*, pie.pie_nom from inventario inv, detalle_inventario_piezas_auto dipa, piezas_auto pie where inv.ord_id=? and dipa.inv_id=inv.inv_id and pie.pie_id=dipa.pie_id",$data);
+		$inventarioGeneral = $this->orders->selectSQLMultiple("select * from inventario where ord_id=? ",$data);
+		$cliente=$cliente[0];
+		$vehiculo=$vehiculo[0];
+		$ordentrb=$ordentrb[0];
+		$inventarioGeneral=$inventarioGeneral[0];
+		$servicios="";
+		$inventario="";
+		$contadorDetalle=1;
+		$coorComb=explode("-",$inventarioGeneral["inv_com"]);
+		$detalles="";
+		foreach ($servs as $keyA => $valueA) 
+		{
+			$servicios.=$valueA["srv_nom"].'&nbsp;&nbsp;<strong>:</strong>&nbsp;&nbsp;$'.$valueA["dso_prc"].'&nbsp;&nbsp;<strong>|</strong>&nbsp;&nbsp;&nbsp;&nbsp;';
+		}
+		foreach ($detallesTrabajo as $key => $value) 
+		{
+			if($contadorDetalle==1)
+			{
+				$detalles.="<tr>";
+			}
+			$detalles.='<td style="border-left: 1px solid '.($contadorDetalle==1?"white":"gray").';">'.$value["art_nom"].'</td>';
+			if($contadorDetalle==3)
+			{
+				$detalles.="</tr>";
+				$contadorDetalle=0;
+			}
+			$contadorDetalle++;
+		}
+		if($contadorDetalle==2)
+		{
+		$detalles.=str_repeat("<td></td>",3-$contadorDetalle).'</tr>';
+		}
+		$contadorDetalle=1;
+		foreach ($invent as $key => $value) 
+		{
+			if($contadorDetalle==1)
+			{
+				$inventario.="<tr>";
+			}
+			$inventario.='<td style="border-left: 1px solid '.($contadorDetalle==1?"white":"gray").';">'.$value["pie_nom"].'</td>';
+			if($contadorDetalle==3)
+			{
+				$inventario.="</tr>";
+				$contadorDetalle=0;
+			}
+			$contadorDetalle++;
+		}
+		if($contadorDetalle==2)
+		{
+		$inventario.=str_repeat("<td></td>",3-$contadorDetalle).'</tr>';
+		}
+		/*$response = $this->orders->selectSQLMultiple("select otb.ord_num, otb.ord_fch, nombre, servs, ord_cst from orden_trabajo_revision otr, orden_trabajo_basico otb where otb.ord_id=otr.ord_id and otr.ord_fch between ? and ?",array();
+		foreach ($response as $keyA => $valueA) 
+		{
+			array_push($tabla,array($valueA["ord_num"],$valueA["ord_fch"],$valueA["nombre"],$valueA["servs"],$valueA["ord_cst"]));
+			$total=$total+$valueA["ord_cst"];
+			$facturas++;
+		}*/
+		
+		// create new PDF document
+		$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$pdf->setPrintHeader(false);
+		// set auto page breaks
+		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+		// set font
+		$pdf->SetFont('helvetica', '', 12);
+
+		// add a page
+		$pdf->AddPage();
+		
+		// create some HTML content
+		$html = '<br/><br/>
+		<img src="/sich/static/img/cabecera.jpg" height="80"/><img src="/sich/static/img/ford.jpg" height="70"/>
+		<div align="center">
+			<strong>ORDEN DE TRABAJO</strong>
+		</div>
+		<table cellpadding="3" cellspacing="0" rules="none" border="0" style="text-align:right; font-size:11pt;">
+			<tr><td><span style="width:100px;"><strong>Serie </strong>001-001-</span><span style="color:red; width:100px;"><strong>'.(str_repeat("0",9-strlen($ordentrb["ord_num"]))).$ordentrb["ord_num"].'</strong></span></td></tr>
+		</table>
+		<table cellpadding="0" cellspacing="0" style="border: 1px solid gray;">
+			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
+				<tr><td style="width:300px;"><strong>Cliente:</strong> '.utf8_decode($cliente["per_nom"].' '.$cliente["per_ape"]).'</td><td style="width:200px;"><strong>E-mail:</strong> '.$cliente["cli_eml"].'</td></tr>
+				<tr><td style="width:300px;"><strong>Télefono:</strong> '.str_replace(array("{","}"),"",$cliente["cli_tel"]).'</td><td style="width:200px;"><strong>C.I./R.U.C.:</strong> '.$cliente["per_ced"].'</td></tr>
+				<tr><td colspan="4"><strong>Dirección:</strong> '.utf8_decode($cliente["cli_dir"]).'</td></tr>
+				<tr><td style="width:300px;"><strong>¿Quién entrega?:</strong> '.utf8_decode($ordentrb["ord_per_ent"]).'</td><td style="width:200px;"><strong>Teléfono:</strong> '.$ordentrb["ord_per_tel"].'</td></tr>
+				<tr><td style="width:300px;"><strong>Asesor:</strong> '.utf8_decode($ordentrb["ord_asr"]).'</td><td style="width:200px;"><strong>Fecha:</strong> '.$ordentrb["ord_fch"].'</td></tr>
+			</table>
+		</table>
+		<br/>
+		<br/>
+		<table cellpadding="0" cellspacing="0" style="border: 1px solid gray;">
+			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
+				<tr><td style="width:300px;"><strong>Vehiculo Marca:</strong> '.utf8_decode($vehiculo["mar_nom"]).'</td><td style="width:240px;"><strong>Modelo:</strong> '.utf8_decode($vehiculo["mod_nom"]).'</td></tr>
+				<tr><td><strong>Chasís:</strong> '.$vehiculo["veh_cha"].'</td><td ><strong>Placa:</strong> '.$vehiculo["veh_pla"].'</td></tr>
+				<tr><td><strong>Año:</strong> '.$vehiculo["veh_yar"].'</td><td ><strong>Motor:</strong> '.$vehiculo["veh_mot"].'</td></tr>
+				<tr><td><strong>Color:</strong> <span style="background-color:'.$vehiculo["veh_col"].';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td><strong>Código:</strong> '.$vehiculo["veh_cla"].'</td></tr>
+			</table>
+		</table>
+		<br/>
+		<br/>
+		<table cellpadding="0" cellspacing="0" style="border: 1px solid gray;">
+			<table cellpadding="3" cellspacing="3" style="font-size:11pt; ">
+				<tr><td colspan="2"><strong>Combustible:</strong><img src="/sich/static/img/gasometro.png" height="70"/></td></tr>
+			</table>
+			<table cellpadding="3" cellspacing="3" style="font-size:11pt; ">
+				<tr><td colspan="3" align="center"><strong>INVENTARIO DEL VEHICULO</strong></td></tr>
+				'.utf8_decode($inventario).'
+				<tr><td colspan="3"><strong>Kilometraje:</strong>'.utf8_decode($inventarioGeneral["inv_kil"]).' Km</td></tr>
+				<tr><td colspan="3"><strong>Observaciones:</strong>'.utf8_decode($inventarioGeneral["inv_obs"]).'</td></tr>
+			</table>
+		</table>
+		';
+		$html = utf8_encode ($html);
+		$pdf->writeHTML($html, true, false, true, false, '');
+		$style2 = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
+		$pdf->SetLineStyle($style2);
+		$pdf->Line(49.25, 149, 49.25+(($coorComb[0]-50)*0.175), 149+(($coorComb[1]-70)*0.16), $style2);
+		
+		$html='
+		<br/>
+		<table cellpadding="0" cellspacing="0" style="border: 1px solid gray;">
+			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
+				<tr><td style="width:270px;"><strong>Fecha ingreso:</strong> '.$ordentrb["ord_fch_ing"].'</td><td style="width:270px;"><strong>Fecha estimada de entrega:</strong> '.$ordentrb["ord_fch_ent"].'</td></tr>
+				<tr><td colspan="4" align="center"><strong> </strong></td></tr>
+				<tr><td colspan="4" align="center"><strong>SERVICIO : COSTO</strong></td></tr>
+				<tr><td colspan="4">'.utf8_decode($servicios).'</td></tr>
+				<tr><td colspan="4" align="center"><strong> </strong></td></tr>
+				<tr><td colspan="4" align="center"><strong>DETALLE DEL TRABAJO</strong></td></tr>
+			</table>
+			<table cellpadding="3" cellspacing="3" style="font-size:11pt; ">
+				'.utf8_decode($detalles).'
+			</table>
+		</table>
+		<br/>
+		<br/>
+		<table cellpadding="0" cellspacing="0">
+			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
+				<tr><td style="width:270px;"><strong>Costo Total:</strong> '.$ordentrb["ord_cst"].'</td><td style="width:270px;"><strong>Pago con tarjeta:</strong> '.$ordentrb["ord_trj"].'</td></tr>
+				<tr><td colspan="4"><strong>Abono:</strong> '.$ordentrb["ord_abn"].'</td></tr>
+				<tr><td colspan="4"><strong>Saldo:</strong> '.($ordentrb["ord_cst"]-$ordentrb["ord_abn"]).'</td></tr>
+				<tr><td colspan="4"><strong>Observaciones:</strong>'.utf8_decode($ordentrb["ord_obs"]).'</td></tr>
+			</table>
+		</table>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<table cellpadding="0" cellspacing="0" border="0">
+			<tr><td align="center">______________________________</td><td align="center">______________________________</td></tr>
+			<tr><td align="center">RECIBÍ CONFORME</td><td align="center">ENTREGUÉ CONFORME</td></tr>
+			<tr><td align="center" colspan="2"><small><strong>IMPORTANTE:</strong> No nos responsabilizamos por obejtos de valor en su vehiculo, que no estén relacionados con la orden de trabajo.</small></td></tr>
+		</table>
+		';
+		
+		// output the HTML content
+		$html = utf8_encode ($html);
+		$pdf->writeHTML($html, true, false, true, false, '');
+		
+		// reset pointer to the last page
+		$pdf->lastPage();
+
+		// ---------------------------------------------------------
+
+		//Close and output PDF document
+		$pdf->Output('orden_trabajo_.pdf', 'I');
+	}
 }
 /* End of file main.php */
 /* Location: ./application/controllers/car.php */

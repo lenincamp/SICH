@@ -94,7 +94,7 @@ class Orden extends Private_Controller {
 			$abono=$this->input->post('txtAbono')?$this->input->post('txtAbono'):0;
 			$reserva=$this->input->post('chkReserva')?true:false;
     		$data = array(
-    			$this->input->post('txtNumeroOrden'),
+    			$this->input->post('txtNumeroOrden')==""?0:$this->input->post('txtNumeroOrden'),
 				$this->input->post('txtFecha'),
 				$this->input->post('txtFechaIngreso'),
 				$this->input->post('txtFechaEntrega'),
@@ -111,9 +111,12 @@ class Orden extends Private_Controller {
 				"{".implode(",",$inventario)."}",
 				"{".implode(",",$costos)."}",
 				"{".$this->input->get('srv')."}",
-				"{".implode(",",$areas)."}"
+				"{".implode(",",$areas)."}",
+				$this->input->post('txtAsesor'),
+				$this->input->post('txtPerEnt'),
+				$this->input->post('txtEntTlf')
     		);
-			$response = $this->orders->selectSQL("SELECT insert_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			$response = $this->orders->selectSQL("SELECT insert_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
@@ -177,9 +180,12 @@ class Orden extends Private_Controller {
 				"{".implode(",",$costos)."}",
 				"{".$this->input->get('srv')."}",
 				"{".implode(",",$areas)."}",
-				$this->input->get('trId')
+				$this->input->get('trId'),
+				$this->input->post('txtAsesorEdit'),
+				$this->input->post('txtPerEntEdit'),
+				$this->input->post('txtEntTlfEdit')
     		);
-			$response = $this->orders->selectSQL("SELECT update_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
+			$response = $this->orders->selectSQL("SELECT update_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
 		else
@@ -250,6 +256,114 @@ class Orden extends Private_Controller {
 			show_404();
 		}
 		return FALSE;
+	}
+	
+	public function sendMailGmail()
+	{
+		//if(!@$this->user) redirect ('main');
+		//if ($this->input->is_ajax_request()) 
+    	{
+			
+			$revision = $this->orders->selectSQLMultiple("select * from revision where rev_id=? ",$this->input->get("id"));
+			$revision=$revision[0];
+			$data= array($revision["ord_id"]);
+			$cliente = $this->orders->selectSQLMultiple("SELECT cli.* from orden_trabajo ot, vehiculo veh, cliente cli where ord_id=? and ot.id_veh=veh.veh_id and cli.cli_id=veh.id_cli",$data);
+			$vehiculo = $this->orders->selectSQLMultiple("SELECT veh.* , mod.mod_nom, mar.mar_nom from orden_trabajo ot, vehiculo veh, modelo mod, marca mar where ord_id=? and ot.id_veh=veh.veh_id and mod.mod_id=veh.id_modelo and mar.mar_id=mod.id_marca",$data);
+			$ordentrb = $this->orders->selectSQLMultiple("SELECT * from orden_trabajo, forma_pago where ord_id=? and fpg_id=id_fpg",$data);
+			$servs = $this->orders->selectSQLMultiple("select * from detalle_servicio_orden dso,  servicio srv where dso.srv_id=srv.srv_id and ord_id=?",$data);
+			$inventarioGeneral = $this->orders->selectSQLMultiple("select * from inventario where ord_id=? ",$data);
+			
+			$cliente=$cliente[0];
+			$vehiculo=$vehiculo[0];
+			$ordentrb=$ordentrb[0];
+			$inventarioGeneral=$inventarioGeneral[0];
+			$servicios="";
+			$separador=", ";
+			$total=0;
+			foreach ($servs as $keyA => $valueA) 
+			{
+				$servicios=$valueA["srv_nom"].$separador.$servicios;
+				$total+=$valueA["dso_prc"];
+			}
+			$dias = array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sábado");
+			$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+			//contenido html del mensaje a enviar
+			$html='<div style=" font-family: Arial, Helvetica, sans-serif;">
+			<div style="height:99vh; width:98vw; z-index:-1; opacity: 0.1; filter: alpha(opacity=10); position:absolute;  background: url('.base_url().'/static/img/logo_grande_chan.png) no-repeat center center; background-size: 45vw auto;"></div>
+			<img src="'.base_url().'static/img/cabecera.jpg" height="100"/>
+			<p align="center" style="color:#C61414; font-size:14pt;"><i><strong>CARTA DE GARANTIA</strong></i></p>
+			<p><strong>Propietario del Vehículo: </strong>'.utf8_decode($cliente["per_nom"].' '.$cliente["per_ape"]).'</p>
+			<p><strong>Números de contactos: </strong>'.str_replace(array("{","}"),"",$cliente["cli_tel"]).'</p>
+			<p><strong>Dirección: </strong>'.utf8_decode($cliente["cli_dir"]).'</p>
+			<p><strong>E-Mail:</strong>'.utf8_decode($cliente["cli_eml"]).'</p>
+			<p align="center" style="color:#C61414; font-size:14pt;"><i><strong>DATOS DEL VEHICULO</strong></i></p>
+			<p><strong>Marca: </strong>'.utf8_decode($vehiculo["mar_nom"]).' </p>
+			<p><strong>Modelo: </strong>'.utf8_decode($vehiculo["mod_nom"]).' </p>
+			<p><strong>Año: </strong>'.$vehiculo["veh_yar"].' </p>
+			<span style="width:200px;"><strong>Color: </strong></span><div style="border: 1px solid black; display:inline-block; width:20px; height:20px; background-color:'.$vehiculo["veh_col"].'"> </div>
+			<p><strong>Numero de chasis: </strong>'.$vehiculo["veh_cha"].' </p>
+			<p><strong>Número de Motor: </strong>'.$vehiculo["veh_mot"].' </p>
+			<p><strong>Placas: </strong>'.$vehiculo["veh_pla"].'</p>
+			<p><strong>Observaciones: </strong>'.utf8_decode($inventarioGeneral["inv_obs"]).'</p>
+			<p align="center" style="color:#C61414; font-size:14pt;"><i><strong>DATOS DE INGRESO</strong></i></p>
+			<p><strong>Fecha de ingreso:</strong> '.$dias[date('w',strtotime($ordentrb["ord_fch_ing"]))]." ".date('d',strtotime($ordentrb["ord_fch_ing"]))." de ".$meses[date('n',strtotime($ordentrb["ord_fch_ing"]))-1]. " del ".date('Y',strtotime($ordentrb["ord_fch_ing"])).' </p>
+			<p><strong>Fecha de salida:</strong> '.$dias[date('w',strtotime($ordentrb["ord_fch_ent"]))]." ".date('d',strtotime($ordentrb["ord_fch_ent"]))." de ".$meses[date('n',strtotime($ordentrb["ord_fch_ent"]))-1]. " del ".date('Y',strtotime($ordentrb["ord_fch_ent"])).' </p>
+			<p><strong>Tipo de empastado:</strong> '.substr($servicios,0,strlen($servicios)-2).' </p>
+			<p><strong>Costo del Empastado:</strong> $'.$total.' </p>
+			<p style="background-color:yellow; width:400px;"><strong>REVISION: </strong>'.$dias[date('w',strtotime($revision["rev_fch"]))]." ".date('d',strtotime($revision["rev_fch"]))." de ".$meses[date('n',strtotime($revision["rev_fch"]))-1]. " del ".date('Y',strtotime($revision["rev_fch"])) .'</p>
+			<p style="color:#C61414; font-size:12pt;"><i>Cláusula de Garantía 7años*</strong></i></p><p>*La garantía del vehículo que brinda la empresa CHAN es bajo el respaldo y licencia de la compañía Sherwin Williams® la cual bajo responsabilidad y compromiso adquirido con el cliente la garantía cubrirá lo siguiente: Golpes, montículos y corrosión en las partes que se aplicó el producto, siempre y cuando no sean de mucha gravedad. La garantía es intransferible. En Caso de Choque el vehículo tendrá que ingresar a los talleres Chan Protección Contra el óxido, después de haber salido de latonería, caso contrario la garantía será cobrada. 
+			
+			<p>Entregue Conforme:</p>
+			<i><strong>Ing. Daniel Chan Mora </strong></i>
+			<table boder="0" cellspacing="0" cellpadding="0">
+			<tr><td><small><i>Juan Montalvo y Eloy Alfaro esq.</small></i></td></tr>
+			<tr><td><small><i>2932-911/ 0997863-315 </small></i></td></tr>
+			<tr><td><small><i>chanmora@hotmail.com </small></i></td></tr>
+			<tr><td><small><i>Machala - Ecuador</small></i></td></tr>
+			</table>
+			
+			<table boder="0" cellspacing="0" cellpadding="0" align="right">
+			<tr><td><img src="'.base_url().'static/img/sherwin.jpg" height="80"/></td></tr>
+			<tr><td align="center"><strong><small>www.sherwinwilliams.com</small></strong></td></tr>
+			</table>
+			</div>';
+			
+			//cargamos la libreria email de ci
+			$this->load->library("email");
+			if($cliente["cli_eml"]!=""&&$cliente["cli_eml"]!=null)
+			{
+				//configuracion para gmail
+				$configGmail = array(
+					'protocol' => 'smtp',
+					'smtp_host' => 'ssl://smtp.gmail.com',
+					'smtp_port' => 465,
+					'smtp_user' => 'alex.nb.92@gmail.com',
+					'smtp_pass' => '21792Alexander',
+					'mailtype' => 'html',
+					'charset' => 'utf-8',
+					'newline' => "\r\n"
+				);    
+		 
+				//cargamos la configuración para enviar con gmail
+				$this->email->initialize($configGmail);
+				$this->email->from('CHAN SHIELD & CLEANING');
+				$this->email->to($cliente["cli_eml"]);
+				$this->email->subject('CARTA DE GARANTIA');
+				$this->email->message(utf8_encode ($html));
+				$this->email->send();
+				//con esto podemos ver el resultado
+				if(strlen($this->email->print_debugger())<20){
+					echo json_encode(true);
+				}
+				else
+				{
+					echo json_encode(false);
+				}
+			}
+			else{
+				echo json_encode("no email");
+			}
+		}
 	}
 }
 /* End of file main.php */

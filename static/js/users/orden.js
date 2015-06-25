@@ -336,7 +336,7 @@ $(function(){
 						$.errorMessage();
 						break;
 					default:
-						$.successMessage("La orden de trabajo N°"+response+" ha sido guardada de forma correcta.");
+						$.successMessage("La orden de trabajo ha sido guardada de forma correcta.");
 						$("#frmOrd input[type='text']").val('');
 						$("#frmOrd input[type='number']").val('0.00');
 						$("#frmOrd input[type='date']").val('');
@@ -346,6 +346,8 @@ $(function(){
 						limpiar($("#limpiaInsert"));
 						create = true;
 						$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
+						trIdImp = response;
+						$("#imprimirModal").modal('show');
 						console.log(response);
 						break;
 					}
@@ -489,6 +491,9 @@ $(function(){
 							$("#chkReservaEdit").prop("checked",basico.ord_rsv=="t"?true:false)
 							$("#txtObservacionesGeneralEdit").val(basico.ord_obs)
 							$("#txtCedulaEdit").val(basico.per_ced)
+							$("#txtAsesorEdit").val(basico.ord_asr)
+							$("#txtPerEntEdit").val(basico.ord_per_ent)
+							$("#txtEntTlfEdit").val(basico.ord_per_tel)
 							$.searchClientByCi(basico.per_ced, true);
 							var timesRun = 0;
 							var interval = setInterval(function(){
@@ -591,7 +596,7 @@ $(function(){
 						$("#buttonsActionEdit").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 						$('#tbOrd').DataTable().ajax.reload();
 						$("#frmMdOrden input[type='text']").val('');
-						$.successMessage("La orden de trabajo N°"+response+" ha sido editada de forma correcta.");
+						$.successMessage("La orden de trabajo ha sido editada de forma correcta.");
 						$("#frmMdOrden input[type='text']").val('');
 						$("#frmMdOrden input[type='number']").val('0.00');
 						$("#frmMdOrden input[type='date']").val('');
@@ -601,6 +606,8 @@ $(function(){
 						$("#costosServicioEdit").html("");
 						$("#mdOrden").modal('hide');
 						window.servicios=new Array();
+						trIdImp = response;
+						$("#imprimirModal").modal('show');
 						limpiar(document.getElementById('#limpiaEdit'));
 						break;
 					}
