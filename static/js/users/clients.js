@@ -149,28 +149,6 @@ $(function(){
 				}
 			});
 		});
-<<<<<<< HEAD
-		if(telsMd.length > 0){
-			$.ajax({
-				type: "POST",
-				url: "/sich/client/edit_client/?trId="+$("#spIdCliMd").attr('data-toggle')+"&tels="+telsMd,
-				dataType: 'json',
-				data: $(this).serialize(),
-				success: function(response) {
-					if(response.update_client == '1'){
-						$("#frmMdClient input[type='text']").val('');
-						$("#frmMdClient input[type='email']").val('');
-						telsMd.length=0;
-						$("#mdClient").modal('hide');
-						$.successMessage();
-						$('#tbClients').DataTable().ajax.reload();
-					}else{		
-						$.errorMessage();
-					}
-				},
-				error: function(){
-					$.errorMessage();
-=======
 		if(!invalidCi){
 			if($("#frmNewClient").validate().numberOfInvalids()==0){
 				if(telsMd.length > 0){
@@ -197,7 +175,6 @@ $(function(){
 					});
 				}else{
 					$.errorMessage("Debe tener al menos un teléfono!!");
->>>>>>> deploy
 				}
 			}else{
 				$.errorMessage("Algunos campos del formulario están mal llenados revise e intente nuevamente..!!");
@@ -240,6 +217,10 @@ $(function(){
 		$("#txtNombreMd").focus();
 	 });
 	 
+	 $('#mdClient').on('hidden.bs.modal', function () {
+		telsMd.length = 0;
+	 });
+	 
 	 var trIdClt;
 	 $.editDeleteModel = function(btn, edt){
 	 	trIdClt = $.trim($($($(btn).parent()).parent()).attr('id'));
@@ -253,13 +234,15 @@ $(function(){
 					$('#txtApellidoMd').val(response.per_ape);
 					$('#txtDireccionMd').val(response.cli_dir);
 					$('#txtEmailMd').val(response.cli_eml);
-					var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
-					if ( $.trim(telefonos[0]) != ''){
-						$("#tbodyTelsMd").html("");
-						$.each(telefonos, function( i, val) {	
-							$("#tbodyTelsMd").append("<tr><td class='text-center'>"+val+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
-							$("#divTbTelsMd").fadeIn('fast');
-						});
+					if( response.cli_tel !== null){
+						var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
+						if ( $.trim(telefonos[0]) != ''){
+							$("#tbodyTelsMd").html("");
+							$.each(telefonos, function( i, val) {	
+								$("#tbodyTelsMd").append("<tr><td class='text-center'>"+val+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+								$("#divTbTelsMd").fadeIn('fast');
+							});
+						}
 					}
 				}else{
 					$.errorMessage();
@@ -287,32 +270,29 @@ $(function(){
 							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
 						  "</button>";
 	
-	$.loadTelsCli = function( btn ){
-		
-		$.post("/sich/client/search_client_by_id/", {id:btn.replace("Btn","")}, function( response ) {
-			var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
-			if ( $.trim(telefonos[0]) != ''){
-				var ol = "<ol>";
-				$.each(telefonos, function( index, val ){
-					ol += "<li>"+val+"</li>";
-				});
-				ol += "</ol>";
-				$("#"+btn).popover({
+	$.popTels = function( btn, cont ){
+		return $("#"+btn).popover({
 					html: true,
-	                animation: false,
-	                content: ol,
+		            animation: false,
+		            content: cont,
 				    placement: 'bottom',
 					title :  '<span class="text-info"><strong>Teléfono(s)</strong></span> <button type="button" id="close" class="close" onclick=$("#'+btn+'").popover("hide");> &times;</button>'
 				}).popover('show');
-			}else{
-				$("#"+btn).popover({
-					html: true,
-	                animation: false,
-	                content: "El Cliente no tiene registrados número de teléfono",
-				    placement: 'bottom',
-					title :  '<span class="text-info"><strong>Teléfono(s)</strong></span> <button type="button" id="close" class="close" onclick=$("#'+btn+'").popover("hide");>&times;</button>'
-				}).popover('show');
-			}
+	};
+	$.loadTelsCli = function( btn ){
+		$.post("/sich/client/search_client_by_id/", {id:btn.replace("Btn","")}, function( response ) {
+			if( response.cli_tel !== null ){
+				var telefonos = response.cli_tel.replace("{","").replace("}","").split(',');
+				if ( $.trim(telefonos[0]) != ''){
+					var ol = "<ol>";
+					$.each(telefonos, function( index, val ){
+						ol += "<li>"+val+"</li>";
+					});
+					ol += "</ol>";
+					$.popTels(btn,ol);
+				} else{ $.popTels(btn, "El Cliente no tiene registrados número de teléfono"); }
+			} else{ $.popTels(btn, "El Cliente no tiene registrados número de teléfono"); }
+			
 		},'json');
 	};
 					  
