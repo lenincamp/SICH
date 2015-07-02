@@ -30,6 +30,22 @@ class Users extends CI_Model {
 		)->row();
 	}
 	
+	public function get_params()
+	{
+		/*
+			SELECT *
+			FROM parametros
+		*/
+		$response = $this->db->select('num_ord, iva')
+						 ->from('parametros')
+						 ->get()->result_array();
+		return $response;
+	}
+	
+	public function updateParameters($data)
+	{
+		return $this->db->update('parametros', $data);
+	}
 	
 	public function update($data,$id)
 	{

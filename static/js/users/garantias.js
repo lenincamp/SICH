@@ -233,7 +233,9 @@ $(function(){
 	 
 	 $.chargeModalEdicion = function(){
 	 $("#buttonsActionEdicion").html('<h4 class="text-danger">Cargando información...</h4>');
-	 $("#edicionModal input").val("")
+	 $("#edicionModal input[type='text']").val("")
+	 $("#edicionModal input[type='number']").val("")
+	 $("#edicionModal input[type='checkbox']").prop('checked', false);
 	 $("#edicionModal textarea").val("")
 	var area=0, precio=0
 		$.ajax({
@@ -252,8 +254,8 @@ $(function(){
 					$("#txtNumEdit").val(data.ord_num)
 					$("#txtFchEmiEdit").val(data.ord_fch)
 					$("#txtObsEdit").val(data.rev_obs)
-					$("#chkOblgEdit").prop("checked",data.rev_obl=="t"?true:false)
-					$("#chkPendEdit").prop("checked",data.rev_est=="f"?true:false)
+					$("#chkOblgEdit").prop("checked",(data.rev_obl=="t"?true:false))
+					$("#chkPendEdit").prop("checked",(data.rev_est=="f"?true:false))
 					$("#buttonsActionEdicion").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 					
 				}else{		
@@ -350,8 +352,10 @@ $(function(){
 				if(response){
 					$('#tbOblg').DataTable().ajax.reload();
 					$('#tbListRev').DataTable().ajax.reload();
-					$("#frmMdEdicion input").val('');
-					$("#frmMdEdicion textarea").val('');
+					$("#edicionModal input[type='text']").val("")
+					$("#edicionModal input[type='number']").val("")
+					$("#edicionModal input[type='checkbox']").prop('checked', false);
+					$("#edicionModal textarea").val("")
 					$("#edicionModal").modal('hide');
 					$("#buttonsActionEdicion").html('<button type="button" class="button button-3d button-rounded" data-dismiss="modal">Cancelar</button> <button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 					$.successMessage();
