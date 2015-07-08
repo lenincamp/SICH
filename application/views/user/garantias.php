@@ -1,7 +1,7 @@
 <div class="well panel panel-default" style="margin-top:1%;min-height:590px;">
   <div class="panel-body">
 	<ul class="nav nav-tabs">
-		<li><a id="ltCrt" data-toggle="tab" href="#sectionA">Crear</a></li>
+		<li><a id="ltCrt" data-toggle="tab" href="#sectionA">General</a></li>
 		<li class="active"><a data-toggle="tab" href="#sectionB">Pendientes</a></li>
 	</ul>
 	<div class="tab-content">
@@ -52,11 +52,11 @@
 										</div>
 										<div class="form-group col-sm-6" style="padding-top:16px; padding-bottom:16px;">
 											<label for="chkOblgGarant" style="width:auto;">Obligatorio:</label>
-											<input type="checkBox" class="form-control" id="chkOblgGarant" name="chkOblgGarant" value="true"  style="display:table-cell; height:auto; width:auto;"/>
+											<input type="checkBox" class="form-control" id="chkOblgGarant" name="chkOblgGarant" style="display:table-cell; height:auto; width:auto;"/>
 										</div>
 										<div class="form-group col-sm-6" style="padding-top:16px; padding-bottom:16px;">
 											<label for="chkPendGarant" style="width:auto;">Pendiente:</label>
-											<input type="checkBox" class="form-control" id="chkPendGarant" name="chkPendGarant" value="true"  style="display:table-cell; height:auto; width:auto;"/>
+											<input type="checkBox" class="form-control" id="chkPendGarant" name="chkPendGarant" style="display:table-cell; height:auto; width:auto;"/>
 										</div>
 										<div class="form-group col-xs-12">
 											<label for="txtObsGarant">Observaciones:</label>
@@ -114,46 +114,6 @@
 			  <!-- END LISTAR SERVICIO -->
 			</div>
 		</div>
-		<!-- Modal SERVICIO HTML -->
-		<div id="servicioModal" class="modal fade">
-			<div class="modal-dialog modal-md">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-						<h4 class="modal-title">Editar Servicio</h4>
-					</div>
-					<form role="form" id='frmMdServicio'>
-						<div class="modal-body">		
-							<span id="spIdServicio"></span>
-							<div class="form-group">
-								<label for="txtNameServicioEdit">Nombre:</label>
-								<input type="text" class="form-control" id="txtNameServicioEdit" name="txtNameServicioEdit" placeholder="Ingrese Nombre">
-							</div>
-							<fieldset class="scheduler-border">
-							<legend class="scheduler-border">Detalle de trabajo</legend>
-								<div id="edit_contenedor_servicios" name="edit_cotenedor_servicios">
-									<!--carga dinamica por ajax-->
-								</div>
-							</fieldset>
-							<fieldset class="scheduler-border">
-							<legend class="scheduler-border">Precios</legend>
-								<div>
-									
-								</div>
-							</fieldset>
-							</div>
-					
-						<div class="modal-footer">
-							<div class="row">
-								<div align="center" id="buttonsActionEdit">
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		<!-- End Modal HTML -->
 		<!-- END SERVICIOS -->
 		
 		<!-- AREAS DE TRABAJO -->
@@ -281,11 +241,11 @@
 							</div>
 							<div class="form-group col-sm-6" style="padding-top:16px; padding-bottom:16px;">
 								<label for="chkOblgEdit" style="width:auto;">Obligatorio:</label>
-								<input type="checkBox" class="form-control" id="chkOblgEdit" name="chkOblgEdit" value="true"  style="display:table-cell; height:auto; width:auto;"/>
+								<input type="checkBox" class="form-control" id="chkOblgEdit" name="chkOblgEdit" style="display:table-cell; height:auto; width:auto;"/>
 							</div>
 							<div class="form-group col-sm-6" style="padding-top:16px; padding-bottom:16px;">
 								<label for="chkPendEdit" style="width:auto;">Pendiente:</label>
-								<input type="checkBox" class="form-control" id="chkPendEdit" name="chkPendEdit" value="true"  style="display:table-cell; height:auto; width:auto;"/>
+								<input type="checkBox" class="form-control" id="chkPendEdit" name="chkPendEdit" style="display:table-cell; height:auto; width:auto;"/>
 							</div>
 							<div class="form-group col-xs-12">
 								<label for="txtClienteEdit">Cliente:</label>

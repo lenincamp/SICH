@@ -621,4 +621,22 @@ $(function(){
 			}
 		});
 	});
+	//--añadir abono
+	var btnsOpTblTels = "<button style='border: 0; background: transparent' onclick='$.editDeleteTel(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteTel(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+	
+	$("#btnAbn").click(function(){
+		var num =  $.trim($("#txtFecAbn").val()).length;
+		if( $.trim($("#txtFecAbn").val()!="" $$ $.trim($("#txtAbn").val() ) {
+			$("#tbodyTels").append("<tr><td class='text-center'>"+$("#txtFecAbn").val()+"</td><td class='text-center'>"+$("#txtFecAbn").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$($("#txtTelefono").val('')).focus();
+			$("#divTbAbns").fadeIn('fast');
+		}else{
+			$.errorMessage("Ingrese una Fecha y un Abono validos.");
+		}
+	});
 });

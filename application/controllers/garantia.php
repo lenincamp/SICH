@@ -151,8 +151,8 @@ class Garantia extends Private_Controller {
 		if(!@$this->user) redirect ('main');
 		if ($this->input->is_ajax_request()) 
     	{
-			$oblg=$this->input->post('chkOblgEdit')?true:false;
-			$est=$this->input->post('chkPendEdit')?false:true;
+			$oblg=($this->input->post('chkOblgEdit')?true:false);
+			$est=($this->input->post('chkPendEdit')?false:true);
 			if($this->input->get('id'))
 			{
 				$data=array(
