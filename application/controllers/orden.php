@@ -260,11 +260,11 @@ class Orden extends Private_Controller {
 	
 	public function sendMailGmail()
 	{
-		//if(!@$this->user) redirect ('main');
+		if(!@$this->user) redirect ('main');
 		//if ($this->input->is_ajax_request()) 
     	{
 			
-			$revision = $this->orders->selectSQLMultiple("select * from revision where rev_id=? ",$this->input->get("id"));
+			$revision = $this->orders->selectSQLMultiple("select * from revision where rev_id=? ",array($this->input->post("id")));
 			$revision=$revision[0];
 			$data= array($revision["ord_id"]);
 			$cliente = $this->orders->selectSQLMultiple("SELECT cli.* from orden_trabajo ot, vehiculo veh, cliente cli where ord_id=? and ot.id_veh=veh.veh_id and cli.cli_id=veh.id_cli",$data);
@@ -289,8 +289,7 @@ class Orden extends Private_Controller {
 			$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 			//contenido html del mensaje a enviar
 			$html='<div style=" font-family: Arial, Helvetica, sans-serif;">
-			<div style="height:99vh; width:98vw; z-index:-1; opacity: 0.1; filter: alpha(opacity=10); position:absolute;  background: url('.base_url().'/static/img/logo_grande_chan.png) no-repeat center center; background-size: 45vw auto;"></div>
-			<img src="'.base_url().'static/img/cabecera.jpg" height="100"/>
+			<img src="http://encoding-ideas.com/sich/static/img/cabecera.jpg" height="100"/>
 			<p align="center" style="color:#C61414; font-size:14pt;"><i><strong>CARTA DE GARANTIA</strong></i></p>
 			<p><strong>Propietario del Vehículo: </strong>'.utf8_decode($cliente["per_nom"].' '.$cliente["per_ape"]).'</p>
 			<p><strong>Números de contactos: </strong>'.str_replace(array("{","}"),"",$cliente["cli_tel"]).'</p>
@@ -323,7 +322,7 @@ class Orden extends Private_Controller {
 			</table>
 			
 			<table boder="0" cellspacing="0" cellpadding="0" align="right">
-			<tr><td><img src="'.base_url().'static/img/sherwin.jpg" height="80"/></td></tr>
+			<tr><td><img src="http://encoding-ideas.com/sich/static/img/sherwin.jpg" height="80"/></td></tr>
 			<tr><td align="center"><strong><small>www.sherwinwilliams.com</small></strong></td></tr>
 			</table>
 			</div>';
@@ -343,10 +342,20 @@ class Orden extends Private_Controller {
 					'charset' => 'utf-8',
 					'newline' => "\r\n"
 				);    
+				$configGmail = array(
+					'protocol' => 'smtp',
+					'smtp_host' => 'ssl://box903.bluehost.com',
+					'smtp_port' => 465,
+					'smtp_user' => 'garantias@chancontraeloxido.com',
+					'smtp_pass' => 'sich_2015',
+					'mailtype' => 'html',
+					'charset' => 'utf-8',
+					'newline' => "\r\n"
+				);   
 		 
 				//cargamos la configuración para enviar con gmail
 				$this->email->initialize($configGmail);
-				$this->email->from('CHAN SHIELD & CLEANING');
+				$this->email->from('garantias@chancontraeloxido.com');
 				$this->email->to($cliente["cli_eml"]);
 				$this->email->subject('CARTA DE GARANTIA');
 				$this->email->message(utf8_encode ($html));

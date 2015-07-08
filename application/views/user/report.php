@@ -46,7 +46,7 @@
 										</fieldset>
 										<div class="alert alert-info alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert">&times;</button>
-											<h5><strong>Información: </strong>En este reporte se detallan los ingresos producidos dentro de un determinado periodo de tiempo.</h5>
+											<h5><strong>Informaci&oacute;n: </strong>En este reporte se detallan los ingresos producidos dentro de un determinado periodo de tiempo.</h5>
 										</div>
 										<div class="row">
 										  <div align="center" id="buttonsAction">
@@ -86,7 +86,7 @@
 										<fieldset class="scheduler-border">
 											<legend class="scheduler-border">Datos de Reporte</legend>
 											<div class="form-group col-sm-6">
-												<label for="txtLimitGarant">Días limite:</label>
+												<label for="txtLimitGarant">D&iacute;as limite:</label>
 												<input type="number" min="0" class="form-control" id="txtLimitGarant" name="txtLimitGarant" placeholder="Ingrese días limite" value="0" step="1"/>
 											</div>
 											<div class="form-group col-sm-6">
@@ -115,7 +115,7 @@
 				</div>
 			</div>
 			<!-- ORDEN DE TRABAJO -->
-			<div id="sectionC" class="tab-pane fade  in active">
+			<div id="sectionC" class="tab-pane fade">
 				<br>
 				<div class="panel-group" id="accordionCar" role="tablist" aria-multiselectable="true">
 				  
@@ -135,14 +135,14 @@
 									<table data-order='[[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ],[ 0, "asc" ]]' class="table table-hovered table-bordered" cellspacing="0" width="100%" id="tbOrd">
 										<thead>
 											<tr>
-												<th class="text-center">N°</th>
+												<th class="text-center">N&deg;</th>
 												<th class="text-center">Fecha</th>
 												<th class="text-center">Cliente</th>
 												<th class="text-center">Fecha Ing.</th>
 												<th class="text-center">Fecha Ent.</th>
 												<th class="text-center">Reserva</th>
 												<th class="text-center">Total</th>
-												<th class="text-center">Acción</th>
+												<th class="text-center">Acci&oacute;n</th>
 											</tr>
 										</thead>
 										
@@ -165,12 +165,12 @@
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title">Imprimir Orden de Trabajo</h4>
 			</div>
 			<div class="modal-body">
 				<fieldset class="scheduler-border">
-						<legend class="scheduler-border">¿Qué deseas imprimir?</legend>
+						<legend class="scheduler-border">&iquest;Qu&eacute; deseas imprimir?</legend>
 					<span id="spIdInv"></span>
 					<div class="form-group col-sm-6" align="center">
 						<a onclick="$.descargar('1')" href="#" class="btn btn-success btn-lg col-xs-11" role="button">Factura</a>
