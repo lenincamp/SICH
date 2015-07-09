@@ -36,7 +36,11 @@ class Users extends CI_Model {
 			SELECT *
 			FROM parametros
 		*/
+<<<<<<< HEAD
 		$response = $this->db->select('num_ord, iva')
+=======
+		$response = $this->db->select('num_ord, iva, mrg_top_ord')
+>>>>>>> 43db682758d604ed75556dd5aac21348069683d3
 						 ->from('parametros')
 						 ->get()->result_array();
 		return $response;

@@ -313,9 +313,28 @@ $(function(){
 		return arr
 	}
 	var create = false;
+	var abnFchs=[]
+	var abns=[]
 	$("#frmOrd").on("submit",function(event){
-		$("#buttonsAction").html('<h4 class="text-primary">Guardando...</h4>');
 		event.preventDefault();
+		$("#buttonsAction").html('<h4 class="text-primary">Guardando...</h4>');
+		abnFchs=[]
+		abns=[]
+		$("#tbodyAbns tr").each(function(){
+		    $(this).find('td').each(function( index ){ 
+				if( index == 0 ){
+					abnFchs.push($.trim($(this).html()));
+				}
+				if( index == 1 ){
+					abns.push($.trim($(this).html()));
+				}
+			});
+		});
+		var abonos="", delimitador="";
+		for(var i=0; i<abnFchs.length; i++){
+			abonos+=delimitador+abnFchs[i]+":"+abns[i];
+			delimitador=",";
+		}
 		arrayConcatenado= new Array()
 		var idsArt=window.servicios
 		idsArt.forEach(unirArrays)
@@ -325,7 +344,7 @@ $(function(){
 		var srv=$("#servicios").attr("data-toggle")
 		$.ajax({
 			type: "POST",
-			url: "/sich/orden/save_orden/?idsArt="+idsArt+"&idsInv="+inv+"&srv="+srv+"&idVeh="+idVeh+"&cmb="+window.combustible,
+			url: "/sich/orden/save_orden/?idsArt="+idsArt+"&idsInv="+inv+"&srv="+srv+"&idVeh="+idVeh+"&cmb="+window.combustible+"&abonos="+abonos,
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
@@ -342,13 +361,15 @@ $(function(){
 						$("#frmOrd input[type='date']").val('');
 						$("#frmOrd input[type='checkbox']").prop("check",false);
 						$("#tableCars").html("");
+						$("#detallesTrabajo").html("");
+						$("#costosServicio").html("");
+						$("#tbodyAbns").html("");
 						window.servicios=new Array();
-						limpiar($("#limpiaInsert"));
+						limpiar(document.getElementById("limpiaInsert"));
 						create = true;
 						$("#buttonsAction").html('<button type="submit"  class="button button-3d-primary button-rounded">Guardar</button>');
 						trIdImp = response;
 						$("#imprimirModal").modal('show');
-						console.log(response);
 						break;
 					}
 				}else{		
@@ -489,11 +510,25 @@ $(function(){
 							$("#slcFormaPAgoEdit").val(basico.id_fpg)
 							$("#txtTarjetaEdit").val(basico.ord_trj)
 							$("#chkReservaEdit").prop("checked",basico.ord_rsv=="t"?true:false)
+							$("#chkReservaEdit").change();
 							$("#txtObservacionesGeneralEdit").val(basico.ord_obs)
 							$("#txtCedulaEdit").val(basico.per_ced)
 							$("#txtAsesorEdit").val(basico.ord_asr)
 							$("#txtPerEntEdit").val(basico.ord_per_ent)
 							$("#txtEntTlfEdit").val(basico.ord_per_tel)
+							$("#tbodyAbnsEdit").html("");
+							var abonos=(basico.ord_abn).replace("{","").replace("}","")
+							if(abonos!="")
+							{
+								
+								var abonosArray=abonos.split(",");
+								abonosArray.forEach(function(item) {
+									var abono = item.split(":");
+									console.log(abono[0]+":::"+abono[1])
+									$("#tbodyAbnsEdit").append("<tr><td class='text-center'>"+abono[0]+"</td><td class='text-center'>"+abono[1]+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+									$("#divTbAbnsEdit").fadeIn('fast');
+								});
+							}
 							$.searchClientByCi(basico.per_ced, true);
 							var timesRun = 0;
 							var interval = setInterval(function(){
@@ -573,6 +608,23 @@ $(function(){
 	 $("#frmMdOrden").on("submit",function(event){
 		$("#buttonsActionEdit").html('<h4 class="text-primary">Guardando...</h4>');
 		event.preventDefault();
+		abnFchs=[]
+		abns=[]
+		$("#tbodyAbnsEdit tr").each(function(){
+		    $(this).find('td').each(function( index ){ 
+				if( index == 0 ){
+					abnFchs.push($.trim($(this).html()));
+				}
+				if( index == 1 ){
+					abns.push($.trim($(this).html()));
+				}
+			});
+		});
+		var abonos="", delimitador="";
+		for(var i=0; i<abnFchs.length; i++){
+			abonos+=delimitador+abnFchs[i]+":"+abns[i];
+			delimitador=",";
+		}
 		arrayConcatenado= new Array()
 		var idsArt=window.servicios
 		idsArt.forEach(unirArrays)
@@ -582,7 +634,7 @@ $(function(){
 		var srv=$("#servicios").attr("data-toggle")
 		$.ajax({
 			type: "POST",
-			url: "/sich/orden/edit_orden/?trId="+$("#spIdOrden").attr('data-toggle')+"&idsArt="+idsArt+"&idsInv="+inv+"&srv="+srv+"&idVeh="+idVeh+"&cmb="+window.combustible,
+			url: "/sich/orden/edit_orden/?trId="+$("#spIdOrden").attr('data-toggle')+"&idsArt="+idsArt+"&idsInv="+inv+"&srv="+srv+"&idVeh="+idVeh+"&cmb="+window.combustible+"&abonos="+abonos,
 			dataType: 'json',
 			data: $(this).serialize(),
 			success: function(response) {
@@ -604,6 +656,7 @@ $(function(){
 						$("#tableCarsEdit").html("");
 						$("#detallesTrabajoEdit").html("");
 						$("#costosServicioEdit").html("");
+						$("#tbodyAbnsEdit").html("");
 						$("#mdOrden").modal('hide');
 						window.servicios=new Array();
 						trIdImp = response;
@@ -620,5 +673,64 @@ $(function(){
 				$.errorMessage();
 			}
 		});
+	});
+	//--añadir abono
+	$.cancelEditAbn = function( btn ){
+		var tr = $($($($(btn).parent()).parent()).parent()).parent();
+		fch=$($($(tr).children('td')[0]).children('input')[0]).val()
+		abono=$($($($(tr).children('td')[1]).children('div')[0]).children('input')[0]).val()
+		var id=$(tr).attr('id')
+		if( true){
+			$($(tr).children('td')[0]).html(fch);
+			$($(tr).children('td')[1]).html(abono);
+			$($(tr).children('td')[2]).show();
+		}else{
+			$.errorMessage("Ingrese una Fecha y un Abono validos.");
+			 $($($(tr).children('td')[0]).children('input')).focus();
+		}
+	};
+	//op = true --> edit; else delete
+	$.editDeleteAbn = function( btn, op ){
+		event.preventDefault();
+		var tr = $($(btn).parent()).parent();
+		var fchTb = $.trim($($(tr).children('td')[0]).html());
+		var abnTb = $.trim($($(tr).children('td')[1]).html());
+		if( op ){
+			 $($(tr).children('td')[0]).html("<input type='date' value='"+fchTb+"' class='form-control' onfocus='this.value = this.value;'>");
+			 $($(tr).children('td')[1]).html("<div class='input-group'><input type='number' step='0.01' value='"+abnTb+"' class='form-control' onfocus='this.value = this.value;' ><span  class='input-group-btn'><button class='btn btn-default' onclick='$.cancelEditAbn(this);' type='button' title='Terminar Edición'> <i class='glyphicon glyphicon-remove'></i></button></span></div>");
+			 $($(tr).children('td')[2]).hide();
+			 $($($(tr).children('td')[0]).children('input')).focus();
+		}else{
+			$(tr).fadeOut('fast', function(){
+				$(this).remove();
+			});
+		}
+	};
+	var btnsOpTblTels = "<button style='border: 0; background: transparent' onclick='$.editDeleteAbn(this, true);'>"+
+							"<img src='/sich/static/img/edit.png' title='Editar'>"+
+						  "</button>"+
+						  "<button style='border: 0; background: transparent' onclick='$.editDeleteAbn(this, false);'>"+
+							"<img src='/sich/static/img/delete.png' title='Eliminar'>"+
+						  "</button>";
+	
+	$("#btnAbn").click(function(){
+		if( $.trim($("#txtFecAbn").val())!="" && $.trim($("#txtAbn").val())!="") {
+			$("#tbodyAbns").append("<tr id='dc_9'><td class='text-center'>"+$("#txtFecAbn").val()+"</td><td class='text-center'>"+$("#txtAbn").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$($("#txtFecAbn").val('')).focus();
+			$("#txtAbn").val('')
+			$("#divTbAbns").fadeIn('fast');
+		}else{
+			$.errorMessage("Ingrese una Fecha y un Abono validos.");
+		}
+	});
+	$("#btnAbnEdit").click(function(){
+		if( $.trim($("#txtFecAbnEdit").val())!="" && $.trim($("#txtAbnEdit").val())!="") {
+			$("#tbodyAbnsEdit").append("<tr id='dc_9'><td class='text-center'>"+$("#txtFecAbnEdit").val()+"</td><td class='text-center'>"+$("#txtAbnEdit").val()+"</td><td class='text-center'>"+btnsOpTblTels+"</td></tr>");
+			$($("#txtFecAbnEdit").val('')).focus();
+			$("#txtAbnEdit").val('')
+			$("#divTbAbnsEdit").fadeIn('fast');
+		}else{
+			$.errorMessage("Ingrese una Fecha y un Abono validos.");
+		}
 	});
 });

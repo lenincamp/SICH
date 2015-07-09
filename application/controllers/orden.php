@@ -91,7 +91,7 @@ class Orden extends Private_Controller {
 					array_push($costos,$this->input->post('prc'.$valueA));
 				}
 			}
-			$abono=$this->input->post('txtAbono')?$this->input->post('txtAbono'):0;
+			//$abono=$this->input->post('txtAbono')?$this->input->post('txtAbono'):0;
 			$reserva=$this->input->post('chkReserva')?true:false;
     		$data = array(
     			$this->input->post('txtNumeroOrden')==""?0:$this->input->post('txtNumeroOrden'),
@@ -100,7 +100,7 @@ class Orden extends Private_Controller {
 				$this->input->post('txtFechaEntrega'),
 				$this->input->post('txtCosto'),
 				$reserva,
-				$abono,
+				'{'.$this->input->get('abonos').'}',
 				$this->input->post('txtTarjeta'),
 				$this->input->post('txtObservacionesGeneral'),
 				substr($this->input->get('idVeh'), 0, strlen($this->input->get('idVeh'))-3),
@@ -116,6 +116,7 @@ class Orden extends Private_Controller {
 				$this->input->post('txtPerEnt'),
 				$this->input->post('txtEntTlf')
     		);
+			//echo $this->input->get('abonos');
 			$response = $this->orders->selectSQL("SELECT insert_orden(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",$data);
 			echo json_encode($response);
 		}
@@ -168,7 +169,7 @@ class Orden extends Private_Controller {
 				$this->input->post('txtFechaEntregaEdit'),
 				$this->input->post('txtCostoEdit'),
 				$reserva,
-				$abono,
+				'{'.$this->input->get('abonos').'}',
 				$this->input->post('txtTarjetaEdit'),
 				$this->input->post('txtObservacionesGeneralEdit'),
 				substr($this->input->get('idVeh'), 0, strlen($this->input->get('idVeh'))-3),

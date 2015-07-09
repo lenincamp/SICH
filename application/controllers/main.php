@@ -37,7 +37,12 @@ class Main extends Private_Controller {
     	{
 			$data = array(
 				'iva'  => $this->input->post('txtIva'),
+<<<<<<< HEAD
 				'num_ord'  => $this->input->post('txtNumOrd')
+=======
+				'num_ord'  => $this->input->post('txtNumOrd'),
+				'mrg_top_ord'  => $this->input->post('txtMrgTop')
+>>>>>>> 43db682758d604ed75556dd5aac21348069683d3
 			);
 			echo json_encode($this->users->updateParameters($data));
 		}

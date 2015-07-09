@@ -46,13 +46,37 @@
 									<label for="txtTarjeta">Pago con tarjeta:</label>
 									<input type="number" class="form-control" id="txtTarjeta" name="txtTarjeta" placeholder="Ingrese N° de Tarjeta"/>
 								</div>
-								<div class="form-group col-md-6" style="padding-top:16px; padding-bottom:16px;">
+								<div class="form-group col-md-6" style="padding-top:16px; padding-bottom:16px; margin-right:1px;">
 									<label for="chkReserva" style="width:auto;">Reserva:</label>
 									<input type="checkBox" class="form-control" id="chkReserva" name="chkReserva" value="true"  style="display:table-cell; height:auto; width:auto;"/>
 								</div>
-								<div class="form-group col-md-6" style="display:none;" id="divAbono">
+								<div class="form-group col-sm-7" style="display:none;" id="divAbono">
 									<label for="txtAbono">Abono:</label>
-									<input type="number" step="0.01" class="form-control" id="txtAbono" name="txtAbono" placeholder="Ingrese abono"/>
+									<div class="form-group">
+										<div class="input-group">
+										<input type="date" class="form-control" id="txtFecAbn" name="txtFecAbn"  style="width:50%;">
+										<input type="number" step="0.01" class="form-control" id="txtAbn" name="txtAbn" placeholder="Ingrese Abono" style="width:50%;">
+										<span class="input-group-btn">
+										<button class="btn btn-default" type="button" title="Agregar Teléfono" id="btnAbn"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-usd"></i></button>
+										</span>
+										</div>
+									<br>
+										<div style="overflow-x:hidden; overflow-y:auto; max-height:110px;display:none;" id="divTbAbns">
+											<table class="table-hovered table-bordered" cellspacing="0" width="100%">
+												<thead>
+													<tr>
+														<th class="text-center">Fecha</th>
+														<th class="text-center">Abono</th>
+														<th class="text-center">Acción</th>
+													</tr>
+												</thead>
+												<tbody id="tbodyAbns">
+													
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!--input type="number" step="0.01" class="form-control" id="txtAbono" name="txtAbono" placeholder="Ingrese abono"/-->
 								</div>
 								<div class="form-group col-md-6" style="margin-right:1px;">
 									<label for="txtAsesor">Asesor:</label>
@@ -277,13 +301,37 @@
 								<label for="txtTarjetaEdit">Pago con tarjeta:</label>
 								<input type="number" class="form-control" id="txtTarjetaEdit" name="txtTarjetaEdit" placeholder="Ingrese N° de Tarjeta"/>
 							</div>
-							<div class="form-group col-md-6" style="padding-top:16px; padding-bottom:16px;">
+							<div class="form-group col-md-6" style="padding-top:16px; padding-bottom:16px; margin-right:1px;">
 								<label for="chkReservaEdit" style="width:auto;">Reserva:</label>
 								<input type="checkBox" class="form-control" id="chkReservaEdit" name="chkReservaEdit" value="true"  style="display:table-cell; height:auto; width:auto;"/>
 							</div>
 							<div class="form-group col-md-6" style="display:none;" id="divAbonoEdit">
 								<label for="txtAbonoEdit">Abono:</label>
-								<input type="number" step="0.01" class="form-control" id="txtAbonoEdit" name="txtAbonoEdit" placeholder="Ingrese abono"/>
+								<div class="form-group">
+									<div class="input-group">
+									<input type="date" class="form-control" id="txtFecAbnEdit" name="txtTelefono"  style="width:50%;">
+									<input type="text" class="form-control" id="txtAbnEdit" name="txtTelefono" placeholder="Ingrese Abono" maxlength="10" onkeypress="$.ValidaSoloNumeros()" style="width:50%;">
+									<span class="input-group-btn">
+									<button class="btn btn-default" type="button" title="Agregar Abono" id="btnAbnEdit"> <i class="glyphicon glyphicon-plus-sign"></i> <i class="glyphicon glyphicon-usd"></i></button>
+									</span>
+									</div>
+								<br>
+									<div style="overflow-x:hidden; overflow-y:auto; max-height:110px;display:none;" id="divTbAbnsEdit">
+										<table class="table-hovered table-bordered" cellspacing="0" width="100%">
+											<thead>
+												<tr>
+													<th class="text-center">Fecha</th>
+													<th class="text-center">Abono</th>
+													<th class="text-center">Acción</th>
+												</tr>
+											</thead>
+											<tbody id="tbodyAbnsEdit">
+												
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<!--input type="number" step="0.01" class="form-control" id="txtAbonoEdit" name="txtAbonoEdit" placeholder="Ingrese abono"/-->
 							</div>
 							<div class="form-group col-md-6" style="margin-right:1px;">
 									<label for="txtAsesorEdit">Asesor:</label>
