@@ -1042,7 +1042,7 @@ $(function(){
 	            var tipo   = val.type.replace("image/",".");
 	            console.log(tipo);
 	            //2.5MB
-	            if (tipo !== ".png" && tipo !== ".jpg" || tamano > 2097152){
+	            if (tipo !== ".png" && tipo !== ".jpg"  && tipo !== ".jpeg" || tamano > 2097152){
 	                cont= false;
 	                i = tam;
 					$($(fileupload).parent().children('div')[0]).html("");
