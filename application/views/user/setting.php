@@ -66,7 +66,11 @@
 					  </div>
 					  <div class="form-group">
 						<label for="txtIva">Iva(%):</label>
-						<input type="number" required="true" min="0" step="0.1" required="true" class="form-control" id="txtIva" value="<?php if ( ! empty($params)){echo $params[0]["iva"];}?>"  name="txtIva" placeholder="Ingrese porcentaje de IVA"/>
+						<input type="number" required="true" min="0" step="0.01" required="true" class="form-control" id="txtIva" value="<?php if ( ! empty($params)){echo $params[0]["iva"];}?>"  name="txtIva" placeholder="Ingrese porcentaje de IVA"/>
+					  </div>
+					  <div class="form-group">
+						<label for="txtMrgTop">Margen Superior(cm):</label>
+						<input type="number" required="true" min="0" step="0.01" required="true" class="form-control" id="txtMrgTop" value="<?php if ( ! empty($params)){echo $params[0]["mrg_top_ord"];}?>"  name="txtMrgTop" placeholder="Ingrese margen superior"/>
 					  </div>
 					  <div class="row">
 						  <div align="center">

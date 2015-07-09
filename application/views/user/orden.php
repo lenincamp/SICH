@@ -50,7 +50,7 @@
 									<label for="chkReserva" style="width:auto;">Reserva:</label>
 									<input type="checkBox" class="form-control" id="chkReserva" name="chkReserva" value="true"  style="display:table-cell; height:auto; width:auto;"/>
 								</div>
-								<div class="form-group col-md-7" style="display:none;" id="divAbono">
+								<div class="form-group col-sm-7" style="display:none;" id="divAbono">
 									<label for="txtAbono">Abono:</label>
 									<div class="form-group">
 										<div class="input-group">
