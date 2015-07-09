@@ -81,7 +81,7 @@ class Report extends Private_Controller {
 
 	function __construct() {
 		parent::__construct();
-		$this->load->model(array('reports','orders'));
+		$this->load->model(array('reports','orders','users'));
 		//$this->load->library('tcpdf');
 	}
 	/*
@@ -206,9 +206,12 @@ class Report extends Private_Controller {
 		$facturas=0;
 		$response;
 		$docs="";
+		$pixel=37.795275591;
 		$general = $this->orders->selectSQLMultiple("select * from orden_trabajo_basico where ord_id=?",array($idOrd));
 		$servs = $this->orders->selectSQLMultiple("select * from detalle_servicio_orden dso,  servicio srv where dso.srv_id=srv.srv_id and ord_id=?",array($idOrd));
 		$parametros=$this->orders->selectSQLMultiple("select * from parametros;",array());
+		$margen=$this->users->get_params();
+		$margen=$margen[0]['mrg_top_ord'];
 		$parametros=$parametros[0];
 		// create new PDF document
 		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -222,7 +225,7 @@ class Report extends Private_Controller {
 		$pdf->AddPage();
 		
 		// create some HTML content
-		$html='<table><tr><td style="height:106px;"></td></tr></table>
+		$html='<table><tr><td style="height:'.($pixel*$margen).'px;"></td></tr></table>
 		<table>
 		<tr><td style="width:70px; height:19px;"></td><td style="width:160px;">'.$general[0]["ord_fch"].'</td><td style="width:35px;"></td><td style="width:100px;">'.$general[0]["tlf"].'</td><td style="width:90px;"></td><td>Machala</td></tr>
 		<tr><td style="width:70px; height:19px;"></td><td colspan="3">'.$general[0]["nombre_cliente"].'</td><td></td><td >'.$general[0]["per_ced"].'</td></tr>
@@ -492,9 +495,17 @@ class Report extends Private_Controller {
 		<br/>
 		<table cellpadding="0" cellspacing="0">
 			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
-				<tr><td style="width:270px;"><strong>Costo Total:</strong> '.$ordentrb["ord_cst"].'</td><td style="width:270px;"><strong>Pago con tarjeta:</strong> '.$ordentrb["ord_trj"].'</td></tr>
-				<tr><td colspan="4"><strong>Abono:</strong> '.$ordentrb["ord_abn"].'</td></tr>
-				<tr><td colspan="4"><strong>Saldo:</strong> '.($ordentrb["ord_cst"]-$ordentrb["ord_abn"]).'</td></tr>
+				<tr><td style="width:270px;"><strong>Costo Total:</strong> '.$ordentrb["ord_cst"].'</td><td style="width:270px;"><strong>Pago con tarjeta:</strong> '.$ordentrb["ord_trj"].'</td></tr>';
+		$abonos=str_replace(array('{','}'),array('',''),$ordentrb["ord_abn"]);
+		$totalAbonos=0;
+		$abonos=explode (',',$abonos);
+		foreach ($abonos as $valor) {
+			$abono = explode (':',$valor);
+			$html.='<tr><td colspan="4"><strong>Abono ('.$abono[0].'):</strong> '.$abono[1].'</td></tr>';
+			$totalAbonos+=$abono[1];
+		}
+		$html.='
+				<tr><td colspan="4"><strong>Saldo:</strong> '.round($ordentrb["ord_cst"]-$totalAbonos,2).'</td></tr>
 				<tr><td colspan="4"><strong>Observaciones:</strong>'.utf8_decode($ordentrb["ord_obs"]).'</td></tr>
 			</table>
 		</table>
