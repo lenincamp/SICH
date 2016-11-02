@@ -73,7 +73,7 @@ class MYPDF extends TCPDF {
         // Set font
         $this->SetFont('helvetica', 'I', 8);
         // Page number
-        $this->Cell(0, 10, utf8_encode('Pï¿½gina '.$this->getAliasNumPage().'/'.$this->getAliasNbPages()), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, utf8_encode('Página '.$this->getAliasNumPage().'/'.$this->getAliasNbPages()), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
@@ -181,10 +181,10 @@ class Report extends Private_Controller {
 		$html = utf8_encode ($html);
 		
 		// output the HTML content
-		$pdf->writeHTML($html, true, false, true, false, '');
+		$pdf->writeHTML($this->especiales($html), true, false, true, false, '');
 		
 		// column titles
-		$header = array('Nï¿½ Ord', 'Fecha', 'Cliente', 'Servicios', 'Total');
+		$header = array('N° Ord', 'Fecha', 'Cliente', 'Servicios', 'Total');
 
 		// print colored table
 		$pdf->ColoredTable(array(30,30,50,52,30),$header, $tabla);
@@ -246,10 +246,10 @@ class Report extends Private_Controller {
 		$html = utf8_encode ($html);
 		
 		// output the HTML content
-		$pdf->writeHTML($html, false, false, false, false, '');
+		$pdf->writeHTML($this->especiales($html), false, false, false, false, '');
 		
 		// column titles
-		$header = array('Nï¿½ Ord', 'Fecha', 'Cliente', 'Servicios', 'Total');
+		$header = array('N° Ord', 'Fecha', 'Cliente', 'Servicios', 'Total');
 
 		// print colored table
 		//$pdf->ColoredTable(array(30,30,50,52,30),$header, $tabla);
@@ -312,19 +312,19 @@ class Report extends Private_Controller {
 			<h4><strong>REPORTE DE GARANTIAS</strong></h4>
 		</div>
 		<table cellpadding="0" cellspacing="0" border="0" style="text-align:left; vertical-align: middle; margin-top:20px;">
-			<tr><td><h5><strong>Garantï¿½as a efectuarse: </strong>'.($limit<1?"hoy":($limit==1?"Hasta maï¿½ana":"en ".$limit." dï¿½as.")).'</h5></td></tr>
-			<tr><td><h5><strong>Garantï¿½as: </strong>'.$docs.'</h5></td></tr>
-			<tr><td><h5><strong>Total garantï¿½as: </strong>'.$garantias.'</h5></td></tr>
+			<tr><td><h5><strong>Garantías a efectuarse: </strong>'.($limit<1?"hoy":($limit==1?"Hasta mañana":"en ".$limit." días.")).'</h5></td></tr>
+			<tr><td><h5><strong>Garantías: </strong>'.$docs.'</h5></td></tr>
+			<tr><td><h5><strong>Total garantías: </strong>'.$garantias.'</h5></td></tr>
 		</table>
 		<br/>
 		';
 		$html = utf8_encode ($html);
 		
 		// output the HTML content
-		$pdf->writeHTML($html, true, false, true, false, '');
+		$pdf->writeHTML($this->especiales($html), true, false, true, false, '');
 		
 		// column titles
-		$header = array('Fecha', 'Cliente', 'Vehï¿½culo', 'Placa', 'Servicios');
+		$header = array('Fecha', 'Cliente', 'Vehículo', 'Placa', 'Servicios');
 
 		// print colored table
 		$pdf->ColoredTable(array(25,50,47,20,50),$header, $tabla);
@@ -337,6 +337,13 @@ class Report extends Private_Controller {
 		//Close and output PDF document
 		$pdf->Output('garantias.pdf', 'I');
 	 }
+	 
+	 public function especiales($str)
+	{
+		$find=array("á","é","í","ó","ú");
+		$remp=array("&aacute;","&eacute;","&iacute;","&oacute;","&uacute;");
+		return str_replace($find, $remp, $str);
+	}
 	 
 	 public function orden_pdf()
 	{
@@ -430,9 +437,9 @@ class Report extends Private_Controller {
 		<table cellpadding="0" cellspacing="0" style="border: 1px solid gray;">
 			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
 				<tr><td style="width:300px;"><strong>Cliente:</strong> '.utf8_decode($cliente["per_nom"].' '.$cliente["per_ape"]).'</td><td style="width:200px;"><strong>E-mail:</strong> '.$cliente["cli_eml"].'</td></tr>
-				<tr><td style="width:300px;"><strong>Tï¿½lefono:</strong> '.str_replace(array("{","}"),"",$cliente["cli_tel"]).'</td><td style="width:200px;"><strong>C.I./R.U.C.:</strong> '.$cliente["per_ced"].'</td></tr>
-				<tr><td colspan="4"><strong>Direcciï¿½n:</strong> '.utf8_decode($cliente["cli_dir"]).'</td></tr>
-				<tr><td style="width:300px;"><strong>ï¿½Quiï¿½n entrega?:</strong> '.utf8_decode($ordentrb["ord_per_ent"]).'</td><td style="width:200px;"><strong>Telï¿½fono:</strong> '.$ordentrb["ord_per_tel"].'</td></tr>
+				<tr><td style="width:300px;"><strong>Télefono:</strong> '.str_replace(array("{","}"),"",$cliente["cli_tel"]).'</td><td style="width:200px;"><strong>C.I./R.U.C.:</strong> '.$cliente["per_ced"].'</td></tr>
+				<tr><td colspan="4"><strong>Dirección:</strong> '.utf8_decode($cliente["cli_dir"]).'</td></tr>
+				<tr><td style="width:300px;"><strong>¿Quién entrega?:</strong> '.utf8_decode($ordentrb["ord_per_ent"]).'</td><td style="width:200px;"><strong>Teléfono:</strong> '.$ordentrb["ord_per_tel"].'</td></tr>
 				<tr><td style="width:300px;"><strong>Asesor:</strong> '.utf8_decode($ordentrb["ord_asr"]).'</td><td style="width:200px;"><strong>Fecha:</strong> '.$ordentrb["ord_fch"].'</td></tr>
 			</table>
 		</table>
@@ -441,9 +448,9 @@ class Report extends Private_Controller {
 		<table cellpadding="0" cellspacing="0" style="border: 1px solid gray;">
 			<table cellpadding="3" cellspacing="0" rules="none" border="0" style="font-size:11pt;">
 				<tr><td style="width:300px;"><strong>Vehiculo Marca:</strong> '.utf8_decode($vehiculo["mar_nom"]).'</td><td style="width:240px;"><strong>Modelo:</strong> '.utf8_decode($vehiculo["mod_nom"]).'</td></tr>
-				<tr><td><strong>Chasï¿½s:</strong> '.$vehiculo["veh_cha"].'</td><td ><strong>Placa:</strong> '.$vehiculo["veh_pla"].'</td></tr>
-				<tr><td><strong>Aï¿½o:</strong> '.$vehiculo["veh_yar"].'</td><td ><strong>Motor:</strong> '.$vehiculo["veh_mot"].'</td></tr>
-				<tr><td><strong>Color:</strong> <span style="background-color:'.$vehiculo["veh_col"].';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td><strong>Cï¿½digo:</strong> '.$vehiculo["veh_cla"].'</td></tr>
+				<tr><td><strong>Chasís:</strong> '.$vehiculo["veh_cha"].'</td><td ><strong>Placa:</strong> '.$vehiculo["veh_pla"].'</td></tr>
+				<tr><td><strong>Año:</strong> '.$vehiculo["veh_yar"].'</td><td ><strong>Motor:</strong> '.$vehiculo["veh_mot"].'</td></tr>
+				<tr><td><strong>Color:</strong> <span style="background-color:'.$vehiculo["veh_col"].';">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td><strong>Código:</strong> '.$vehiculo["veh_cla"].'</td></tr>
 			</table>
 		</table>
 		<br/>
@@ -461,7 +468,7 @@ class Report extends Private_Controller {
 		</table>
 		';
 		$html = utf8_encode ($html);
-		$pdf->writeHTML($html, true, false, true, false, '');
+		$pdf->writeHTML($this->especiales($html), true, false, true, false, '');
 		$style2 = array('width' => 0.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(255, 0, 0));
 		$pdf->SetLineStyle($style2);
 		$pdf->Line(49.25, 149, 49.25+(($coorComb[0]-50)*0.175), 149+(($coorComb[1]-70)*0.16), $style2);
@@ -499,14 +506,14 @@ class Report extends Private_Controller {
 		<br/>
 		<table cellpadding="0" cellspacing="0" border="0">
 			<tr><td align="center">______________________________</td><td align="center">______________________________</td></tr>
-			<tr><td align="center">RECIBï¿½ CONFORME</td><td align="center">ENTREGUï¿½ CONFORME</td></tr>
-			<tr><td align="center" colspan="2"><small><strong>IMPORTANTE:</strong> No nos responsabilizamos por obejtos de valor en su vehiculo, que no estï¿½n relacionados con la orden de trabajo.</small></td></tr>
+			<tr><td align="center">RECIBÍ CONFORME</td><td align="center">ENTREGUÉ CONFORME</td></tr>
+			<tr><td align="center" colspan="2"><small><strong>IMPORTANTE:</strong> No nos responsabilizamos por objetos de valor en su vehiculo, que no estén relacionados con la orden de trabajo.</small></td></tr>
 		</table>
 		';
 		
 		// output the HTML content
 		$html = utf8_encode ($html);
-		$pdf->writeHTML($html, true, false, true, false, '');
+		$pdf->writeHTML($this->especiales($html), true, false, true, false, '');
 		
 		// reset pointer to the last page
 		$pdf->lastPage();

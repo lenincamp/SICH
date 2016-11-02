@@ -42,6 +42,7 @@
 				<li><img src="<?php echo base_url()?>static/img/user.png" style="width:100%;" alt="">
 					<ul>
 						<li><a href="<?php echo base_url()?>main/conf/"><img src="<?php echo base_url()?>static/img/conf.png" style="width:15%; margin:5px;" alt="">Configuración</a></li>
+						<li><a href="<?php echo base_url()?>main/help/"><img src="<?php echo base_url()?>static/img/help.png" style="width:15%; margin:5px;" alt="">Ayuda</a></li>
 						<li><a href="<?php echo base_url()?>main/logout/"><img src="<?php echo base_url()?>static/img/salir.png" style="width:15%; margin:5px;" alt="">Salir</a></li>
 					</ul>
 				</li>
