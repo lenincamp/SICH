@@ -113,6 +113,7 @@ $(function(){
 									$("#frmNewClient input[type='email']").val('');
 									tels.length=0;
 									$("#divTbTels").fadeOut('fast');
+									removeTelfs("#tbodyTels tr");
 									create = true;
 								}else{		
 									$.errorMessage('Error en el Registro');
@@ -133,6 +134,17 @@ $(function(){
 			$.errorMessage("La Cédula Es Incorrecta!!");
 		}
 	});
+
+	/*
+	 * -------------------------------------------------------------------
+	 *  Borra Telefonos 
+	 * -------------------------------------------------------------------
+	 */
+	function removeTelfs (bodytel){		
+		$(bodytel).each(function(){
+			$(this).remove();
+		});
+	}
 	
 	/*
 	 * -------------------------------------------------------------------
